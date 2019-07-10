@@ -13,12 +13,33 @@
 #ifndef LEM_IN_H
 # define LEM_IN_H
 
-typedef	struct s_data
-{
-	s_nodes		*next;
-	s_nodes		*prev;
+# include "libft/libft.h"
 
-}				t_data;
+typedef struct 			s_chill
+{	
+	struct s_data		*next;
+	struct s_data		*prev;
+	int					tube;
+	size_t				size;
+}						t_chill;
+
+typedef	struct 			s_data
+{
+	struct	s_data		*next;
+	struct	s_data		*prev;
+	char				*name;
+	int					x;
+	int					y;
+	char				role;
+	t_chill				*chill;
+
+}						t_data;
+
+typedef struct 			s_nodes
+{	
+	t_data				*head;
+	size_t				size;
+}						t_nodes;
 
 typedef struct 	s_cond
 {
@@ -28,18 +49,19 @@ typedef struct 	s_cond
 	int			ant;
 }				t_cond;
 
+/*
+** nodes tools
+*/
 
-typedef struct 	s_nodes
-{
-	s_nodes		*head;
-	char		*name;
-	int			x;
-	int			y;
-	char		role;
-	s_nodes		*chill;
-}				t_nodes;
+int				add_node(t_nodes *nodes, char *name);
+void			clear_nodes(t_nodes *nodes);
+void			ft_nodeprint(t_nodes *nodes);
 
-t_nodes			*ft_read(void);
+/*
+** parser
+*/
+
+t_nodes			*ft_read(t_cond	*cond, t_nodes *nodes, int fd);
 int				ft_init(char *line, t_nodes	*nodes);
 int				ft_read_error(char	*line, t_cond *cond);
 
