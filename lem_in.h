@@ -6,7 +6,7 @@
 /*   By: smoreno- <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/09 21:25:05 by smoreno-          #+#    #+#             */
-/*   Updated: 2019/07/11 04:06:58 by thberrid         ###   ########.fr       */
+/*   Updated: 2019/07/11 09:01:43 by thberrid         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,8 +32,8 @@ typedef	struct 			s_data
 	int					x;
 	int					y;
 	char				role;
-	t_chill				*chill;
-
+	t_list				*chill;
+	t_size				size;
 }						t_data;
 
 typedef struct 			s_nodes
