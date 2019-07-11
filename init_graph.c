@@ -12,11 +12,11 @@
 
 #include "lem_in.h"
 
-t_nodes		init_graph(t_nodes *nodes)
+t_nodes		*init_graph(t_nodes *nodes)
 {
-	int		i;
-	int		j;
-	int		k;
+	size_t		i;
+	size_t		j;
+	size_t		k;
 	t_data	*tmp;
 	t_data	*tmp_sub;
 	t_chill	*tmp_chill;
@@ -27,19 +27,22 @@ t_nodes		init_graph(t_nodes *nodes)
 	while (i < nodes->size)
 	{
 		j = 0;
+		tmp_chill = nodes->head_tubes;
 		while (j < nodes->size_tubes)
 		{
-			if (ft_strcmp(tmp->name, tmp_chill->name))
+			if (ft_strcmp(tmp->name, tmp_chill->name) == 0)
 			{
 				k = 0;
-				tmp->sub = nodes->head;
+				tmp_sub = nodes->head;
 				while (k < nodes->size)
 				{
-					if (ft_strcmp(tmp_sub->name, tmp_chill->dest))
+					if (ft_strcmp(tmp_sub->name, tmp_chill->dest) == 0)
 					{
-						if (!(tmp_list = ft_lstnew(tmp_sub, sizeof(t_data))))
+						if (!(tmp_list = ft_memalloc(sizeof(t_list))))
 							return (NULL);
-						ft_lstadd(tmp->chill, tmp_list);
+						tmp_list->content = tmp_sub;
+						tmp_list->content_size = sizeof(t_data);
+						ft_lstadd(&(tmp->chill), tmp_list);
 						tmp->size += 1;
 					}
 					tmp_sub = tmp_sub->next;
@@ -55,11 +58,11 @@ t_nodes		init_graph(t_nodes *nodes)
 	return (nodes);
 }
 
-t_notes		browse_chill(t_nodes *nodes, int level)
+/*t_notes		browse_chill(t_nodes *nodes, int level)
 {
 	int			i;
 	t_chill		*tmp;
 
 	i = 0;
 	while (i < )
-}
+}*/

@@ -129,6 +129,7 @@ int		main(int ac, char **av)
 //	if (!(cond = ft_memalloc(sizeof(t_cond))))
 //		return (-1);
 	nodes = ft_read(nodes, fd);
+	nodes = init_graph(nodes);
 	ft_nodeprint(nodes);
 	close(fd);
 }

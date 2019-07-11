@@ -5,5 +5,5 @@ salle2 16 7
 ##end
 #saluuttttt
 ##
-salle1-3
-salle2-3
+salle1-salle3
+salle2-salle1

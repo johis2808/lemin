@@ -33,7 +33,7 @@ typedef	struct 			s_data
 	int					y;
 	char				role;
 	t_list				*chill;
-	t_size				size;
+	size_t				size;
 }						t_data;
 
 typedef struct 			s_nodes
@@ -77,6 +77,6 @@ long		ft_atol(const char *str);
 t_nodes			*ft_read(t_nodes *nodes, int fd);
 int				ft_init(char *line, t_nodes	*nodes, char role);
 int				ft_read_error(char	*line, t_cond *cond);
-
+t_nodes			*init_graph(t_nodes *nodes);
 
 # endif
