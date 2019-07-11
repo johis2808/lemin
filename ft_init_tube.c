@@ -34,10 +34,6 @@ void		free_arr(char **arr)
 	}
 }
 
-t_nodes		*add_tube(char *tubes, t_nodes *nodes)
-{
-
-}
 /*
 ** gestion des cas : doublons noms salles/nom de salle existant
 ** return NULL : ne pas oublier les FREEEEEEE
@@ -48,17 +44,17 @@ t_nodes		*ft_init_tube(char *line, t_nodes *nodes)
 	char	**tubes;
 	int		i;
 
+	if (line[0] == '#')
+		return (nodes);
 	if (!(tubes = ft_strsplit(line, '-')))
 		return (NULL);
 	if (arr_len(tubes) != 2)
 		return (NULL);
 	i = 0;
-	while (tubes[i])
-	{
-		if (!add_tube(tubes[i], nodes))
-			return (NULL);
-		i += 1;
-	}
-	free_arr(tubes);
+	if (!add_tubes(tubes[0], tubes[1], nodes))
+		return (NULL);
+	if (!add_tubes(tubes[1], tubes[0], nodes))
+		return (NULL);
+	//free_arr(tubes);
 	return (nodes);
 }

@@ -24,26 +24,27 @@ t_nodes		*close_read(char *line)
 
 t_nodes		*read_node(char *line, t_cond *cond, t_nodes *nodes)
 {
-	char	role;
-
 	if (ft_strcmp(line, "##start") == 0)
 	{
 		if (cond->start)
 			return (close_read(line));
 		cond->start = 1;
-		role = 's';
+		cond->role = 's';
 	}
 	else if (ft_strcmp(line, "##end") == 0)
 	{
 		if (cond->end)
 			return (close_read(line));
 		cond->end = 1;
-		role = 't';
+		cond->role = 't';
 	}
-	else
-		role = 0;
-	if (*line && ft_init(line, nodes, role) == -1)
-		return (NULL);
+	else if (line[0] != '#')
+	{
+		if (*line && ft_init(line, nodes, cond->role) == -1)
+			return (NULL);
+		cond->role = 0;
+	}
+	return (nodes);
 }
 
 t_nodes		*read_ant(char *line, t_cond *cond, t_nodes *nodes)
@@ -58,17 +59,37 @@ t_nodes		*read_ant(char *line, t_cond *cond, t_nodes *nodes)
 	}
 	else
 		return (NULL);
+	return (nodes);
 }
 
 t_nodes		*read_node_edge(char *line, t_cond *cond, t_nodes *nodes)
 {
+	if (ft_strchr(line, '-'))
+		cond->edge = 1;
 	if (!cond->edge)
+	{
 		if (!read_node(line, cond, nodes))
 			return (close_read(line));
+	}
 	else
+	{
 		if (!ft_init_tube(line, nodes))
 			return (close_read(line));
-	return (NULL);
+	}
+	return (nodes);
+}
+
+int			check_cmds(char *line)
+{
+	if (ft_strcmp(line, "##start") == 0
+		|| ft_strcmp(line, "##end") == 0)
+		return (1);
+	if (line[0] == '#')
+	{
+		free(line);
+		return (0);
+	}
+	return (1);
 }
 
 t_nodes		*ft_read(t_nodes *nodes, int fd)
@@ -81,14 +102,18 @@ t_nodes		*ft_read(t_nodes *nodes, int fd)
 	{ 
 		if ((ft_strlen(line) == 0))
 			return (NULL);
-		if (line[0] == '#')
+		if (!check_cmds(line))
 			continue ;
 		if (cond.ant)
-			if (!read_node_edge(line, cond, nodes))
+		{
+			if (!read_node_edge(line, &cond, nodes))
 				return (close_read(line));
+		}
 		else
-			if (!read_ant(line, &cond))
+		{
+			if (!read_ant(line, &cond, nodes))
 				return (close_read(line));
+		}
 		free(line);
 	}
 	return (nodes);

@@ -15,10 +15,10 @@
 /*
 ** parse_name, manque définir les erreurs dans le cas où les nom_salles
 ** debutent/fin par ' ' ou le nom de salle déjà existant.
-** return -1 = erreur malloc.
+** return -1 = erreur malloc. gerer le cas: caractère L ou le caractère #
 */
 
-int			parse_name(char *line, t_nodes *nodes)
+int			parse_name(char *line, t_nodes *nodes, char role)
 {
 	int		i;
 	int		len;
@@ -34,7 +34,7 @@ int			parse_name(char *line, t_nodes *nodes)
 		return (-1);
 	name[len] = '\0';
 	name = ft_memcpy(name, line, len);
-	if ((add_node(nodes, name)) == -1)
+	if ((add_node(nodes, name, role)) == -1)
 		return (-1);
 	return (len);
 }
@@ -75,16 +75,14 @@ int			parse_coord(char *line, t_data *node)
 ** line vide?.
 */
 
-int			ft_init(char *line, t_nodes *nodes)
+int			ft_init(char *line, t_nodes *nodes, char role)
 {
 	int		ret;
-	t_data	*tmp;
 	
 	ret = 0;
-	tmp = nodes->head;
 	while (line && *line)
 	{
-		if ((ret = parse_name(line, nodes)) == -1)
+		if ((ret = parse_name(line, nodes, role)) == -1)
 			return (-1);
 		line += ret;
 		if ((ret = parse_coord(line, nodes->head->prev)) == -1)
