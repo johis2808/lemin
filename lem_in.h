@@ -6,7 +6,7 @@
 /*   By: smoreno- <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/09 21:25:05 by smoreno-          #+#    #+#             */
-/*   Updated: 2019/07/09 21:25:08 by smoreno-         ###   ########.fr       */
+/*   Updated: 2019/07/11 04:06:58 by thberrid         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ typedef struct 			s_chill
 {	
 	struct s_data		*next;
 	struct s_data		*prev;
-	int					tube;
+	char				*name;
 	size_t				size;
 }						t_chill;
 
@@ -39,6 +39,8 @@ typedef	struct 			s_data
 typedef struct 			s_nodes
 {	
 	t_data				*head;
+	t_chill				*head_tubes;
+	int					ants;
 	size_t				size;
 }						t_nodes;
 

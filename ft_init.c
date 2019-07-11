@@ -6,7 +6,7 @@
 /*   By: smoreno- <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/09 21:54:29 by smoreno-          #+#    #+#             */
-/*   Updated: 2019/07/09 21:54:32 by smoreno-         ###   ########.fr       */
+/*   Updated: 2019/07/11 05:03:13 by thberrid         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -118,56 +118,6 @@ long	ft_atol(const char *str)
 	return (val * sign);
 }
 
-t_nodes		*ft_read(t_nodes *nodes, int fd)
-{
-	char	*line;
-	t_cond	cond;
-	long	ants;
-
-	ft_bzero(&cond, sizeof(t_cond));
-	while (get_next_line(fd, &line) != 0)
-	{
-		if (cond.ant)
-		{
-			if (!cond.edge)
-			{
-				if ((ft_strlen(line) == 0))
-					return (NULL);
-				if (ft_strcmp(line, "##start") == 0)
-				{
-					cond.start = 1;
-					free(line);
-				}
-				if (ft_strcmp(line, "##end") == 0)
-				{
-					cond.end = 1;
-					free(line);
-				}
-				if (*line && ft_init(line, nodes) == -1)
-					return (NULL);
-			}
-		}
-		else
-		{
-			ants = ft_atol(line);
-			if (ants <= FT_INTMAX && ants > 0)
-				cond.ant = ants;
-			else
-			{
-				free(line);
-				return (NULL);
-			}
-		}
-		
-		free(line);
-	}
-	return (nodes);
-}
-
-/*
-**
-*/
-
 int		main(int ac, char **av)
 {
 	t_nodes		*nodes;
@@ -184,4 +134,3 @@ int		main(int ac, char **av)
 	ft_nodeprint(nodes);
 	close(fd);
 }
-
