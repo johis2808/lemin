@@ -14,6 +14,7 @@
 # define LEM_IN_H
 
 # include "libft/libft.h"
+# define FT_INTMAX 2147483647
 
 typedef struct 			s_chill
 {	
