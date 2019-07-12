@@ -1,9 +1,27 @@
-12
+5
 ##start
-salle1 23 3
-salle2 16 7
-##end
-#saluuttttt
-##
-salle1-salle3
-salle2-salle1
+1 23 3
+2 16 7
+#commentaire
+3 16 3
+4 16 5
+5 9 3
+6 1 5
+7 4 8
+###end
+0 9 5
+0-4
+0-6
+1-3
+4-3
+5-2
+3-5
+#autre commentaire
+4-2
+2-1
+7-6
+7-2
+7-4
+#C'est la fin
+6-5
+#autre commentaire

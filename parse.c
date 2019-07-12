@@ -86,7 +86,7 @@ int			check_cmds(char *line)
 		return (1);
 	if (line[0] == '#')
 	{
-		free(line);
+	//	free(line);
 		return (0);
 	}
 	return (1);

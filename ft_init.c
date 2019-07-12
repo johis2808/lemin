@@ -43,6 +43,7 @@ int			parse_name(char *line, t_nodes *nodes, char role)
 ** parse_coord, revoir les codes err 
 ** manque définir l'erreur lorsqu'il y a qu'une coo'/plusieurs ' ',
 ** return -1 = pb atoi.
+** corriger le READ +1
 */
 
 int			parse_coord(char *line, t_data *node)
@@ -119,7 +120,9 @@ long	ft_atol(const char *str)
 int		main(int ac, char **av)
 {
 	t_nodes		*nodes;
+	t_list		*queu;
 //	t_cond		*cond;
+	t_data		*aya;
 	int			fd;
 	(void)ac;
 
@@ -130,6 +133,10 @@ int		main(int ac, char **av)
 //		return (-1);
 	nodes = ft_read(nodes, fd);
 	nodes = init_graph(nodes);
+	aya = get_start(nodes);
+	queu = ft_memalloc(sizeof(t_list));
+	queu->content = aya;
+	ft_printf("ret : %d\n", graph_bfs(queu, 1));
 	ft_nodeprint(nodes);
-	close(fd);
+	//close(fd);
 }

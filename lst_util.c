@@ -94,6 +94,8 @@ void	ft_nodeprint(t_nodes *nodes)
 		ft_printf("Room name: %s\n", cur->name);
 		ft_printf("coord X : %d | ", cur->x);
 		ft_printf("coord Y : %d\n", cur->y);
+		ft_printf("Ret BFS: %d\n ", cur->level);
+		ft_printf("Open: %d\n", cur->open);	
 		cur = cur->next;
 	}
 }

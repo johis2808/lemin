@@ -31,6 +31,8 @@ typedef	struct 			s_data
 	char				*name;
 	int					x;
 	int					y;
+	int					level;
+	int					open;
 	char				role;
 	t_list				*chill;
 	size_t				size;
@@ -78,5 +80,7 @@ t_nodes			*ft_read(t_nodes *nodes, int fd);
 int				ft_init(char *line, t_nodes	*nodes, char role);
 int				ft_read_error(char	*line, t_cond *cond);
 t_nodes			*init_graph(t_nodes *nodes);
+t_data			*get_start(t_nodes *nodes);
+int				graph_bfs(t_list *node, int level);
 
 # endif
