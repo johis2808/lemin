@@ -93,15 +93,41 @@ t_nodes		*init_graph(t_nodes *nodes)
 }*/
 
 
-void	add_queu(t_list *queu, t_list *new)
+void	add_queu(t_list **queu, t_list *new)
 {
+	t_list 	*newtmp;
+	t_list	*tmpqueu;
+
+	tmpqueu = *queu;
+	while ((*queu)->next)
+		*queu = (*queu)->next;
+	while (new)
+	{
+		newtmp = ft_memalloc(sizeof(t_list));
+		newtmp->content = new->content;
+		new = new->next;
+		*queu = newtmp;
+		*queu = (*queu)->next;
+	}
+	*queu = tmpqueu;
+/*
 	t_list	*tmp;
 
-	tmp = queu;
+	tmp = new;
+	if (*queu)
+		tmp = *queu;
+	while (new)
+		new = new->next;
+	new = *queu;
+	*queu = tmp;
+
+	tmp = *queu;
 	while (tmp)
 		tmp = tmp->next;
-	tmp = new;
-//	alst = new;
+		tmp = new;
+	
+	/queu = tmp;
+//	alst = ne*/
 }
 
 t_data	*get_start(t_nodes *nodes)
@@ -132,15 +158,17 @@ int		graph_bfs(t_list *queu, int level)
 //	aya->next = ((t_data *)queu->content)->chill->next;
 //	aya->next->next = ((t_data *)queu->content)->chill->next; */
 	new_queue = ft_memalloc(sizeof(t_list));
-	tmp = ft_memalloc(sizeof(t_list)); 
+//	new_queue = NULL;
+//	tmp = ft_memalloc(sizeof(t_list)); 
 	while (queu)
 	{
 		i = 0;
 		tmp = ((t_data *)(queu->content))->chill;
 		//while (i < ((t_data *)(queu->content))->size)
 		if (tmp)
-				add_queu(new_queue, tmp);
-		((t_data *)(queu->content))->level = level;
+				add_queu(&new_queue, tmp);
+		if (!((t_data *)(queu->content))->level)
+			((t_data *)(queu->content))->level = level;
 		queu = queu->next;
 	}
 	if (new_queue)

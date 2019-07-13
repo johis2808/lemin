@@ -38,6 +38,14 @@ typedef	struct 			s_data
 	size_t				size;
 }						t_data;
 
+
+typedef struct 			s_queu
+{	
+	struct s_chill		*next;
+	struct s_chill		*prev;
+	t_data				*chill;
+}						t_queu;
+
 typedef struct 			s_nodes
 {	
 	t_data				*head;
