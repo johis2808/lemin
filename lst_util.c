@@ -62,7 +62,7 @@ void	clear_nodes(t_nodes *nodes)
 	{
 		tmp = nodes->head;
 		nodes->head = tmp->next;
-		free(tmp);
+		///free(tmp);
 		nodes->size--;
 	}
 	nodes->head = NULL;
@@ -76,7 +76,7 @@ void	clear_tubes(t_nodes *nodes)
 	{
 		tmp = nodes->head_tubes;
 		nodes->head_tubes = tmp->next;
-		free(tmp);
+	//	free(tmp);
 		nodes->size_tubes--;
 	}
 	nodes->head_tubes = NULL;
@@ -95,7 +95,8 @@ void	ft_nodeprint(t_nodes *nodes)
 		ft_printf("coord X : %d | ", cur->x);
 		ft_printf("coord Y : %d\n", cur->y);
 		ft_printf("Ret BFS: %d\n ", cur->level);
-		ft_printf("Open: %d\n", cur->open);	
+		ft_printf("Open: %d\n", cur->open);
+		ft_printf("Open: %c\n", cur->role);		
 		cur = cur->next;
 	}
 }

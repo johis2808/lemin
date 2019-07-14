@@ -139,5 +139,6 @@ int		main(int ac, char **av)
 	graph_bfs(queu, 1);
 	/*ft_printf("ret : %d\n", graph_bfs(queu, 1));*/
 	ft_nodeprint(nodes);
+	short_path(queu, 1);
 	//close(fd);
 }

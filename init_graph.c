@@ -93,7 +93,7 @@ t_nodes		*init_graph(t_nodes *nodes)
 }*/
 
 
-void	add_queu(t_list *queu, t_list *new)
+void	add_queu(t_list *queu, t_list *new, int level)
 {
 	t_list 	*newtmp;
 	t_list	*head;
@@ -101,7 +101,9 @@ void	add_queu(t_list *queu, t_list *new)
 	head = queu;
 	if (!queu->content)
 	{
-		if (((t_data *)(new->content))->chill && !((t_data *)(new->content))->level)
+		if (((t_data *)(new->content))->chill
+			&& ((!((t_data *)(new->content))->level)
+			|| (level && ((t_data *)(new->content))->level > level)))
 		{
 			queu->content = new->content;
 			new = new->next;
@@ -114,7 +116,9 @@ void	add_queu(t_list *queu, t_list *new)
 	}
 	while (new)
 	{
-		if (((t_data *)(new->content))->chill && !((t_data *)(new->content))->level)
+		if (((t_data *)(new->content))->chill
+			&& ((!((t_data *)(new->content))->level)
+			|| (level && ((t_data *)(new->content))->level > level)))
 		{
 			newtmp = ft_memalloc(sizeof(t_list));
 			newtmp->content = new->content;
@@ -161,16 +165,6 @@ t_data	*get_start(t_nodes *nodes)
 	return (NULL);
 }
 
-void	*ft_mememalloc(size_t size)
-{
-	void *new;
-
-	if (!(new = (void*)malloc(sizeof(void) * size)))
-		return (NULL);
-	ft_bzero(new, size);
-	return (new);
-}
-
 int		graph_bfs(t_list *queu, int level)
 {
 	t_list	*tmp;
@@ -181,7 +175,7 @@ int		graph_bfs(t_list *queu, int level)
 	//aya = ((t_data *)queu->content)->chill; 
 //	aya->next = ((t_data *)queu->content)->chill->next;
 //	aya->next->next = ((t_data *)queu->content)->chill->next; */
-	if (!(new_queue = ft_mememalloc(sizeof(t_list))))
+	if (!(new_queue = ft_memalloc(sizeof(t_list))))
 		return (-1);
 //	new_queue = NULL;
 //	tmp = ft_memalloc(sizeof(t_list)); 
@@ -191,7 +185,7 @@ int		graph_bfs(t_list *queu, int level)
 		tmp = ((t_data *)(queu->content))->chill;
 		//while (i < ((t_data *)(queu->content))->size)
 		if (tmp)
-				add_queu(new_queue, tmp);
+				add_queu(new_queue, tmp, 0);
 		if (!((t_data *)(queu->content))->level)
 		{	((t_data *)(queu->content))->level = level;
 			ft_printf("LA : %s\n", ((t_data *)(queu->content))->name);

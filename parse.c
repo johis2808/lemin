@@ -85,11 +85,11 @@ int			check_cmds(char *line)
 	if (ft_strcmp(line, "##start") == 0
 		|| ft_strcmp(line, "##end") == 0)
 		return (1);
-	if (line[0] == '#')
-	{
+	//if (line[0] == '#')
+//	{
 	//	free(line);
-		return (0);
-	}
+		//return (0);
+//	}
 	return (1);
 }
 
@@ -115,7 +115,7 @@ t_nodes		*ft_read(t_nodes *nodes, int fd)
 			if (!read_ant(line, &cond, nodes))
 				return (close_read(line));
 		}
-		free(line);
+	//	free(line);
 	}
 	return (nodes);
 }
