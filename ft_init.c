@@ -136,7 +136,8 @@ int		main(int ac, char **av)
 	aya = get_start(nodes);
 	queu = ft_memalloc(sizeof(t_list));
 	queu->content = aya;
-	ft_printf("ret : %d\n", graph_bfs(queu, 1));
+	graph_bfs(queu, 1);
+	/*ft_printf("ret : %d\n", graph_bfs(queu, 1));*/
 	ft_nodeprint(nodes);
 	//close(fd);
 }

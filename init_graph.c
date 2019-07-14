@@ -6,7 +6,7 @@
 /*   By: thberrid <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/11 07:35:55 by thberrid          #+#    #+#             */
-/*   Updated: 2019/07/11 09:10:03 by thberrid         ###   ########.fr       */
+/*   Updated: 2019/07/14 01:59:11 by thberrid         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,23 +93,37 @@ t_nodes		*init_graph(t_nodes *nodes)
 }*/
 
 
-void	add_queu(t_list **queu, t_list *new)
+void	add_queu(t_list *queu, t_list *new)
 {
 	t_list 	*newtmp;
-	t_list	*tmpqueu;
+	t_list	*head;
 
-	tmpqueu = *queu;
-	while ((*queu)->next)
-		*queu = (*queu)->next;
+	head = queu;
+	if (!queu->content)
+	{
+		if (((t_data *)(new->content))->chill && !((t_data *)(new->content))->level)
+		{
+			queu->content = new->content;
+			new = new->next;
+		}
+	}
+	else
+	{
+		while (queu->next)
+			queu = queu->next;
+	}
 	while (new)
 	{
-		newtmp = ft_memalloc(sizeof(t_list));
-		newtmp->content = new->content;
+		if (((t_data *)(new->content))->chill && !((t_data *)(new->content))->level)
+		{
+			newtmp = ft_memalloc(sizeof(t_list));
+			newtmp->content = new->content;
+			queu->next = newtmp;
+			queu = queu->next;
+		}
 		new = new->next;
-		*queu = newtmp;
-		*queu = (*queu)->next;
 	}
-	*queu = tmpqueu;
+	queu = head;
 /*
 	t_list	*tmp;
 
@@ -147,6 +161,16 @@ t_data	*get_start(t_nodes *nodes)
 	return (NULL);
 }
 
+void	*ft_mememalloc(size_t size)
+{
+	void *new;
+
+	if (!(new = (void*)malloc(sizeof(void) * size)))
+		return (NULL);
+	ft_bzero(new, size);
+	return (new);
+}
+
 int		graph_bfs(t_list *queu, int level)
 {
 	t_list	*tmp;
@@ -157,7 +181,8 @@ int		graph_bfs(t_list *queu, int level)
 	//aya = ((t_data *)queu->content)->chill; 
 //	aya->next = ((t_data *)queu->content)->chill->next;
 //	aya->next->next = ((t_data *)queu->content)->chill->next; */
-	new_queue = ft_memalloc(sizeof(t_list));
+	if (!(new_queue = ft_mememalloc(sizeof(t_list))))
+		return (-1);
 //	new_queue = NULL;
 //	tmp = ft_memalloc(sizeof(t_list)); 
 	while (queu)
@@ -166,12 +191,14 @@ int		graph_bfs(t_list *queu, int level)
 		tmp = ((t_data *)(queu->content))->chill;
 		//while (i < ((t_data *)(queu->content))->size)
 		if (tmp)
-				add_queu(&new_queue, tmp);
+				add_queu(new_queue, tmp);
 		if (!((t_data *)(queu->content))->level)
-			((t_data *)(queu->content))->level = level;
+		{	((t_data *)(queu->content))->level = level;
+			ft_printf("LA : %s\n", ((t_data *)(queu->content))->name);
+		}
 		queu = queu->next;
 	}
-	if (new_queue)
+	if (new_queue->content)
 		graph_bfs(new_queue, level + 1);
 	return (-1);
 }
