@@ -45,7 +45,10 @@ t_list *short_path(t_list *queu, int level)
 	}
 	return (NULL);
 }
-
+/*
+** 1 / il fut retirer dans D out le E
+** 2 /	D in doit pointer uniquement sur E
+*/
 t_list *add_outnode(t_data *node, t_list *chill)
 {
 	t_list 		*new_out;
@@ -68,7 +71,8 @@ t_list *add_outnode(t_data *node, t_list *chill)
 
 t_list *findparent(t_data *node, t_list *chill)
 {
-	t_list *tmp;
+	t_list	*tmp;
+	t_list	*new_children;
 	int min_level;
 
 	(void)node;
@@ -82,7 +86,7 @@ t_list *findparent(t_data *node, t_list *chill)
 		}
 		chill = chill->next;
 	}
-	if (!add_outnode((t_data *)tmp->content))
+	if (!(new_children = add_outnode(((t_data *)tmp->content), tmp)))
 		return (NULL);
 	ft_printf("-- %s %d\n", ((t_data *)(tmp->content))->name, ((t_data *)(tmp->content))->level);
 	return (tmp);
