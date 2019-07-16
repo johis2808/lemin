@@ -32,6 +32,7 @@ typedef	struct 			s_data
 	int					x;
 	int					y;
 	int					level;
+	char				statut;
 	int					open;
 	int					is_path;
 	char				role;
@@ -96,7 +97,7 @@ void			add_queu(t_list *queu, t_list *new, int level);
 /*
 ** finding paths
 */
-t_list			*findparent(t_list	*chill);
+t_list			*findparent(t_data *node, t_list *chill);
 t_list			*short_path(t_list *queu, int level);
 
 # endif
