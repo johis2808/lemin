@@ -96,7 +96,7 @@ void			add_queu(t_list *queu, t_list *new, int level);
 /*
 ** finding paths
 */
-
-t_data			*short_path(t_list *queu, int level);
+t_list			*findparent(t_list	*chill);
+t_list			*short_path(t_list *queu, int level);
 
 # endif

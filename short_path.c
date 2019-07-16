@@ -12,11 +12,11 @@
 
 #include "lem_in.h"
 
-t_data	*short_path(t_list *queu, int level)
+t_list	*short_path(t_list *queu, int level)
 {
 	t_list	*tmp;
 	t_list	*new_queue;
-	t_data	*ret;
+	t_list	*ret;
 	t_list	*head;
 	t_data	*curr;
 
@@ -28,9 +28,10 @@ t_data	*short_path(t_list *queu, int level)
 		curr = (t_data *)(queu->content);
 		if (((t_data *)(queu->content))->role == 't')
 		{
-			ft_printf(">> %s\n", ((t_data *)(queu->content))->name);
-			return (((t_data *)(queu->content)));
+			ft_printf(">+> %s\n", ((t_data *)(queu->content))->name);
+			return (queu);
 		}
+		ft_printf(".|. %s %d %d\n", ((t_data *)(queu->content))->name, ((t_data *)(queu->content))->level, level);
 		tmp = ((t_data *)(queu->content))->chill;
 	//	if (tmp && ((t_data *)(tmp->content))->open > -1)
 			add_queu(new_queue, tmp, level);
@@ -38,21 +39,30 @@ t_data	*short_path(t_list *queu, int level)
 		queu = queu->next;
 	}
 	if (new_queue->content)
-		ret = short_path(new_queue, level + 1);
-	while (head)
 	{
-		tmp = ((t_data *)(head->content))->chill;
-		while (tmp)
-		{
-			if (ft_strcmp(((t_data *)(tmp->content))->name, ret->name) && ((t_data *)(tmp->content))->level < ret->level)
-			{
-			//	ft_printf("-- %d\n", ((t_data *)(tmp->content))->level);
-				ft_printf(">> %s\n", ((t_data *)(tmp->content))->name);
-				return (((t_data *)(tmp->content)));
-			}
-			tmp = tmp->next;	
-		}
-		head = head->next;
+		ret = short_path(new_queue, level + 1);
+		return (findparent(((t_data *)ret->content)->chill));
 	}
 	return (NULL);
+}
+
+t_list	*findparent(t_list	*chill)
+{
+	t_list	*tmp;
+
+	int		min_level;
+
+	min_level = FT_INTMAX;
+	
+	while (chill)
+	{
+		if (((t_data *)(chill->content))->level < min_level)
+		{
+			min_level =  ((t_data *)(chill->content))->level;
+			tmp = chill;			
+		}
+		chill = chill->next;
+	}
+	ft_printf("-- %s %d\n", ((t_data *)(tmp->content))->name, ((t_data *)(tmp->content))->level);
+	return (tmp);	
 }

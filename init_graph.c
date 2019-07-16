@@ -128,24 +128,6 @@ void	add_queu(t_list *queu, t_list *new, int level)
 		new = new->next;
 	}
 	queu = head;
-/*
-	t_list	*tmp;
-
-	tmp = new;
-	if (*queu)
-		tmp = *queu;
-	while (new)
-		new = new->next;
-	new = *queu;
-	*queu = tmp;
-
-	tmp = *queu;
-	while (tmp)
-		tmp = tmp->next;
-		tmp = new;
-	
-	/queu = tmp;
-//	alst = ne*/
 }
 
 t_data	*get_start(t_nodes *nodes)
