@@ -14,8 +14,8 @@
 
 t_nodes		*close_read(char *line)
 {
-//	(void)line;
-	free(line);
+	(void)line;
+	//free(line);
 	return (NULL);
 }
 

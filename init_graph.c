@@ -152,9 +152,9 @@ int		graph_bfs(t_list *queu, int level)
 	t_list	*tmp;
 	size_t		i;
 	t_list	*new_queue;
-	//t_list	*aya;
+	t_data	*aya;
 
-	//aya = ((t_data *)queu->content)->chill; 
+	aya = ((t_data *)queu->content); 
 //	aya->next = ((t_data *)queu->content)->chill->next;
 //	aya->next->next = ((t_data *)queu->content)->chill->next; */
 	if (!(new_queue = ft_memalloc(sizeof(t_list))))

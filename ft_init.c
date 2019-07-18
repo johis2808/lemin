@@ -117,6 +117,30 @@ long	ft_atol(const char *str)
 	return (val * sign);
 }
 
+void	resetlevel(t_nodes *nodes)
+{
+	size_t	len;
+	t_data	*tmp;
+	t_list	*chill;
+	t_data	*tmp2;
+
+	len = 0;
+	tmp = nodes->head;
+	while (len < nodes->size)
+	{
+		tmp->level = 0;
+		tmp = tmp->next;
+		len++;
+		chill = tmp->chill;
+		while (chill)
+		{
+			tmp2 = ((t_data *)chill->content);
+			((t_data *)chill->content)->level = 0;
+			chill = chill->next;
+		} 
+	}
+}
+
 int		main(int ac, char **av)
 {
 	t_nodes		*nodes;
@@ -140,5 +164,10 @@ int		main(int ac, char **av)
 	/*ft_printf("ret : %d\n", graph_bfs(queu, 1));*/
 	ft_nodeprint(nodes);
 	short_path(queu, 1);
+	resetlevel(nodes);
+	graph_bfs(queu, 1);
+	short_path(queu, 1);
+	ft_nodeprint(nodes);
+
 	//close(fd);
 }

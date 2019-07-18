@@ -99,5 +99,6 @@ void			add_queu(t_list *queu, t_list *new, int level);
 */
 t_list			*findparent(t_data *node, t_list *chill);
 t_list			*short_path(t_list *queu, int level);
+t_list			*add_outnode(t_data *node, t_list *chill);
 
 # endif
