@@ -33,9 +33,27 @@ void	ft_lstremove(t_list **list, t_list *to_del)
 	if (previous)
 		previous->next = to_del->next;
 	else
-		current->next = to_del->next;
+		current = to_del->next;
 	
 //	current = current->next;
+}
+
+void	switch_children(t_list **parent, t_list *good_children, t_list *bad_children)
+{
+	t_list	*tmp;
+	t_data	*tmp2;
+
+	tmp = ((t_data *)(*parent)->content)->chill;
+	while (tmp)
+	{
+		tmp2 = (t_data *)(tmp->content);
+		if (tmp == bad_children)
+		{
+			tmp = good_children;
+			break ;
+		}
+		tmp = tmp->next;
+	}
 }
 
 t_list *short_path(t_list *queu, int level)
@@ -46,6 +64,8 @@ t_list *short_path(t_list *queu, int level)
 	t_list *ret;
 	t_list *head;
 	t_data *curr;
+	//t_list *new_out;
+	//t_data *test;
 
 	head = queu;
 	if (!(new_queue = ft_memalloc(sizeof(t_list))))
@@ -68,16 +88,20 @@ t_list *short_path(t_list *queu, int level)
 	if (new_queue->content)
 	{
 		ret = short_path(new_queue, level + 1);
+		if (!ret)
+			return (NULL);
 		new_children = findparent((t_data *)ret->content, ((t_data *)ret->content)->chill);
 		if (((t_data *)new_children->content)->role != 's')
 		{
-			if (!(add_outnode(((t_data *)new_children->content), new_children)))
-			return (NULL);
+			((t_data *)new_children->content)->open = -1;
+		/*	if (!(new_out = add_outnode(((t_data *)new_children->content), new_children)))
+				return (NULL);
+			switch_children(&ret, new_out, new_children);*/
 		}
-		else
+	/*	else
 		{
-			ft_lstremove(&((t_data *)new_children->content)->chill, ret);
-		}
+			//ft_lstremove(&((t_data *)new_children->content)->chill, ret);
+		}*/
 		
 		return (new_children);
 	}
@@ -95,6 +119,7 @@ t_list *add_outnode(t_data *node, t_list *chill)
 	t_data		*new_data;
 	t_list		*tmp_chill;
 	t_data		*tmp_data;
+	t_data		*tmp;
 
 	if (!(new_out = ft_memalloc(sizeof(t_list))))
 		return (NULL);
@@ -102,17 +127,19 @@ t_list *add_outnode(t_data *node, t_list *chill)
 		return (NULL);
 	new_out->content = ft_memcpy(new_data, node, sizeof(t_data));
 	node->statut = 'i';
-	node->chill = findparent(node, node->chill);
-	ft_lstremove(&((t_data *)new_out->content)->chill, node->chill);	
+	//node->chill = findparent(node, node->chill);
+//	ft_lstremove(&((t_data *)new_out->content)->chill, node->chill);	
 	((t_data *)new_out->content)->statut = 'o';
+	tmp = ((t_data *)new_out->content); 
 	tmp_chill = ((t_data *)new_out->content)->chill;
-	ft_printf(".|. %s\n",((t_data *)new_out->content)->name);
+	ft_printf("name %s\n",((t_data *)new_out->content)->name);
 	tmp_data = (t_data *)tmp_chill->content;
 	while (tmp_chill)
 		tmp_chill = tmp_chill->next;
 	tmp_chill = chill;
+	tmp = ((t_data *)tmp_chill->content); 
 //	node->chill = new_out; 
-	return (tmp_chill);
+	return (new_out);
 }
 
 t_list *findparent(t_data *node, t_list *chill)
@@ -125,13 +152,15 @@ t_list *findparent(t_data *node, t_list *chill)
 	min_level = FT_INTMAX;
 	while (chill)
 	{
-		if (((t_data *)(chill->content))->level < min_level)
+		if (((t_data *)(chill->content))->level < min_level 
+			&& ((t_data *)(chill->content))->open > -1)
 		{
 			min_level = ((t_data *)(chill->content))->level;
 			tmp = chill;
 		}
 		chill = chill->next;
 	}
-//	ft_printf("-- %s %d\n", ((t_data *)(tmp->content))->name, ((t_data *)(tmp->content))->level);
+
+	ft_printf("-- %s %d\n", ((t_data *)(tmp->content))->name, ((t_data *)(tmp->content))->level);
 	return (tmp);
 }

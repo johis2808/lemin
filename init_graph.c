@@ -91,19 +91,28 @@ t_nodes		*init_graph(t_nodes *nodes)
 	//ft_printf("lAAAAA : %d \n", node->open);
 	return (df);
 }*/
-
+//((t_data *)(new->content))->chill
 
 void	add_queu(t_list *queu, t_list *new, int level)
 {
 	t_list 	*newtmp;
 	t_list	*head;
+	t_data	*vdm;
+	
 
 	head = queu;
+	vdm = (t_data *)new->content;
 	if (!queu->content)
 	{
-		if (((t_data *)(new->content))->chill
-			&& ((!((t_data *)(new->content))->level)
-			|| (level && ((t_data *)(new->content))->level > level)))
+		while ((new && ((t_data *)(new->content))->open == -1) 
+		|| (new && (((t_data *)(new->content))->level && level == 0))
+		|| (new && (((t_data *)(new->content))->level && level 
+			&& (((t_data *)(new->content))->level < level))))
+			new = new->next;
+		if (new)
+			vdm = (t_data *)new->content;
+		if ((new && ((!((t_data *)(new->content))->level)))
+			|| (new && (level && ((t_data *)(new->content))->level > level)))
 		{
 			queu->content = new->content;
 			new = new->next;
@@ -114,16 +123,20 @@ void	add_queu(t_list *queu, t_list *new, int level)
 		while (queu->next)
 			queu = queu->next;
 	}
+	//|| (level && ((t_data *)(new->content))->level > level)
 	while (new)
 	{
-		if (((t_data *)(new->content))->chill
+		if (((t_data *)(new->content))->open > -1)
+		{
+			if (((t_data *)(new->content))->chill
 			&& ((!((t_data *)(new->content))->level)
 			|| (level && ((t_data *)(new->content))->level > level)))
-		{
-			newtmp = ft_memalloc(sizeof(t_list));
-			newtmp->content = new->content;
-			queu->next = newtmp;
-			queu = queu->next;
+			{
+				newtmp = ft_memalloc(sizeof(t_list));
+				newtmp->content = new->content;
+				queu->next = newtmp;
+				queu = queu->next;
+			}
 		}
 		new = new->next;
 	}

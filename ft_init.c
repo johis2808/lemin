@@ -28,7 +28,7 @@ int			parse_name(char *line, t_nodes *nodes, char role)
 	len = 0;
 	if (!line)
 		return (-1);
-	while (line[len] != ' ')
+	while (line[len] && line[len] != ' ')
 		len++;
 	if (!(name = ft_memalloc(len + 1)))
 		return (-1);
@@ -49,25 +49,31 @@ int			parse_name(char *line, t_nodes *nodes, char role)
 int			parse_coord(char *line, t_data *node)
 {
 	int		len;
+	size_t	i;
 
 	len = 0;
+	i = 0;
 	if (!line || !node)
 		return (-1);
-	while (line && *line)
-	{
-		if (*line == ' ' && *(line + 1) != ' ')
+	/*while (line && line[i])
+	{*/
+		if (line && *line == ' ' && *(line + 1) != ' ')
 			len++;
-		if (!(node->x = ft_atoi(line)))
-			return (-1);
+		node->x = ft_atoi(line);
+		/*if (!(node->x = ft_atoi(line)))
+			return (-1);*/
 		len += ft_intlen(node->x);
+		i += len;
 		line += len;
-		if (*line == ' ' && *(line + 1) != ' ')
-			len++;	
-		if (!(node->y = ft_atoi(line)))
-			return (-1);
+		if (line && *line == ' ' && *(line + 1) != ' ')
+			len++;
+		node->y = ft_atoi(line);	
+		/*if (!(node->y = ft_atoi(line)))
+			return (-1);*/
 		len += ft_intlen(node->y);
 		line += len;
-	}
+		i += len;
+	//}
 	return (len);
 }
 
@@ -141,15 +147,23 @@ void	resetlevel(t_nodes *nodes)
 	}
 }
 
+int		find_path(t_list **queu)
+{
+	graph_bfs(*queu, 1);
+	return ((short_path(*queu, 1) ? 1 : 0));	
+}
+
 int		main(int ac, char **av)
 {
 	t_nodes		*nodes;
 	t_list		*queu;
 //	t_cond		*cond;
 	t_data		*aya;
+	size_t		nb_paths;
 	int			fd;
 	(void)ac;
 
+	nb_paths = 0;
 	fd = open(av[1], O_RDWR);
 	if (!(nodes = ft_memalloc(sizeof(t_nodes))))
 		return (-1);
@@ -160,14 +174,34 @@ int		main(int ac, char **av)
 	aya = get_start(nodes);
 	queu = ft_memalloc(sizeof(t_list));
 	queu->content = aya;
-	graph_bfs(queu, 1);
-	/*ft_printf("ret : %d\n", graph_bfs(queu, 1));*/
-	ft_nodeprint(nodes);
+	while (find_path(&queu))
+	{
+		nb_paths++;
+		resetlevel(nodes);
+
+	}
+	ft_printf("nbpath : %d\n", nb_paths);
+/*	graph_bfs(queu, 1);
+	ft_printf("ret : %d\n", graph_bfs(queu, 1));
+	//ft_nodeprint(nodes);
 	short_path(queu, 1);
+	ft_printf("----\n");
+	//ft_nodeprint(nodes);
+	resetlevel(nodes);
+	//ft_nodeprint(nodes);
+	graph_bfs(queu, 1);
+	//ft_nodeprint(nodes);
+	ret = short_path(queu, 1);
+	ft_printf("ret avant: %p\n", ret);
+	//ft_nodeprint(nodes);
+
 	resetlevel(nodes);
 	graph_bfs(queu, 1);
-	short_path(queu, 1);
-	ft_nodeprint(nodes);
-
+	ret = short_path(queu, 1);
+	ft_printf("ret apres: %p\n", ret);
+	//ft_nodeprint(nodes);
+	tmp = ((t_data *)(queu->content));
+//	ft_nodeprint(nodes);
+	*/
 	//close(fd);
 }
