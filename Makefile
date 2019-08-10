@@ -6,7 +6,7 @@
 #    By: thberrid <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/07/29 19:26:47 by thberrid          #+#    #+#              #
-#    Updated: 2019/07/29 20:20:20 by thberrid         ###   ########.fr        #
+#    Updated: 2019/08/10 20:10:23 by thberrid         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -27,10 +27,9 @@ FILES_H = lem_in.h
 LIBFT = ./libft/libft.a
 FLAGS = -Wall -Wextra -Werror
 
-.PHONY : $(LIBFT)
-all : $(NAME) $(LIBFT)
+all : $(NAME)
 
-$(NAME) : $(FILES)
+$(NAME) : $(FILES_O) $(FILES_H) $(LIBFT)
 	gcc -I. -L ./libft/ -lft -o $(NAME) $(FILES_O)
  
 $(DIR_O)/%.o : %.c $(FILES_H)
@@ -42,7 +41,7 @@ $(LIBFT) :
 
 .PHONY : fsanitize
 fsanitize : 
-	gcc -g $(FILES_C) -I libft/libft.h libft/libft.a lem_in.h $(FLAGS) -fsanitize=address
+	gcc -g $(FILES_C) -I libft/libft.h $(LIBFT) $(FILES_H) $(FLAGS) -fsanitize=address
 
 .PHONY : clean
 clean :
