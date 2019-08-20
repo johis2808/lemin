@@ -6,7 +6,7 @@
 /*   By: thberrid <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/11 07:35:55 by thberrid          #+#    #+#             */
-/*   Updated: 2019/07/14 01:59:11 by thberrid         ###   ########.fr       */
+/*   Updated: 2019/08/20 04:46:41 by thberrid         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,13 +99,12 @@ void	add_queu(t_list *queu, t_list *new, int level)
 	t_list	*head;
 	t_data	*vdm;
 	
-
 	head = queu;
 	vdm = (t_data *)new->content;
 	if (!queu->content)
 	{
-		while ((new && ((t_data *)(new->content))->open == -1) 
-		|| (new && (((t_data *)(new->content))->level && level == 0))
+		//while ((new && ((t_data *)(new->content))->open == -1) 
+		while ((new && (((t_data *)(new->content))->level && level == 0))
 		|| (new && (((t_data *)(new->content))->level && level 
 			&& (((t_data *)(new->content))->level < level))))
 			new = new->next;
@@ -126,8 +125,8 @@ void	add_queu(t_list *queu, t_list *new, int level)
 	//|| (level && ((t_data *)(new->content))->level > level)
 	while (new)
 	{
-		if (((t_data *)(new->content))->open > -1)
-		{
+//		if (((t_data *)(new->content))->open > -1)
+//		{
 			if (((t_data *)(new->content))->chill
 			&& ((!((t_data *)(new->content))->level)
 			|| (level && ((t_data *)(new->content))->level > level)))
@@ -137,7 +136,7 @@ void	add_queu(t_list *queu, t_list *new, int level)
 				queu->next = newtmp;
 				queu = queu->next;
 			}
-		}
+//		}
 		new = new->next;
 	}
 	queu = head;
@@ -182,8 +181,9 @@ int		graph_bfs(t_list *queu, int level)
 		if (tmp)
 				add_queu(new_queue, tmp, 0);
 		if (!((t_data *)(queu->content))->level)
-		{	((t_data *)(queu->content))->level = level;
-			ft_printf("LA : %s\n", ((t_data *)(queu->content))->name);
+		{	
+			((t_data *)(queu->content))->level = level;
+		//	ft_printf("LEVELS %s > %d\n", ((t_data *)(queu->content))->name, level);
 		}
 		queu = queu->next;
 	}
