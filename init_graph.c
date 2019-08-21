@@ -6,7 +6,7 @@
 /*   By: thberrid <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/11 07:35:55 by thberrid          #+#    #+#             */
-/*   Updated: 2019/08/20 04:46:41 by thberrid         ###   ########.fr       */
+/*   Updated: 2019/08/21 04:52:59 by thberrid         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,14 +93,28 @@ t_nodes		*init_graph(t_nodes *nodes)
 }*/
 //((t_data *)(new->content))->chill
 
+void	printqueu2(char *title, t_list *q)
+{
+	int		i;
+
+	i = 0;
+	while (q)
+	{
+		if ((t_data *)(q->content))
+			ft_printf("%d : %s (%s, %c)\n", i, title, ((t_data *)(q->content))->name, ((t_data *)(q->content))->role);
+		else
+			ft_printf("%d : empty list node...(%s)\n", i, title);
+		q = q->next;
+		i += 1;
+	}
+}
+
 void	add_queu(t_list *queu, t_list *new, int level)
 {
 	t_list 	*newtmp;
 	t_list	*head;
-	t_data	*vdm;
 	
 	head = queu;
-	vdm = (t_data *)new->content;
 	if (!queu->content)
 	{
 		//while ((new && ((t_data *)(new->content))->open == -1) 
@@ -108,8 +122,6 @@ void	add_queu(t_list *queu, t_list *new, int level)
 		|| (new && (((t_data *)(new->content))->level && level 
 			&& (((t_data *)(new->content))->level < level))))
 			new = new->next;
-		if (new)
-			vdm = (t_data *)new->content;
 		if ((new && ((!((t_data *)(new->content))->level)))
 			|| (new && (level && ((t_data *)(new->content))->level > level)))
 		{
@@ -133,8 +145,18 @@ void	add_queu(t_list *queu, t_list *new, int level)
 			{
 				newtmp = ft_memalloc(sizeof(t_list));
 				newtmp->content = new->content;
-				queu->next = newtmp;
-				queu = queu->next;
+				/*
+				 * no se porque lol
+				 * */
+				if (queu->content)
+				{
+					queu->next = newtmp;
+					queu = queu->next;
+				}
+				else
+				{
+					queu->content = newtmp->content;
+				}
 			}
 //		}
 		new = new->next;
@@ -183,7 +205,6 @@ int		graph_bfs(t_list *queu, int level)
 		if (!((t_data *)(queu->content))->level)
 		{	
 			((t_data *)(queu->content))->level = level;
-		//	ft_printf("LEVELS %s > %d\n", ((t_data *)(queu->content))->name, level);
 		}
 		queu = queu->next;
 	}
@@ -191,4 +212,3 @@ int		graph_bfs(t_list *queu, int level)
 		graph_bfs(new_queue, level + 1);
 	return (-1);
 }
-
