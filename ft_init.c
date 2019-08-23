@@ -6,7 +6,7 @@
 /*   By: smoreno- <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/09 21:54:29 by smoreno-          #+#    #+#             */
-/*   Updated: 2019/07/11 05:03:13 by thberrid         ###   ########.fr       */
+/*   Updated: 2019/08/22 05:34:29 by thberrid         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -149,8 +149,15 @@ void	resetlevel(t_nodes *nodes)
 
 int		find_path(t_list **queu)
 {
-	graph_bfs(*queu, 1);
-	return ((short_path(*queu, 1) ? 1 : 0));	
+	int		ret;
+
+	ret = graph_bfs(*queu, 1);
+	ft_printf("\n");
+	//ft_printf("LEVEL RET %d\n", ret);
+	ret = ((short_path(*queu, 1) ? 1 : 0));
+	//ft_printf("SHORT RET %d\n", ret);
+	return (ret);
+	//return ((short_path(*queu, 1) ? 1 : 0));	
 }
 
 int		main(int ac, char **av)
@@ -177,8 +184,8 @@ int		main(int ac, char **av)
 	while (find_path(&queu))
 	{
 		nb_paths++;
+		ft_printf("\n");
 		resetlevel(nodes);
-
 	}
 	ft_printf("nbpath : %d\n", nb_paths);
 /*	graph_bfs(queu, 1);

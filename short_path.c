@@ -6,7 +6,7 @@
 /*   By: thberrid <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/14 05:27:22 by thberrid          #+#    #+#             */
-/*   Updated: 2019/08/21 04:55:00 by thberrid         ###   ########.fr       */
+/*   Updated: 2019/08/23 06:18:06 by thberrid         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,33 +30,6 @@ void	switch_children(t_list **parent, t_list *good_children, t_list *bad_childre
 	}
 }
 
-t_list	*ft_lstremove(t_list **list, t_list *to_del)
-{
-	t_list	*element;
-	t_list	*previous;
-
-	element = *list;
-	previous = NULL;
-	while (element)
-	{
-		if ((t_data *)element->content == (t_data *)to_del->content)
-		{
-//			ft_printf("rm %s\n", ((t_data *)element->content)->name);
-			break ;
-		}
-		previous = element;
-		element = element->next;
-	}
-	if (previous)
-		previous->next = element->next;
-	else
-		*list = element->next;
-	if (!element)
-		ft_printf("/:<");
-	return (*list);
-	// try to free lol
-}
-
 void	printqueu(char *title, t_list *q)
 {
 	int		i;
@@ -73,6 +46,59 @@ void	printqueu(char *title, t_list *q)
 	}
 }
 
+/*	head, ret	*/
+t_list	*simulate_outnode(t_list *node, t_list *node_previous)
+{
+	t_list	*children;
+	char	touchy;
+
+	if (((t_data *)(node_previous->content))->role != 't'
+		&& ((t_data *)(node->content))->role != 's')
+	{
+		touchy = 0;
+		children = ((t_data *)(node->content))->chill;
+		while (children)
+		{
+			if (((t_data *)(children->content))->role == 's')
+			{
+				touchy = 1;
+				break ;
+			}
+			children = children->next;
+		}
+		if (touchy)
+		{
+			ft_lstadd(&(((t_data *)(node_previous->content))->chill), node);
+		}
+		else
+			((t_data *)(node_previous->content))->chill = node;
+	}
+	return (node);
+}
+
+t_list	*ft_lstremove(t_list **list, t_list *to_del)
+{
+	t_list	*element;
+	t_list	*previous;
+
+	element = *list;
+	previous = NULL;
+	while (element)
+	{
+		if ((t_data *)element->content == (t_data *)to_del->content)
+			break ;
+		previous = element;
+		element = element->next;
+	}
+	if (previous)
+		previous->next = element->next;
+	else
+		*list = element->next;
+	if (!element)
+		ft_printf("/:<");
+	return (*list);
+}
+
 t_list *short_path(t_list *queu, int level)
 {
 	t_list 	*tmp;
@@ -80,10 +106,9 @@ t_list *short_path(t_list *queu, int level)
 	t_list	*new_children;
 	t_list 	*ret;
 	t_list 	*head;
-	//t_list *new_out;
-	//t_data *test;
+	t_list	*out;
 
-//	ft_printf("> %d\n", level);
+	
 	head = queu;
 	if (!(new_queue = ft_memalloc(sizeof(t_list))))
 		return (NULL);
@@ -91,42 +116,47 @@ t_list *short_path(t_list *queu, int level)
 	{
 		if (((t_data *)(queu->content))->role == 't')
 			return (queu);
-		tmp = ((t_data *)(queu->content))->chill;
+		out = ((t_data *)(queu->content))->out;
+//		if (out && ((t_data *)(out->content))->role != 's')
+//			tmp = out;
+//		else
+			tmp = ((t_data *)(queu->content))->chill;
 		add_queu(new_queue, tmp, level);
 		queu = queu->next;
 	}
-	/*	
-			t_list 	*chill_target;
-			chill_target = new_queue;
-			while (chill_target)
-			{
-				ft_printf("C1 %s\n", ((t_data *)(chill_target->content))->name);
-				chill_target = chill_target->next;
-			}
-	*/
-
+//	if (!(t_data *)(new_queue->content))
+//		ft_printf("rabit 3\n");
 	if ((t_data *)(new_queue->content))
 	{
 		ret = short_path(new_queue, level + 1);
-		ft_printf("> %s (%d)\n", ((t_data *)(ret->content))->name, ((t_data *)(ret->content))->level);
 		if (!ret)
 			return (NULL);
+		ft_printf("> %s (%d)\n", ((t_data *)(ret->content))->name, ((t_data *)(ret->content))->level);
+		/* this while is the new findparent() */
 		while (head)
 		{
-			new_children = ((t_data *)(head->content))->chill;
+			out = ((t_data *)(head->content))->out;
+			if (out)
+				new_children = out;
+			else
+				new_children = ((t_data *)(head->content))->chill;
 			while (new_children)
 			{
-		//		ft_printf("lvl = %d, cur = %s (%d), ret = %s\n", level, ((t_data *)(new_children->content))->name, ((t_data *)(new_children->content))->level, ((t_data *)(ret->content))->name);
 				if (level < ((t_data *)(new_children->content))->level && (t_data *)(new_children->content) == (t_data *)(ret->content))
-					break;
+					break ;
 				new_children = new_children->next;
-			}	
-		//	if (level < ((t_data *)(new_children->content))->level && (t_data *)(new_children->content) == (t_data *)(ret->content))
+			}
 			if (new_children && level < ((t_data *)(new_children->content))->level && (t_data *)(new_children->content) == (t_data *)(ret->content))
 				break ;
 			head = head->next;
 		}
+		/* on retourne le lien plutot qu'inverser, meh ? */
 		ft_lstremove(&(((t_data *)(head->content))->chill), ret);
+		
+		/* simuler out node : supprimer tous les autres enfant, meh ? */
+		if (!simulate_outnode(head, ret))
+			return (NULL);
+
 		return (head);
 	}
 	return (NULL);
