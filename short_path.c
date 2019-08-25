@@ -6,7 +6,7 @@
 /*   By: thberrid <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/14 05:27:22 by thberrid          #+#    #+#             */
-/*   Updated: 2019/08/23 06:18:06 by thberrid         ###   ########.fr       */
+/*   Updated: 2019/08/25 06:53:50 by thberrid         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -132,6 +132,8 @@ t_list *short_path(t_list *queu, int level)
 		if (!ret)
 			return (NULL);
 		ft_printf("> %s (%d)\n", ((t_data *)(ret->content))->name, ((t_data *)(ret->content))->level);
+		if (((t_data *)(head->content))->role == 's')
+			ft_printf("> %s (%d)\n", ((t_data *)(head->content))->name, ((t_data *)(head->content))->level);
 		/* this while is the new findparent() */
 		while (head)
 		{
@@ -156,7 +158,6 @@ t_list *short_path(t_list *queu, int level)
 		/* simuler out node : supprimer tous les autres enfant, meh ? */
 		if (!simulate_outnode(head, ret))
 			return (NULL);
-
 		return (head);
 	}
 	return (NULL);

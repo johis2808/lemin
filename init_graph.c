@@ -6,7 +6,7 @@
 /*   By: thberrid <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/11 07:35:55 by thberrid          #+#    #+#             */
-/*   Updated: 2019/08/21 04:52:59 by thberrid         ###   ########.fr       */
+/*   Updated: 2019/08/23 05:18:18 by thberrid         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -117,7 +117,6 @@ void	add_queu(t_list *queu, t_list *new, int level)
 	head = queu;
 	if (!queu->content)
 	{
-		//while ((new && ((t_data *)(new->content))->open == -1) 
 		while ((new && (((t_data *)(new->content))->level && level == 0))
 		|| (new && (((t_data *)(new->content))->level && level 
 			&& (((t_data *)(new->content))->level < level))))
@@ -134,11 +133,8 @@ void	add_queu(t_list *queu, t_list *new, int level)
 		while (queu->next)
 			queu = queu->next;
 	}
-	//|| (level && ((t_data *)(new->content))->level > level)
 	while (new)
 	{
-//		if (((t_data *)(new->content))->open > -1)
-//		{
 			if (((t_data *)(new->content))->chill
 			&& ((!((t_data *)(new->content))->level)
 			|| (level && ((t_data *)(new->content))->level > level)))
@@ -146,7 +142,7 @@ void	add_queu(t_list *queu, t_list *new, int level)
 				newtmp = ft_memalloc(sizeof(t_list));
 				newtmp->content = new->content;
 				/*
-				 * no se porque lol
+				 * no se porque lol ay ay
 				 * */
 				if (queu->content)
 				{
@@ -158,7 +154,6 @@ void	add_queu(t_list *queu, t_list *new, int level)
 					queu->content = newtmp->content;
 				}
 			}
-//		}
 		new = new->next;
 	}
 	queu = head;
@@ -187,6 +182,7 @@ int		graph_bfs(t_list *queu, int level)
 	size_t		i;
 	t_list	*new_queue;
 	t_data	*aya;
+	t_list	*out;
 
 	aya = ((t_data *)queu->content); 
 //	aya->next = ((t_data *)queu->content)->chill->next;
@@ -198,10 +194,17 @@ int		graph_bfs(t_list *queu, int level)
 	while (queu)
 	{
 		i = 0;
-		tmp = ((t_data *)(queu->content))->chill;
+		out = ((t_data *)(queu->content))->out;
+//		if (out && (((t_data *)(out->content))->out))
+//		if (out && ((t_data *)(out->content))->role != 's')
+//			tmp = out;
+//		else
+			tmp = ((t_data *)(queu->content))->chill;
 		//while (i < ((t_data *)(queu->content))->size)
 		if (tmp)
-				add_queu(new_queue, tmp, 0);
+		{
+			add_queu(new_queue, tmp, 0);
+		}
 		if (!((t_data *)(queu->content))->level)
 		{	
 			((t_data *)(queu->content))->level = level;

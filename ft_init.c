@@ -6,7 +6,7 @@
 /*   By: smoreno- <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/09 21:54:29 by smoreno-          #+#    #+#             */
-/*   Updated: 2019/08/22 05:34:29 by thberrid         ###   ########.fr       */
+/*   Updated: 2019/08/25 06:08:28 by thberrid         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -152,7 +152,6 @@ int		find_path(t_list **queu)
 	int		ret;
 
 	ret = graph_bfs(*queu, 1);
-	ft_printf("\n");
 	//ft_printf("LEVEL RET %d\n", ret);
 	ret = ((short_path(*queu, 1) ? 1 : 0));
 	//ft_printf("SHORT RET %d\n", ret);
