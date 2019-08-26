@@ -6,7 +6,7 @@
 /*   By: smoreno- <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/09 21:54:29 by smoreno-          #+#    #+#             */
-/*   Updated: 2019/08/25 06:08:28 by thberrid         ###   ########.fr       */
+/*   Updated: 2019/08/26 09:10:37 by thberrid         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -147,16 +147,29 @@ void	resetlevel(t_nodes *nodes)
 	}
 }
 
-int		find_path(t_list **queu)
+int		find_path(t_list **queu, char target)
 {
 	int		ret;
 
-	ret = graph_bfs(*queu, 1);
+	ret = graph_bfs(*queu, 1, target);
+//	if (target == 's')
+//		ft_printf(" >> %d\n", ret);
 	//ft_printf("LEVEL RET %d\n", ret);
-	ret = ((short_path(*queu, 1) ? 1 : 0));
+	ret = ((short_path(*queu, 1, target) ? 1 : 0));
+//	if (target == 's')
+//		ft_printf(" >> %d\n", ret);
 	//ft_printf("SHORT RET %d\n", ret);
 	return (ret);
 	//return ((short_path(*queu, 1) ? 1 : 0));	
+}
+
+int		path_back(t_list **q)
+{
+	int		retrn;
+
+	retrn = bfs_level(*q, 1);
+	retrn = ((bfs_path(*q, 1) ? 1 : 0));
+	return (retrn);
 }
 
 int		main(int ac, char **av)
@@ -177,16 +190,29 @@ int		main(int ac, char **av)
 //		return (-1);
 	nodes = ft_read(nodes, fd);
 	nodes = init_graph(nodes);
-	aya = get_start(nodes);
+	aya = get_startend(nodes, 's');
 	queu = ft_memalloc(sizeof(t_list));
 	queu->content = aya;
-	while (find_path(&queu))
+	while (find_path(&queu, 't'))
 	{
 		nb_paths++;
 		ft_printf("\n");
 		resetlevel(nodes);
 	}
-	ft_printf("nbpath : %d\n", nb_paths);
+	aya = get_startend(nodes, 't');
+	//ft_printf("st : %s (%d)\n", aya->name, aya->level);
+	queu = ft_memalloc(sizeof(t_list));
+	queu->content = aya;
+	aya = get_startend(nodes, 's');
+	aya->level = 0;	// llooooooooooooooooool bidouilles bidouilles
+	//ft_printf("st : %s (%d)\n", aya->name, aya->level);
+	while (path_back(&queu))
+	{
+		nb_paths++;
+		ft_printf("\n");
+		resetlevel(nodes);
+	}
+	//ft_printf("nbpath : %d\n", nb_paths);
 /*	graph_bfs(queu, 1);
 	ft_printf("ret : %d\n", graph_bfs(queu, 1));
 	//ft_nodeprint(nodes);

@@ -6,7 +6,7 @@
 /*   By: thberrid <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/14 05:27:22 by thberrid          #+#    #+#             */
-/*   Updated: 2019/08/25 06:53:50 by thberrid         ###   ########.fr       */
+/*   Updated: 2019/08/26 09:21:52 by thberrid         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,8 +50,10 @@ void	printqueu(char *title, t_list *q)
 t_list	*simulate_outnode(t_list *node, t_list *node_previous)
 {
 	t_list	*children;
+	t_list	*new;
 	char	touchy;
 
+	new = NULL;
 	if (((t_data *)(node_previous->content))->role != 't'
 		&& ((t_data *)(node->content))->role != 's')
 	{
@@ -66,12 +68,19 @@ t_list	*simulate_outnode(t_list *node, t_list *node_previous)
 			}
 			children = children->next;
 		}
+//		touchy = 1;	// lol seriously ?
 		if (touchy)
 		{
-			ft_lstadd(&(((t_data *)(node_previous->content))->chill), node);
+			new = ft_memalloc(sizeof(t_list));
+			new->content = node->content;
+			ft_lstadd(&(((t_data *)(node_previous->content))->chill), new);
 		}
 		else
-			((t_data *)(node_previous->content))->chill = node;
+		{
+			new = ft_memalloc(sizeof(t_list));
+			new->content = node->content;
+			((t_data *)(node_previous->content))->chill = new;
+		}
 	}
 	return (node);
 }
@@ -99,7 +108,7 @@ t_list	*ft_lstremove(t_list **list, t_list *to_del)
 	return (*list);
 }
 
-t_list *short_path(t_list *queu, int level)
+t_list *short_path(t_list *queu, int level, char target)
 {
 	t_list 	*tmp;
 	t_list 	*new_queue;
@@ -114,8 +123,10 @@ t_list *short_path(t_list *queu, int level)
 		return (NULL);
 	while (queu)
 	{
-		if (((t_data *)(queu->content))->role == 't')
+		if (((t_data *)(queu->content))->role == target)
+		{
 			return (queu);
+		}
 		out = ((t_data *)(queu->content))->out;
 //		if (out && ((t_data *)(out->content))->role != 's')
 //			tmp = out;
@@ -128,20 +139,30 @@ t_list *short_path(t_list *queu, int level)
 //		ft_printf("rabit 3\n");
 	if ((t_data *)(new_queue->content))
 	{
-		ret = short_path(new_queue, level + 1);
+		ret = short_path(new_queue, level + 1, target);
 		if (!ret)
 			return (NULL);
-		ft_printf("> %s (%d)\n", ((t_data *)(ret->content))->name, ((t_data *)(ret->content))->level);
-		if (((t_data *)(head->content))->role == 's')
-			ft_printf("> %s (%d)\n", ((t_data *)(head->content))->name, ((t_data *)(head->content))->level);
+		/*
+		 * below is to print the paths (with superposition)
+		 *
+		 * */
+				
+		if (target == 't')
+		{
+
+			ft_printf("> %s (%d)\n", ((t_data *)(ret->content))->name, ((t_data *)(ret->content))->level);
+			if (((t_data *)(head->content))->role == 's')
+				ft_printf("> %s (%d)\n", ((t_data *)(head->content))->name, ((t_data *)(head->content))->level);
+		}
+		
 		/* this while is the new findparent() */
 		while (head)
 		{
-			out = ((t_data *)(head->content))->out;
+/*			out = ((t_data *)(head->content))->out;
 			if (out)
 				new_children = out;
 			else
-				new_children = ((t_data *)(head->content))->chill;
+*/				new_children = ((t_data *)(head->content))->chill;
 			while (new_children)
 			{
 				if (level < ((t_data *)(new_children->content))->level && (t_data *)(new_children->content) == (t_data *)(ret->content))
@@ -152,6 +173,7 @@ t_list *short_path(t_list *queu, int level)
 				break ;
 			head = head->next;
 		}
+
 		/* on retourne le lien plutot qu'inverser, meh ? */
 		ft_lstremove(&(((t_data *)(head->content))->chill), ret);
 		
@@ -162,6 +184,8 @@ t_list *short_path(t_list *queu, int level)
 	}
 	return (NULL);
 }
+
+/* lol toutes les fonctions ci-dessous sont genre unused */
 
 int		is_mutual(t_data *target, t_list *list)
 {

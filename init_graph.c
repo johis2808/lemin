@@ -6,7 +6,7 @@
 /*   By: thberrid <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/11 07:35:55 by thberrid          #+#    #+#             */
-/*   Updated: 2019/08/23 05:18:18 by thberrid         ###   ########.fr       */
+/*   Updated: 2019/08/26 09:34:09 by thberrid         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -159,7 +159,7 @@ void	add_queu(t_list *queu, t_list *new, int level)
 	queu = head;
 }
 
-t_data	*get_start(t_nodes *nodes)
+t_data	*get_startend(t_nodes *nodes, char symbol)
 {
 	size_t	i;
 	t_data	*tmp;
@@ -168,7 +168,7 @@ t_data	*get_start(t_nodes *nodes)
 	tmp = nodes->head;
 	while (i < nodes->size)
 	{
-		if (tmp->role == 's')
+		if (tmp->role == symbol)
 			return(tmp);
 		tmp = tmp->next;
 		i++;
@@ -176,15 +176,15 @@ t_data	*get_start(t_nodes *nodes)
 	return (NULL);
 }
 
-int		graph_bfs(t_list *queu, int level)
+int		graph_bfs(t_list *queu, int level, char target)
 {
 	t_list	*tmp;
 	size_t		i;
 	t_list	*new_queue;
 	t_data	*aya;
-	t_list	*out;
-
-	aya = ((t_data *)queu->content); 
+//	t_list	*out;
+	aya = ((t_data *)queu->content);
+   	//	ft_printf("LVL %s\n", ((t_data *)(queu->content))->name);		   
 //	aya->next = ((t_data *)queu->content)->chill->next;
 //	aya->next->next = ((t_data *)queu->content)->chill->next; */
 	if (!(new_queue = ft_memalloc(sizeof(t_list))))
@@ -194,7 +194,7 @@ int		graph_bfs(t_list *queu, int level)
 	while (queu)
 	{
 		i = 0;
-		out = ((t_data *)(queu->content))->out;
+//		out = ((t_data *)(queu->content))->out;
 //		if (out && (((t_data *)(out->content))->out))
 //		if (out && ((t_data *)(out->content))->role != 's')
 //			tmp = out;
@@ -212,6 +212,6 @@ int		graph_bfs(t_list *queu, int level)
 		queu = queu->next;
 	}
 	if (new_queue->content)
-		graph_bfs(new_queue, level + 1);
+		graph_bfs(new_queue, level + 1, target);
 	return (-1);
 }
