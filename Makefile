@@ -6,7 +6,7 @@
 #    By: thberrid <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/07/29 19:26:47 by thberrid          #+#    #+#              #
-#    Updated: 2019/08/10 20:10:23 by thberrid         ###   ########.fr        #
+#    Updated: 2019/08/26 09:49:52 by thberrid         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -19,7 +19,8 @@ NAME_C = ft_init.c \
 		  init_graph.c \
 		  lst_util.c \
 		  parse.c \
-		  short_path.c
+		  short_path.c \
+		  path_back.c
 # FILES_C = $(addprefix $(DIR_C)/, $(NAME_C))
 NAME_O = $(NAME_C:.c=.o)
 FILES_O = $(addprefix $(DIR_O)/, $(NAME_O))
@@ -38,10 +39,6 @@ $(DIR_O)/%.o : %.c $(FILES_H)
 
 $(LIBFT) :
 	make -C ./libft/
-
-.PHONY : fsanitize
-fsanitize : 
-	gcc -g $(FILES_C) -I libft/libft.h $(LIBFT) $(FILES_H) $(FLAGS) -fsanitize=address
 
 .PHONY : clean
 clean :
