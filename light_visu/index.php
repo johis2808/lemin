@@ -7,7 +7,7 @@
 	</head>
 	<body>
 		<div id="interface">
-			<p id="usage">usage : http://localhost:8080/map=?map_name</p>
+			<p id="usage">usage : http://localhost:8080/map=?map_name&rand</p>
 			<div id="clickables">
 				<button id="hide-names">toggle names</button>
 				<?php include("./server.php"); ?>

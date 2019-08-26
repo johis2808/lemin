@@ -45,8 +45,9 @@ function map_tojson($file){
 			if (strpos($line, "#") === FALSE) :
 				if (strpos($line, "-") === FALSE) :
 					$node_data = explode(" ", $line);
-					if ($node_data[1] == $node_data[2]):
-						$node_data[2] += rand(5, 25);
+					if (isset($_GET['rand']) && $node_data[1] == $node_data[2]):
+						$node_data[1] += rand(5, 50);
+						$node_data[2] += rand(5, 50);
 					endif;
 					$new_node = array(
 						"role"	=> get_commentdata($previous_line),

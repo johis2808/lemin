@@ -14,7 +14,7 @@ body {
 	display: none;
 }
 #interface {
-	position: absolute;
+	position: fixed;
 	z-index: 9;
 	left: .75em;
 	top: .5em;

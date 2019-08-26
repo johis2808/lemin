@@ -43,8 +43,8 @@ function setShifts(){
 		xShift = (xMin * -1) + (pointSize * 2);
 	if (yMin < 0)
 		yShift = (yMin * -1) + (pointSize * 2);
-	xStep = (windowWidth / 1.2) / xInterval;
-	yStep = (windowHeight / 1.3) / yInterval;
+	xStep = (windowWidth / 1.3) / xInterval;
+	yStep = (windowHeight / 1.4) / yInterval;
 }
 
 function centerPosition(point){
@@ -114,8 +114,10 @@ function drawArcs(arcs, canvasTarget, color)
 		ctxTarget.setLineDash([1,4]);
 		ctxTarget.lineWidth = 1;
 	} else {
-		ctxTarget.lineWidth = pointSize / 3;
-		ctxTarget.globalAlpha = 1 / pathsLength;
+		var width = pointSize / 3;
+		ctxTarget.lineWidth = width;
+		var alpha = 1 / pathsLength;
+		ctxTarget.globalAlpha = alpha;
 		ctxTarget.lineCap = "square";
 	}
 	while (i < max)
