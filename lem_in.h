@@ -6,7 +6,7 @@
 /*   By: smoreno- <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/09 21:25:05 by smoreno-          #+#    #+#             */
-/*   Updated: 2019/07/11 09:01:43 by thberrid         ###   ########.fr       */
+/*   Updated: 2019/08/26 04:58:24 by thberrid         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,6 +36,7 @@ typedef	struct 			s_data
 	int					open;
 	int					is_path;
 	char				role;
+	t_list				*out;
 	t_list				*chill;
 	size_t				size;
 }						t_data;
@@ -90,15 +91,24 @@ t_nodes			*ft_read(t_nodes *nodes, int fd);
 int				ft_init(char *line, t_nodes	*nodes, char role);
 int				ft_read_error(char	*line, t_cond *cond);
 t_nodes			*init_graph(t_nodes *nodes);
-t_data			*get_start(t_nodes *nodes);
-int				graph_bfs(t_list *node, int level);
+t_data			*get_startend(t_nodes *nodes, char symbol);
+int				graph_bfs(t_list *node, int level, char target);
 void			add_queu(t_list *queu, t_list *new, int level);
 
 /*
 ** finding paths
 */
 t_list			*findparent(t_data *node, t_list *chill);
-t_list			*short_path(t_list *queu, int level);
+t_list			*short_path(t_list *queu, int level, char target);
 t_list			*add_outnode(t_data *node, t_list *chill);
+
+/*
+** path back
+*/
+
+t_list			*ft_lstremove(t_list **list, t_list *to_del);
+
+int				bfs_level(t_list *q, int level);
+t_list			*bfs_path(t_list *q, int level);
 
 # endif
