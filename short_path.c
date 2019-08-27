@@ -6,7 +6,7 @@
 /*   By: thberrid <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/14 05:27:22 by thberrid          #+#    #+#             */
-/*   Updated: 2019/08/26 09:21:52 by thberrid         ###   ########.fr       */
+/*   Updated: 2019/08/27 00:37:02 by thberrid         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,33 +54,46 @@ t_list	*simulate_outnode(t_list *node, t_list *node_previous)
 	char	touchy;
 
 	new = NULL;
+		touchy = 0;
+//	ft_printf(":: %s\n", ((t_data *)(node_previous->content))->name);
 	if (((t_data *)(node_previous->content))->role != 't'
 		&& ((t_data *)(node->content))->role != 's')
 	{
-		touchy = 0;
-		children = ((t_data *)(node->content))->chill;
+		children = ((t_data *)(node_previous->content))->chill;
 		while (children)
 		{
 			if (((t_data *)(children->content))->role == 's')
 			{
+
+	//			ft_printf(":: :: touch\n");
 				touchy = 1;
 				break ;
 			}
 			children = children->next;
 		}
 //		touchy = 1;	// lol seriously ?
-		if (touchy)
+		if (!touchy)
 		{
-			new = ft_memalloc(sizeof(t_list));
-			new->content = node->content;
-			ft_lstadd(&(((t_data *)(node_previous->content))->chill), new);
-		}
-		else
-		{
+	//		new = ft_memalloc(sizeof(t_list));
+	//		new->content = node->content;
+	//		ft_lstadd(&(((t_data *)(node_previous->content))->chill), new);
+	//	}
+	//	else
+	//	{
+//			ft_printf(":: :: %s\n", ((t_data *)(node_previous->content))->name);
+			//	ft_printf("touching\n");
 			new = ft_memalloc(sizeof(t_list));
 			new->content = node->content;
 			((t_data *)(node_previous->content))->chill = new;
 		}
+	}
+//	ft_printf(":: %s\n", ((t_data *)(node_previous->content))->name);
+	t_list *tmp;
+	tmp = ((t_data *)(node_previous->content))->chill;
+	while (tmp)
+	{
+//		ft_printf("|| %s\n", ((t_data *)(tmp->content))->name);
+		tmp = tmp->next;
 	}
 	return (node);
 }
