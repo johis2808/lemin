@@ -163,6 +163,67 @@ int		find_path(t_list **queu, char target)
 	//return ((short_path(*queu, 1) ? 1 : 0));	
 }
 
+void    path_print(t_path_head *heads)
+{
+    t_path        *curr;
+    t_chill        *room;
+    size_t        i;
+    size_t        t;
+    curr = heads->head;
+    i = 0;
+    while (curr && i < heads->path_size)
+    {
+        t = 0;
+        room = curr->path->head_tubes;
+        while (room && t < curr->path->size_tubes)
+        {
+            ft_printf("Room name: %s\n", room->name);
+            t++;
+            room = room->next;
+        }
+		ft_printf("\n");
+        curr = curr->next;
+        i++;
+    }
+}
+
+t_nodes        *add_paths(t_path_head *head_paths, t_nodes    *new_path)
+{
+    t_path    *newp;
+    newp = NULL;
+    if(!(newp = ft_memalloc(sizeof(t_path))))
+        return (NULL);
+    newp->path = new_path;
+    newp->next = head_paths->head ? head_paths->head : newp;
+    newp->prev = head_paths->head ? head_paths->head->prev : newp;
+    if (head_paths->path_size == 0)
+        head_paths->head = newp;
+    newp->prev->next = newp;
+    newp->next->prev = newp;
+    head_paths->path_size++;
+    return (new_path);
+}
+
+int        path_back(t_list **q, t_path_head **paths)
+{
+    int        retrn;
+    t_nodes        *new_path;
+    new_path = NULL;
+    if(!*paths)
+    {
+        if(!(*paths = ft_memalloc(sizeof(t_path_head))))
+            return (-1);
+    }
+    retrn = bfs_level(*q, 1);
+    //retrn = ((bfs_path(*q, 1, &new_path) ? 1 : 0));
+    retrn = ((bfs_path(*q, 1, &new_path) ? 1 : 0));
+    if (new_path)
+        add_paths(*paths, new_path);    
+    return (retrn);
+}
+
+
+/*
 int		path_back(t_list **q)
 {
 	int		retrn;
@@ -171,7 +232,7 @@ int		path_back(t_list **q)
 	retrn = ((bfs_path(*q, 1) ? 1 : 0));
 	return (retrn);
 }
-
+*/
 int		main(int ac, char **av)
 {
 	t_nodes		*nodes;
@@ -179,6 +240,11 @@ int		main(int ac, char **av)
 //	t_cond		*cond;
 	t_data		*aya;
 	size_t		nb_paths;
+
+	t_path_head	*paths;
+
+	paths = NULL;
+
 	int			fd;
 	(void)ac;
 
@@ -196,9 +262,12 @@ int		main(int ac, char **av)
 	while (find_path(&queu, 't'))
 	{
 		nb_paths++;
-		ft_printf("\n");
+//		ft_printf("\n");
 		resetlevel(nodes);
 	}
+
+	ft_printf("OOOOOO %d\n", nb_paths);
+
 	aya = get_startend(nodes, 't');
 	//ft_printf("st : %s (%d)\n", aya->name, aya->level);
 	queu = ft_memalloc(sizeof(t_list));
@@ -206,12 +275,15 @@ int		main(int ac, char **av)
 	aya = get_startend(nodes, 's');
 	aya->level = 0;	// llooooooooooooooooool bidouilles bidouilles
 	//ft_printf("st : %s (%d)\n", aya->name, aya->level);
-	while (path_back(&queu))
+	while (path_back(&queu, &paths))
 	{
 		nb_paths++;
-		ft_printf("\n");
+		
 		resetlevel(nodes);
 	}
+
+	path_print(paths);
+	
 	//ft_printf("nbpath : %d\n", nb_paths);
 /*	graph_bfs(queu, 1);
 	ft_printf("ret : %d\n", graph_bfs(queu, 1));

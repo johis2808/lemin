@@ -79,12 +79,29 @@ int		bfs_level(t_list *q, int level)
 	return (0);
 }
 
-t_list	*bfs_path(t_list *q, int level)
+
+t_nodes        *make_path(t_nodes    **head, t_data *new)
+{
+    if(!*head)
+    {
+        if(!(*head = ft_memalloc(sizeof(t_nodes))))
+            return (NULL);
+    }
+    if (!(add_tubes(new->name, ".", *head)))
+        return (NULL);
+    return    (*head);
+}
+
+t_list	*bfs_path(t_list *q, int level, t_nodes **path)
 {
 	t_list	*retrn;
 	t_list	*new_q;
 	t_list	*q_save;
 	t_list	*children;
+
+	 t_data    *tmp;
+	 tmp = ft_memalloc(sizeof(t_data));
+
 
 	new_q = NULL;
 	q_save = q;
@@ -92,7 +109,9 @@ t_list	*bfs_path(t_list *q, int level)
 	{
 		if (((t_data *)(q->content))->role == 's')
 		{
-			ft_printf("> %s (%d / %d)\n", ((t_data *)(q->content))->name, ((t_data *)(q->content))->level, level);
+			tmp = ft_memcpy(tmp,(t_data *)(q->content), sizeof(t_data));
+            make_path(path, tmp);
+		//	ft_printf("> %s (%d / %d)\n", ((t_data *)(q->content))->name, ((t_data *)(q->content))->level, level);
 			return (q);
 		}
 		add_newq(&new_q, ((t_data *)(q->content))->chill, is_levelinf, level);
@@ -100,7 +119,7 @@ t_list	*bfs_path(t_list *q, int level)
 	}
 	if (!new_q)
 		return (NULL);
-	retrn = bfs_path(new_q, level += 1);
+	retrn = bfs_path(new_q, level += 1, path);
 	if (!retrn)
 		return (NULL);
 	q = q_save;
@@ -123,6 +142,10 @@ t_list	*bfs_path(t_list *q, int level)
 	if (!q)
 		return (NULL);
 	ft_lstremove(&(((t_data *)(q->content))->chill), retrn);
-	ft_printf("> %s (%d / %d)\n", ((t_data *)(q->content))->name, ((t_data *)(q->content))->level, level);
+	
+	tmp = ft_memcpy(tmp,(t_data *)(q->content), sizeof(t_data));
+    make_path(path, tmp);
+
+//	ft_printf("> %s (%d / %d)\n", ((t_data *)(q->content))->name, ((t_data *)(q->content))->level, level);
 	return (q);	
 }

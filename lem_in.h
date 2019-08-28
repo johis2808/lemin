@@ -67,6 +67,26 @@ typedef struct 	s_cond
 	char		role;
 }				t_cond;
 
+
+
+
+typedef struct             s_path
+{    
+    struct s_path        *next;
+    struct s_path        *prev;
+    t_nodes                *path;
+}                        t_path;
+
+typedef struct             s_path_head
+{    
+    t_path                *head;
+    size_t                path_size;
+    char                *name;
+}                        t_path_head;
+
+
+
+
 /*
 ** nodes tools
 */
@@ -109,6 +129,8 @@ t_list			*add_outnode(t_data *node, t_list *chill);
 t_list			*ft_lstremove(t_list **list, t_list *to_del);
 
 int				bfs_level(t_list *q, int level);
-t_list			*bfs_path(t_list *q, int level);
+t_list			*bfs_path(t_list *q, int level, t_nodes **path);
+
+
 
 # endif

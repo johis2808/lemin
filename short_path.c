@@ -163,9 +163,9 @@ t_list *short_path(t_list *queu, int level, char target)
 		if (target == 't')
 		{
 
-			ft_printf("> %s (%d)\n", ((t_data *)(ret->content))->name, ((t_data *)(ret->content))->level);
-			if (((t_data *)(head->content))->role == 's')
-				ft_printf("> %s (%d)\n", ((t_data *)(head->content))->name, ((t_data *)(head->content))->level);
+		//	ft_printf("> %s (%d)\n", ((t_data *)(ret->content))->name, ((t_data *)(ret->content))->level);
+		//	if (((t_data *)(head->content))->role == 's')
+		//		ft_printf("> %s (%d)\n", ((t_data *)(head->content))->name, ((t_data *)(head->content))->level);
 		}
 		
 		/* this while is the new findparent() */
