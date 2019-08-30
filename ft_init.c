@@ -6,7 +6,7 @@
 /*   By: smoreno- <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/09 21:54:29 by smoreno-          #+#    #+#             */
-/*   Updated: 2019/08/30 07:33:45 by thberrid         ###   ########.fr       */
+/*   Updated: 2019/08/30 07:42:00 by thberrid         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -262,11 +262,10 @@ int		main(int ac, char **av)
 	while (find_path(&queu, 't'))
 	{
 		nb_paths++;
-//		ft_printf("\n");
+	//	ft_printf("\n");
 		resetlevel(nodes);
 	}
 
-//	ft_printf("OOOOOO %d\n", nb_paths);
 
 	aya = get_startend(nodes, 't');
 	//ft_printf("st : %s (%d)\n", aya->name, aya->level);
@@ -275,14 +274,17 @@ int		main(int ac, char **av)
 	aya = get_startend(nodes, 's');
 	aya->level = 0;	// llooooooooooooooooool bidouilles bidouilles
 	//ft_printf("st : %s (%d)\n", aya->name, aya->level);
+	int		nb_print = 0;
 	while (path_back(&queu, &paths))
 	{
-		nb_paths++;
+		nb_print++;
 		resetlevel(nodes);
 	}
 
 	path_print(paths);
 	
+	ft_printf("found by FN short path %d\n", nb_paths);
+	ft_printf("found by FN path back %d\n", nb_print);
 	//ft_printf("nbpath : %d\n", nb_paths);
 /*	graph_bfs(queu, 1);
 	ft_printf("ret : %d\n", graph_bfs(queu, 1));
