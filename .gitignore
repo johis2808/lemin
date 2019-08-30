@@ -6,3 +6,5 @@
 *~
 *.gch
 lem-in
+light_visu/*.json
+light_visu/result
