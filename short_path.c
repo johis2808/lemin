@@ -6,7 +6,7 @@
 /*   By: thberrid <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/14 05:27:22 by thberrid          #+#    #+#             */
-/*   Updated: 2019/08/27 00:37:02 by thberrid         ###   ########.fr       */
+/*   Updated: 2019/08/30 07:29:34 by thberrid         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,16 +47,18 @@ void	printqueu(char *title, t_list *q)
 }
 
 /*	head, ret	*/
-t_list	*simulate_outnode(t_list *node, t_list *node_previous)
+int		simulate_outnode(t_list *node, t_list *node_previous)
 {
 	t_list	*children;
 	t_list	*new;
 	char	touchy;
 
-	new = NULL;
+//	new = NULL;
 		touchy = 0;
 //	ft_printf(":: %s\n", ((t_data *)(node_previous->content))->name);
 	if (((t_data *)(node_previous->content))->role != 't'
+		&& ((t_data *)(node->content))->role != 't'
+		&& ((t_data *)(node_previous->content))->role != 's'
 		&& ((t_data *)(node->content))->role != 's')
 	{
 		children = ((t_data *)(node_previous->content))->chill;
@@ -72,14 +74,14 @@ t_list	*simulate_outnode(t_list *node, t_list *node_previous)
 			children = children->next;
 		}
 //		touchy = 1;	// lol seriously ?
-		if (!touchy)
+		if (touchy)
 		{
-	//		new = ft_memalloc(sizeof(t_list));
-	//		new->content = node->content;
-	//		ft_lstadd(&(((t_data *)(node_previous->content))->chill), new);
-	//	}
-	//	else
-	//	{
+			new = ft_memalloc(sizeof(t_list));
+			new->content = node->content;
+			ft_lstadd(&(((t_data *)(node_previous->content))->chill), new);
+		}
+		else
+		{
 //			ft_printf(":: :: %s\n", ((t_data *)(node_previous->content))->name);
 			//	ft_printf("touching\n");
 			new = ft_memalloc(sizeof(t_list));
@@ -88,6 +90,7 @@ t_list	*simulate_outnode(t_list *node, t_list *node_previous)
 		}
 	}
 //	ft_printf(":: %s\n", ((t_data *)(node_previous->content))->name);
+/*
 	t_list *tmp;
 	tmp = ((t_data *)(node_previous->content))->chill;
 	while (tmp)
@@ -95,7 +98,8 @@ t_list	*simulate_outnode(t_list *node, t_list *node_previous)
 //		ft_printf("|| %s\n", ((t_data *)(tmp->content))->name);
 		tmp = tmp->next;
 	}
-	return (node);
+	*/
+	return (1);
 }
 
 t_list	*ft_lstremove(t_list **list, t_list *to_del)
@@ -107,7 +111,7 @@ t_list	*ft_lstremove(t_list **list, t_list *to_del)
 	previous = NULL;
 	while (element)
 	{
-		if ((t_data *)element->content == (t_data *)to_del->content)
+		if ((t_data *)(element->content) == (t_data *)(to_del->content))
 			break ;
 		previous = element;
 		element = element->next;
@@ -163,9 +167,9 @@ t_list *short_path(t_list *queu, int level, char target)
 		if (target == 't')
 		{
 
-		//	ft_printf("> %s (%d)\n", ((t_data *)(ret->content))->name, ((t_data *)(ret->content))->level);
-		//	if (((t_data *)(head->content))->role == 's')
-		//		ft_printf("> %s (%d)\n", ((t_data *)(head->content))->name, ((t_data *)(head->content))->level);
+//			ft_printf("> %s (%d)\n", ((t_data *)(ret->content))->name, ((t_data *)(ret->content))->level);
+//			if (((t_data *)(head->content))->role == 's')
+//				ft_printf("> %s (%d)\n", ((t_data *)(head->content))->name, ((t_data *)(head->content))->level);
 		}
 		
 		/* this while is the new findparent() */

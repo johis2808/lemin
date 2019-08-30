@@ -6,7 +6,7 @@
 /*   By: smoreno- <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/09 21:54:29 by smoreno-          #+#    #+#             */
-/*   Updated: 2019/08/26 09:10:37 by thberrid         ###   ########.fr       */
+/*   Updated: 2019/08/30 07:33:45 by thberrid         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -177,7 +177,7 @@ void    path_print(t_path_head *heads)
         room = curr->path->head_tubes;
         while (room && t < curr->path->size_tubes)
         {
-            ft_printf("Room name: %s\n", room->name);
+            ft_printf("> %s\n", room->name);
             t++;
             room = room->next;
         }
@@ -266,7 +266,7 @@ int		main(int ac, char **av)
 		resetlevel(nodes);
 	}
 
-	ft_printf("OOOOOO %d\n", nb_paths);
+//	ft_printf("OOOOOO %d\n", nb_paths);
 
 	aya = get_startend(nodes, 't');
 	//ft_printf("st : %s (%d)\n", aya->name, aya->level);
@@ -278,7 +278,6 @@ int		main(int ac, char **av)
 	while (path_back(&queu, &paths))
 	{
 		nb_paths++;
-		
 		resetlevel(nodes);
 	}
 
