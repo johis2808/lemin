@@ -171,7 +171,7 @@ void    path_print(t_path_head *heads)
     size_t        t;
     curr = heads->head;
     i = 0;
-    while (curr && i < heads->path_size)
+    while (curr && i < heads->nb_path)
     {
         t = 0;
         room = curr->path->head_tubes;
@@ -187,27 +187,30 @@ void    path_print(t_path_head *heads)
     }
 }
 
-t_nodes        *add_paths(t_path_head *head_paths, t_nodes    *new_path)
+t_nodes        *add_paths(t_path_head *head_paths, t_nodes  *new_path, t_data *start)
 {
     t_path    *newp;
+
     newp = NULL;
     if(!(newp = ft_memalloc(sizeof(t_path))))
         return (NULL);
     newp->path = new_path;
+	newp->path_size = start->level;
     newp->next = head_paths->head ? head_paths->head : newp;
     newp->prev = head_paths->head ? head_paths->head->prev : newp;
-    if (head_paths->path_size == 0)
+    if (head_paths->nb_path == 0)
         head_paths->head = newp;
     newp->prev->next = newp;
     newp->next->prev = newp;
-    head_paths->path_size++;
+    head_paths->nb_path++;
     return (new_path);
 }
 
-int        path_back(t_list **q, t_path_head **paths)
+int        path_back(t_list **q, t_path_head **paths, t_data *start)
 {
     int        retrn;
     t_nodes        *new_path;
+
     new_path = NULL;
     if(!*paths)
     {
@@ -215,10 +218,11 @@ int        path_back(t_list **q, t_path_head **paths)
             return (-1);
     }
     retrn = bfs_level(*q, 1);
+//	ft_printf("pif\n");
     //retrn = ((bfs_path(*q, 1, &new_path) ? 1 : 0));
     retrn = ((bfs_path(*q, 1, &new_path) ? 1 : 0));
     if (new_path)
-        add_paths(*paths, new_path);    
+        add_paths(*paths, new_path, start);    
     return (retrn);
 }
 
@@ -236,18 +240,25 @@ int		path_back(t_list **q)
 int		main(int ac, char **av)
 {
 	t_nodes		*nodes;
+	t_nodes		*tmpnodes;
 	t_list		*queu;
 //	t_cond		*cond;
 	t_data		*aya;
 	size_t		nb_paths;
-
+	int			max_paths;
 	t_path_head	*paths;
+	t_path_head	*old_paths;
+	int			i;
+
+	long		new;
+	long		old;
 
 	paths = NULL;
 
 	int			fd;
 	(void)ac;
-
+	max_paths = 1;
+	
 	nb_paths = 0;
 	fd = open(av[1], O_RDWR);
 	if (!(nodes = ft_memalloc(sizeof(t_nodes))))
@@ -255,7 +266,7 @@ int		main(int ac, char **av)
 //	if (!(cond = ft_memalloc(sizeof(t_cond))))
 //		return (-1);
 	nodes = ft_read(nodes, fd);
-	nodes = init_graph(nodes);
+	//nodes = init_graph(nodes);
 	aya = get_startend(nodes, 's');
 	queu = ft_memalloc(sizeof(t_list));
 	queu->content = aya;
@@ -270,21 +281,48 @@ int		main(int ac, char **av)
 	aya = get_startend(nodes, 't');
 	//ft_printf("st : %s (%d)\n", aya->name, aya->level);
 	queu = ft_memalloc(sizeof(t_list));
-	queu->content = aya;
-	aya = get_startend(nodes, 's');
-	aya->level = 0;	// llooooooooooooooooool bidouilles bidouilles
+//	queu->content = aya;
+//	aya = get_startend(nodes, 's');
+//	aya->level = 0;	// llooooooooooooooooool bidouilles bidouilles
 	//ft_printf("st : %s (%d)\n", aya->name, aya->level);
 	int		nb_print = 0;
-	while (path_back(&queu, &paths))
+	old = FT_INTMAX;
+	new = 0;
+	while (1)
 	{
-		nb_print++;
-		resetlevel(nodes);
-	}
+		i = 0;
+		tmpnodes = init_graph(nodes);
+		paths = NULL;
+		queu = ft_memalloc(sizeof(t_list));
+		aya = get_startend(nodes, 't');
+		queu->content = aya;
+		aya = get_startend(nodes, 's');
+		aya->level = 0;	// llooooooooooooooooool bidouilles bidouilles;
+		while (path_back(&queu, &paths, aya) && i < max_paths)
+		{
+			nb_print++;
+			
+			resetlevel(tmpnodes);
+			new = count_lines(paths, tmpnodes->ants);
+			i++;
+		}
 
+		max_paths++;
+		ft_printf("pouf %d %d\n", old, new);
+		if (old <= new)
+		{
+			paths = old_paths;
+			break ;
+		}
+		old = new;
+		old_paths = paths;
+		
+	}
 	path_print(paths);
-	
-	ft_printf("found by FN short path %d\n", nb_paths);
-	ft_printf("found by FN path back %d\n", nb_print);
+	ft_printf("ret : %l\n", count_lines(paths, nodes->ants));
+
+//	ft_printf("found by FN short path %d\n", nb_paths);
+//	ft_printf("found by FN path back %d\n", nb_print);
 	//ft_printf("nbpath : %d\n", nb_paths);
 /*	graph_bfs(queu, 1);
 	ft_printf("ret : %d\n", graph_bfs(queu, 1));

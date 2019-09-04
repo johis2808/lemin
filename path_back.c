@@ -80,7 +80,7 @@ int		bfs_level(t_list *q, int level)
 }
 
 
-t_nodes        *make_path(t_nodes    **head, t_data *new)
+t_nodes        *make_path(t_nodes **head, t_data *new)
 {
     if(!*head)
     {

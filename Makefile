@@ -20,7 +20,8 @@ NAME_C = ft_init.c \
 		  lst_util.c \
 		  parse.c \
 		  short_path.c \
-		  path_back.c
+		  path_back.c \
+		  count_ant.c 
 # FILES_C = $(addprefix $(DIR_C)/, $(NAME_C))
 NAME_O = $(NAME_C:.c=.o)
 FILES_O = $(addprefix $(DIR_O)/, $(NAME_O))

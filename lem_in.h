@@ -15,6 +15,7 @@
 
 # include "libft/libft.h"
 # define FT_INTMAX 2147483647
+# define FT_LONGMAX 4294967295
 
 typedef struct 			s_chill
 {	
@@ -68,19 +69,19 @@ typedef struct 	s_cond
 }				t_cond;
 
 
-
-
 typedef struct             s_path
 {    
     struct s_path        *next;
     struct s_path        *prev;
+	size_t                path_size;
+	long				ants;
     t_nodes                *path;
 }                        t_path;
 
 typedef struct             s_path_head
 {    
     t_path                *head;
-    size_t                path_size;
+    size_t                nb_path;
     char                *name;
 }                        t_path_head;
 
@@ -131,6 +132,10 @@ t_list			*ft_lstremove(t_list **list, t_list *to_del);
 int				bfs_level(t_list *q, int level);
 t_list			*bfs_path(t_list *q, int level, t_nodes **path);
 
+/*
+** Opti paths
+*/
 
+long			count_lines(t_path_head *paths, int ants);
 
 # endif
