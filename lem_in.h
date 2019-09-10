@@ -40,6 +40,7 @@ typedef	struct 			s_data
 	t_list				*out;
 	t_list				*chill;
 	size_t				size;
+	long				ant_name;
 }						t_data;
 
 
@@ -137,5 +138,8 @@ t_list			*bfs_path(t_list *q, int level, t_nodes **path);
 */
 
 long			count_lines(t_path_head *paths, int ants);
+
+void			push_print(t_path_head *paths, int ant_man, int max);
+
 
 # endif

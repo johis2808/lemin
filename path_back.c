@@ -87,7 +87,8 @@ t_nodes        *make_path(t_nodes **head, t_data *new)
         if(!(*head = ft_memalloc(sizeof(t_nodes))))
             return (NULL);
     }
-    if (!(add_tubes(new->name, ".", *head)))
+ //   if (!(add_tubes(new->name, ".", *head)))
+	if (!(add_node(*head, new->name, new->role)))
         return (NULL);
     return    (*head);
 }

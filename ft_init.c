@@ -298,7 +298,7 @@ int		main(int ac, char **av)
 		queu->content = aya;
 		aya = get_startend(nodes, 's');
 		aya->level = 0;	// llooooooooooooooooool bidouilles bidouilles;
-		while (path_back(&queu, &paths, aya) && i < max_paths)
+		while (i < max_paths && path_back(&queu, &paths, aya))
 		{
 			nb_print++;
 			
@@ -308,7 +308,7 @@ int		main(int ac, char **av)
 		}
 
 		max_paths++;
-		ft_printf("pouf %d %d\n", old, new);
+//		ft_printf("pouf %d %d\n", old, new);
 		if (old <= new)
 		{
 			paths = old_paths;
@@ -318,8 +318,10 @@ int		main(int ac, char **av)
 		old_paths = paths;
 		
 	}
-	path_print(paths);
-	ft_printf("ret : %l\n", count_lines(paths, nodes->ants));
+//	path_print(paths);
+	paths->head->ants = nodes->ants;
+	push_print(paths, 1, paths->head->ants);
+//	ft_printf("ret : %l\n", count_lines(paths, nodes->ants));
 
 //	ft_printf("found by FN short path %d\n", nb_paths);
 //	ft_printf("found by FN path back %d\n", nb_print);
