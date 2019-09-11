@@ -75,6 +75,7 @@ typedef struct             s_path
     struct s_path        *next;
     struct s_path        *prev;
 	size_t                path_size;
+	size_t 				open;
 	long				ants;
     t_nodes                *path;
 }                        t_path;

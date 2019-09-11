@@ -110,8 +110,8 @@ t_list	*bfs_path(t_list *q, int level, t_nodes **path)
 	{
 		if (((t_data *)(q->content))->role == 's')
 		{
-			tmp = ft_memcpy(tmp,(t_data *)(q->content), sizeof(t_data));
-            make_path(path, tmp);
+		//	tmp = ft_memcpy(tmp,(t_data *)(q->content), sizeof(t_data));
+         //   make_path(path, tmp);
 		//	ft_printf("> %s (%d / %d)\n", ((t_data *)(q->content))->name, ((t_data *)(q->content))->level, level);
 			return (q);
 		}

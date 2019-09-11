@@ -27,7 +27,7 @@ NAME_O = $(NAME_C:.c=.o)
 FILES_O = $(addprefix $(DIR_O)/, $(NAME_O))
 FILES_H = lem_in.h
 LIBFT = ./libft/libft.a
-FLAGS = -Wall -Wextra -Werror
+FLAGS = -g -Wall -Wextra -Werror
 
 all : $(NAME)
 
