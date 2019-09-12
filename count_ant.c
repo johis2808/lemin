@@ -13,20 +13,21 @@
 
 #include "lem_in.h"
 
-int	push_ants(t_data *path, int ant_man)
+int	push_ants(t_data *path, int ant_man, int prev)
 {
 	long	tmp_ant;
 	int		count;
 
+	(void)prev;
 	count = 0;
 	tmp_ant = path->ant_name;
 	path->ant_name = ant_man;
-	ft_printf("rabit\n");
+	//	ft_printf("rabit\n");
 	if (tmp_ant && path->role != 't')
 	{	
 	//	path->ant_name = 0;
 	
-		return (push_ants(path->next, tmp_ant) + 1);
+		return (push_ants(path->next, tmp_ant, ant_man) + 1);
 	}
 	if (path->role == 't')
 	{
@@ -42,15 +43,21 @@ int		update_ants(t_path_head *paths, int ant_man, int max)
 	size_t		i;
 	size_t		j;
 	t_data		*room;
-
+	(void)max;
 	i = 0;
 	tmp = paths->head;
-	while (i < paths->nb_path && ant_man <= max) 
+	while (i < paths->nb_path) 
 	{
 		
-		ft_printf("rabit %d\n", paths->head->ants);
-//		if (tmp->path->head->ant_name)
-		if (tmp->open)
+//		ft_printf("rabit %d\n", paths->head->ants);
+//		if (tmp->open)
+		if (paths->head->ants > 0 && !tmp->path->head->ant_name)
+		{
+			tmp->path->head->ant_name = ant_man;
+		//	ft_printf("add nerw ant \n");
+		//	tmp->open = 1;
+		} 
+		else 
 		{
 			room = tmp->path->head;
 			j = 0; 
@@ -59,16 +66,12 @@ int		update_ants(t_path_head *paths, int ant_man, int max)
 				room = room->next;
 				j++;
 			}
-			if (j == tmp->path_size)
-				tmp->open = 0;
-			else
-				push_ants(room, ant_man);
-		}
-		if (paths->head->ants > 0 && tmp->open != 1)
-		{
-			tmp->path->head->ant_name = ant_man;
-			tmp->open = 1;
-		}
+	//		if (j == tmp->path_size)
+	//			tmp->open = 0;
+	//		else
+				push_ants(room, ((paths->head->ants > 0) ? ant_man : 0), 0);
+				room->prev->ant_name = 0;
+		} 
 		ant_man++;
 			paths->head->ants--;
 		i++;
@@ -88,7 +91,7 @@ int		print_ants(t_path_head *paths)
 	count = 0;
 	retrn = 0;	
 	tmp = paths->head;
-		while (count < paths->nb_path - 1)
+		while (count < paths->nb_path -1)
 	{
 		room = tmp->path->head;
 		countroom = 0;

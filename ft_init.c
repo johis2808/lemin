@@ -221,7 +221,7 @@ int        path_back(t_list **q, t_path_head **paths, t_data *start)
 //	ft_printf("pif\n");
     //retrn = ((bfs_path(*q, 1, &new_path) ? 1 : 0));
     retrn = ((bfs_path(*q, 1, &new_path) ? 1 : 0));
-    if (new_path)
+    if (retrn)
         add_paths(*paths, new_path, start);    
     return (retrn);
 }
@@ -288,22 +288,25 @@ int		main(int ac, char **av)
 	int		nb_print = 0;
 	old = FT_INTMAX;
 	new = 0;
+	int test = 1;
 	while (1)
 	{
 		i = 0;
 		tmpnodes = init_graph(nodes);
 		paths = NULL;
 		queu = ft_memalloc(sizeof(t_list));
-		aya = get_startend(nodes, 't');
+		aya = get_startend(tmpnodes, 't');
 		queu->content = aya;
-		aya = get_startend(nodes, 's');
+		aya = get_startend(tmpnodes, 's');
 		aya->level = 0;	// llooooooooooooooooool bidouilles bidouilles;
-		while (i < max_paths && path_back(&queu, &paths, aya))
+	//	ft_printf("p\n");
+		while (i < max_paths && test)
 		{
+			test = path_back(&queu, &paths, aya);
 			nb_print++;
 			
-			resetlevel(tmpnodes);
 			new = count_lines(paths, tmpnodes->ants);
+			resetlevel(tmpnodes);
 			i++;
 		}
 
