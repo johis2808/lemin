@@ -221,7 +221,8 @@ int        path_back(t_list **q, t_path_head **paths, t_data *start)
 //	ft_printf("pif\n");
     //retrn = ((bfs_path(*q, 1, &new_path) ? 1 : 0));
     retrn = ((bfs_path(*q, 1, &new_path) ? 1 : 0));
-    if (retrn)
+	ft_printf("\n");
+    if (new_path && retrn)
         add_paths(*paths, new_path, start);    
     return (retrn);
 }
@@ -278,9 +279,9 @@ int		main(int ac, char **av)
 	}
 
 
-	aya = get_startend(nodes, 't');
+//	aya = get_startend(nodes, 't');
 	//ft_printf("st : %s (%d)\n", aya->name, aya->level);
-	queu = ft_memalloc(sizeof(t_list));
+//	queu = ft_memalloc(sizeof(t_list));
 //	queu->content = aya;
 //	aya = get_startend(nodes, 's');
 //	aya->level = 0;	// llooooooooooooooooool bidouilles bidouilles
@@ -288,9 +289,10 @@ int		main(int ac, char **av)
 	int		nb_print = 0;
 	old = FT_INTMAX;
 	new = 0;
-	int test = 1;
+//	int test = 1;
 	while (1)
 	{
+		ft_printf("max path %d\n", max_paths);
 		i = 0;
 		tmpnodes = init_graph(nodes);
 		paths = NULL;
@@ -299,17 +301,17 @@ int		main(int ac, char **av)
 		queu->content = aya;
 		aya = get_startend(tmpnodes, 's');
 		aya->level = 0;	// llooooooooooooooooool bidouilles bidouilles;
-	//	ft_printf("p\n");
-		while (i < max_paths && test)
+		while ((i < max_paths) && path_back(&queu, &paths, aya))
 		{
-			test = path_back(&queu, &paths, aya);
+			//test = path_back(&queu, &paths, aya);
 			nb_print++;
 			
-			new = count_lines(paths, tmpnodes->ants);
+			
 			resetlevel(tmpnodes);
 			i++;
 		}
-
+		new = count_lines(paths, tmpnodes->ants);
+ft_printf("\n");
 		max_paths++;
 //		ft_printf("pouf %d %d\n", old, new);
 		if (old <= new)
@@ -322,6 +324,8 @@ int		main(int ac, char **av)
 		
 	}
 //	path_print(paths);
+	if (paths->nb_path > 1)
+		paths->nb_path -= 1;
 	paths->head->ants = nodes->ants;
 	push_print(paths, 1, paths->head->ants);
 //	ft_printf("ret : %l\n", count_lines(paths, nodes->ants));

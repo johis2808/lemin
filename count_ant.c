@@ -91,7 +91,7 @@ int		print_ants(t_path_head *paths)
 	count = 0;
 	retrn = 0;	
 	tmp = paths->head;
-		while (count < paths->nb_path -1)
+		while (count < paths->nb_path)
 	{
 		room = tmp->path->head;
 		countroom = 0;
