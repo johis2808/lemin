@@ -114,7 +114,7 @@ t_list	*bfs_path(t_list *q, int level, t_nodes **path)
 		{
 		//	tmp = ft_memcpy(tmp,(t_data *)(q->content), sizeof(t_data));
         //   make_path(path, tmp);
-			ft_printf("> %s (%d / %d) : %p\n", ((t_data *)(q->content))->name, ((t_data *)(q->content))->level, level, q);
+//			ft_printf("> %s (%d / %d) : %p\n", ((t_data *)(q->content))->name, ((t_data *)(q->content))->level, level, q);
 			return (q);
 		}
 		add_newq(&new_q, ((t_data *)(q->content))->chill, is_levelinf, level);
@@ -149,6 +149,6 @@ t_list	*bfs_path(t_list *q, int level, t_nodes **path)
 	tmp = ft_memcpy(tmp,(t_data *)(q->content), sizeof(t_data));
     make_path(path, tmp);
 
-	ft_printf("> %s (%d / %d) : %p\n", ((t_data *)(q->content))->name, ((t_data *)(q->content))->level, level, q);
+//	ft_printf("> %s (%d / %d) : %p\n", ((t_data *)(q->content))->name, ((t_data *)(q->content))->level, level, q);
 	return (q);	
 }

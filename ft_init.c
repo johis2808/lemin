@@ -221,7 +221,7 @@ int        path_back(t_list **q, t_path_head **paths, t_data *start)
 //	ft_printf("pif\n");
     //retrn = ((bfs_path(*q, 1, &new_path) ? 1 : 0));
     retrn = ((bfs_path(*q, 1, &new_path) ? 1 : 0));
-	ft_printf("\n");
+//	ft_printf("\n");
     if (new_path && retrn)
         add_paths(*paths, new_path, start);    
     return (retrn);
@@ -251,8 +251,12 @@ int		main(int ac, char **av)
 	t_path_head	*old_paths;
 	int			i;
 
+	int			fd;
+
 	long		new;
 	long		old;
+
+/*
 
 	paths = NULL;
 
@@ -278,6 +282,8 @@ int		main(int ac, char **av)
 		resetlevel(nodes);
 	}
 
+*/
+
 
 //	aya = get_startend(nodes, 't');
 	//ft_printf("st : %s (%d)\n", aya->name, aya->level);
@@ -290,11 +296,45 @@ int		main(int ac, char **av)
 	old = FT_INTMAX;
 	new = 0;
 //	int test = 1;
+	fd = open(av[1], O_RDWR);
+	if (!(nodes = ft_memalloc(sizeof(t_nodes))))
+		return (-1);
+	nodes = ft_read(nodes, fd);
+
+
+		paths = NULL;
+		(void)ac;
+		max_paths = 1;
+
 	while (1)
 	{
-		ft_printf("max path %d\n", max_paths);
-		i = 0;
+
+		
+		nb_paths = 0;
+		
+	//	if (!(cond = ft_memalloc(sizeof(t_cond))))
+	//		return (-1);
+		
+		//nodes = init_graph(nodes);
+
 		tmpnodes = init_graph(nodes);
+
+		aya = get_startend(tmpnodes, 's');
+		queu = ft_memalloc(sizeof(t_list));
+		queu->content = aya;
+		i = 0;
+		while ((i < max_paths) && find_path(&queu, 't'))
+		{
+			nb_paths++;
+			i++;
+		//	ft_printf("\n");
+			resetlevel(tmpnodes);
+		}
+
+
+//		ft_printf("max path %d\n", max_paths);
+		i = 0;
+		
 		paths = NULL;
 		queu = ft_memalloc(sizeof(t_list));
 		aya = get_startend(tmpnodes, 't');
@@ -311,7 +351,7 @@ int		main(int ac, char **av)
 			i++;
 		}
 		new = count_lines(paths, tmpnodes->ants);
-ft_printf("\n");
+//	ft_printf("\n");
 		max_paths++;
 //		ft_printf("pouf %d %d\n", old, new);
 		if (old <= new)
@@ -324,11 +364,14 @@ ft_printf("\n");
 		
 	}
 //	path_print(paths);
-	if (paths->nb_path > 1)
-		paths->nb_path -= 1;
+//	if (paths->nb_path > 1)
+//		paths->nb_path -= 1;
 	paths->head->ants = nodes->ants;
+//	new = count_lines(paths, paths->head->ants);
 	push_print(paths, 1, paths->head->ants);
-//	ft_printf("ret : %l\n", count_lines(paths, nodes->ants));
+	// ce printf est super important, me [as le supprimer
+	//ft_printf("\n");
+//		ft_printf("ret : %l\n", count_lines(paths, nodes->ants));
 
 //	ft_printf("found by FN short path %d\n", nb_paths);
 //	ft_printf("found by FN path back %d\n", nb_print);

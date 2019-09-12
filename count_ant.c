@@ -32,6 +32,7 @@ int	push_ants(t_data *path, int ant_man, int prev)
 	if (path->role == 't')
 	{
 	//		path->open = 0;
+			ft_printf("L%d-%s ", ant_man, path->name);
 		path->ant_name = 0;
 	}
 	return (0);
@@ -51,9 +52,14 @@ int		update_ants(t_path_head *paths, int ant_man, int max)
 		
 //		ft_printf("rabit %d\n", paths->head->ants);
 //		if (tmp->open)
-		if (paths->head->ants > 0 && !tmp->path->head->ant_name)
+//	ft_printf("opopo%d\n", tmp->ants );
+		if (paths->head->ants >= 0 && !tmp->path->head->ant_name && tmp->ants > 0 )
 		{
+			tmp->ants--;
+			
+			paths->head->ants--;
 			tmp->path->head->ant_name = ant_man;
+			ant_man++;
 		//	ft_printf("add nerw ant \n");
 		//	tmp->open = 1;
 		} 
@@ -69,11 +75,18 @@ int		update_ants(t_path_head *paths, int ant_man, int max)
 	//		if (j == tmp->path_size)
 	//			tmp->open = 0;
 	//		else
-				push_ants(room, ((paths->head->ants > 0) ? ant_man : 0), 0);
-				room->prev->ant_name = 0;
+	//			push_ants(room, ((paths->head->ants > 0) ? ant_man : 0), 0);
+				push_ants(room, ((paths->head->ants > 0 && tmp->ants > 0) ? ant_man : 0), 0);
+
+				if (paths->head->ants > 0 && tmp->ants > 0)
+				{
+					paths->head->ants--;
+					ant_man++;
+				}
+			//	room->prev->ant_name = 0;
 		} 
-		ant_man++;
-			paths->head->ants--;
+		
+			
 		i++;
 		tmp = tmp->next;
 	}	
@@ -109,19 +122,23 @@ int		print_ants(t_path_head *paths)
 		tmp = tmp->next;
 		count++;
 	}
-	if (retrn)
+	if (!retrn)
 		ft_printf("\n");
 	return (retrn);
 }
 
 void		push_print(t_path_head *paths, int ant_man, int max)
 {
-	
 	ant_man = update_ants(paths, ant_man, max);
 	if (ant_man > max)
 		ant_man = 1;
-	if (print_ants(paths))
+	if (print_ants(paths)){
+
+		ft_printf("\n");
+	
 		push_print(paths, ant_man, max);
+	}
+//		ft_printf("\n");
 }
 
 long		count_lines(t_path_head *paths, int ants)
@@ -131,12 +148,14 @@ long		count_lines(t_path_head *paths, int ants)
 	long		mid;
 	long		max;
 	size_t		i;
+	float		rest;
 	
 	i = 0;
 	mid = 0;
 	max = 0;
 	tmp = paths->head;
 	antbypath = ants / paths->nb_path;
+	//rest = ants % paths->nb_path; 
 	while (i < paths->nb_path)
 	{
 		tmp->ants = antbypath + tmp->path_size;
@@ -152,11 +171,16 @@ long		count_lines(t_path_head *paths, int ants)
 		tmp = tmp->next;
 	}
 	mid /= paths->nb_path;
+	rest = mid % paths->nb_path; 
 	i = 0;
 	tmp = paths->head;
 	while (i < paths->nb_path)
 	{
 		tmp->ants = mid - tmp->path_size;
+			ft_printf("--nb %f\n", rest);
+		if (rest > 0)
+			tmp->ants += 1;
+		rest = 0;
 		if ((tmp->ants + (long)tmp->path_size) > max)
 			max = tmp->ants + tmp->path_size;
 		i++;
