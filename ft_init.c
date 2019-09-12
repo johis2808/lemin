@@ -366,9 +366,9 @@ int		main(int ac, char **av)
 //	path_print(paths);
 //	if (paths->nb_path > 1)
 //		paths->nb_path -= 1;
-	paths->head->ants = nodes->ants;
+//	paths->head->ants = nodes->ants;
 //	new = count_lines(paths, paths->head->ants);
-	push_print(paths, 1, paths->head->ants);
+	push_print(paths, 1, paths->max_ants);
 	// ce printf est super important, me [as le supprimer
 	//ft_printf("\n");
 //		ft_printf("ret : %l\n", count_lines(paths, nodes->ants));

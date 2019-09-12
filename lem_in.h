@@ -84,6 +84,7 @@ typedef struct             s_path_head
 {    
     t_path                *head;
     size_t                nb_path;
+	long				max_ants;
     char                *name;
 }                        t_path_head;
 
