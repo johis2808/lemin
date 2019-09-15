@@ -15,13 +15,13 @@
 t_nodes		*close_read(char *line)
 {
 	(void)line;
-	//free(line);
+	free(line);
 	return (NULL);
 }
 
 /*
- ** fn error : init tube aucun tube;
- */
+** fn error : init tube aucun tube;
+*/
 
 t_nodes		*read_node(char *line, t_cond *cond, t_nodes *nodes)
 {
@@ -85,11 +85,6 @@ int			check_cmds(char *line)
 	if (ft_strcmp(line, "##start") == 0
 		|| ft_strcmp(line, "##end") == 0)
 		return (1);
-	//if (line[0] == '#')
-//	{
-	//	free(line);
-		//return (0);
-//	}
 	return (1);
 }
 
@@ -100,7 +95,7 @@ t_nodes		*ft_read(t_nodes *nodes, int fd)
 
 	ft_bzero(&cond, sizeof(t_cond));
 	while (get_next_line(fd, &line) != 0)
-	{ 
+	{
 		if ((ft_strlen(line) == 0))
 			return (NULL);
 		if (!check_cmds(line))
@@ -115,7 +110,6 @@ t_nodes		*ft_read(t_nodes *nodes, int fd)
 			if (!read_ant(line, &cond, nodes))
 				return (close_read(line));
 		}
-	//	free(line);
 	}
 	return (nodes);
 }
