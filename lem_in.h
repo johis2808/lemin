@@ -119,6 +119,7 @@ t_data			*get_startend(t_nodes *nodes, char symbol);
 int				graph_bfs(t_list *node, int level, char target);
 void			add_queu(t_list *queu, t_list *new, int level);
 
+
 /*
 ** finding paths
 */
@@ -134,6 +135,12 @@ t_list			*ft_lstremove(t_list **list, t_list *to_del);
 
 int				bfs_level(t_list *q, int level);
 t_list			*bfs_path(t_list *q, int level, t_nodes **path);
+
+int				add_newq(t_list **q, t_list *list, int (*fn)(int, int), int level);
+int				is_levelnull(int this_level, int graph_level);
+int				is_levelinf(int this_level, int graph_level);
+int				check_cmds(char *line);
+void			ft_nodeprint(t_nodes *nodes);
 
 /*
 ** Opti paths

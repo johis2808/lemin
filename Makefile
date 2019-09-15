@@ -21,6 +21,9 @@ NAME_C = ft_init.c \
 		  parse.c \
 		  short_path.c \
 		  path_back.c \
+		  trash2.c \
+		  check_cmd.c \
+		  bfs_addq.c \
 		  count_ant.c 
 # FILES_C = $(addprefix $(DIR_C)/, $(NAME_C))
 NAME_O = $(NAME_C:.c=.o)
