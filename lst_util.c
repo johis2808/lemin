@@ -35,6 +35,27 @@ t_nodes		*add_tubes(char *tubes, char *dest, t_nodes *nodes)
 	return (nodes);
 }
 
+t_list		*ft_lstremove(t_list **list, t_list *to_del)
+{
+	t_list	*element;
+	t_list	*previous;
+
+	element = *list;
+	previous = NULL;
+	while (element)
+	{
+		if ((t_data *)(element->content) == (t_data *)(to_del->content))
+			break ;
+		previous = element;
+		element = element->next;
+	}
+	if (previous)
+		previous->next = element->next;
+	else
+		*list = element->next;
+	return (*list);
+}
+
 int			add_node(t_nodes *nodes, char *name, char role)
 {
 	t_data	*new;
