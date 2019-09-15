@@ -21,7 +21,7 @@ t_nodes		*add_tubes(char *tubes, char *dest, t_nodes *nodes)
 {
 	t_chill		*new;
 
-	if(!nodes || !(new = ft_memalloc(sizeof(t_chill))))
+	if (!nodes || !(new = ft_memalloc(sizeof(t_chill))))
 		return (NULL);
 	new->name = tubes;
 	new->dest = dest;
@@ -35,12 +35,11 @@ t_nodes		*add_tubes(char *tubes, char *dest, t_nodes *nodes)
 	return (nodes);
 }
 
-
-int		add_node(t_nodes *nodes, char *name, char role)
+int			add_node(t_nodes *nodes, char *name, char role)
 {
 	t_data	*new;
 
-	if(!nodes || !(new = ft_memalloc(sizeof(t_data))))
+	if (!nodes || !(new = ft_memalloc(sizeof(t_data))))
 		return (-1);
 	new->name = name;
 	new->role = role;
@@ -54,7 +53,7 @@ int		add_node(t_nodes *nodes, char *name, char role)
 	return (0);
 }
 
-void	clear_nodes(t_nodes *nodes)
+void		clear_nodes(t_nodes *nodes)
 {
 	t_data	*tmp;
 
@@ -62,13 +61,12 @@ void	clear_nodes(t_nodes *nodes)
 	{
 		tmp = nodes->head;
 		nodes->head = tmp->next;
-		///free(tmp);
 		nodes->size--;
 	}
 	nodes->head = NULL;
 }
 
-void	clear_tubes(t_nodes *nodes)
+void		clear_tubes(t_nodes *nodes)
 {
 	t_chill	*tmp;
 
@@ -76,19 +74,18 @@ void	clear_tubes(t_nodes *nodes)
 	{
 		tmp = nodes->head_tubes;
 		nodes->head_tubes = tmp->next;
-	//	free(tmp);
 		nodes->size_tubes--;
 	}
 	nodes->head_tubes = NULL;
 }
 
-void	ft_nodeprint(t_nodes *nodes)
+void		ft_nodeprint(t_nodes *nodes)
 {
 	t_data	*cur;
 	size_t	len;
 	t_list	*chill;
 	t_data	*thi;
-	
+
 	cur = nodes->head;
 	len = nodes->size;
 	while (cur && len-- > 0)
@@ -100,15 +97,14 @@ void	ft_nodeprint(t_nodes *nodes)
 		ft_printf("Open: %d\n", cur->open);
 		ft_printf("Open: %c\n", cur->role);
 		ft_printf("stat curr : %c\n", cur->statut);
-		chill = cur->chill;	
+		chill = cur->chill;
 		while (chill)
 		{
 			thi = ((t_data *)chill->content);
 			ft_printf("Room chill name: %s\n", thi->name);
 			ft_printf("stat chill : %c\n", thi->statut);
-			chill = chill->next;	
+			chill = chill->next;
 		}
-		cur = cur->next;	
+		cur = cur->next;
 	}
 }
-
