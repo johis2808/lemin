@@ -29,7 +29,7 @@ int				bfs_level(t_list *q, int level)
 	return (0);
 }
 
-t_list			find_children(t_list *q, t_data *target)
+t_list			*find_children(t_list *q, t_data *target)
 {
 	t_list *children;
 

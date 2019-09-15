@@ -69,6 +69,28 @@ static t_list	*find_parent(t_list *haystack, t_list *needle, int level)
 	return (haystack);
 }
 
+static t_list	*add_queusp(t_list *queu, t_list *candidates, int level)
+{
+	t_list *tmp;
+	t_list *new;
+
+	tmp = candidates;
+	while (tmp)
+	{
+		if (((t_data *)(tmp->content))->level > level)
+		{
+			new = ft_memalloc(sizeof(t_list));
+			if (!(new = ft_memalloc(sizeof(t_list))))
+				return (NULL);
+			new->content = ((t_data *)tmp->content);
+			ft_lstadd(&queu, new);
+			ft_lstadd(&queu, new);
+		}
+		tmp = tmp->next;
+	}
+	return (queu);
+}
+
 t_list			*short_path(t_list *queu, int level, char target)
 {
 	t_list	*new_queue;
