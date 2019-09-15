@@ -15,16 +15,19 @@ NAME = lem-in
 DIR_C = src
 DIR_O = obj
 NAME_C = ft_init.c \
-		  ft_init_tube.c \
+		  ft_init_utils.c \
 		  init_graph.c \
 		  lst_util.c \
 		  parse.c \
 		  short_path.c \
 		  path_back.c \
+		  count_ant.c \
+		  tools.c     \
 		  trash2.c \
 		  check_cmd.c \
 		  bfs_addq.c \
-		  count_ant.c 
+		  utils.c	\
+		  trash.c 
 # FILES_C = $(addprefix $(DIR_C)/, $(NAME_C))
 NAME_O = $(NAME_C:.c=.o)
 FILES_O = $(addprefix $(DIR_O)/, $(NAME_O))

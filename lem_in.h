@@ -88,8 +88,23 @@ typedef struct             s_path_head
     char                *name;
 }                        t_path_head;
 
-
-
+typedef struct 			s_param
+{
+	t_nodes			*nodes;
+	int				ret;
+	t_nodes			*tmpnodes;
+	t_list			*queu;
+	t_data			*aya;
+	size_t			nb_paths;
+	int				max_paths;
+	t_path_head		*paths;
+	t_path_head		*old_paths;
+	int				i;
+	int				fd;
+	long			new;
+	long			old;
+	int			nb_print;
+}				t_param;
 
 /*
 ** nodes tools
@@ -110,15 +125,15 @@ long		ft_atol(const char *str);
 /*
 ** parser
 */
-
+int			parse_name(char *line, t_nodes *nodes, char role);
+int			parse_coord(char *line, t_data *node);
 t_nodes			*ft_read(t_nodes *nodes, int fd);
 int				ft_init(char *line, t_nodes	*nodes, char role);
 int				ft_read_error(char	*line, t_cond *cond);
 t_nodes			*init_graph(t_nodes *nodes);
 t_data			*get_startend(t_nodes *nodes, char symbol);
 int				graph_bfs(t_list *node, int level, char target);
-void			add_queu(t_list *queu, t_list *new, int level);
-
+long	ft_atol(const char *str);
 
 /*
 ** finding paths
@@ -126,7 +141,11 @@ void			add_queu(t_list *queu, t_list *new, int level);
 t_list			*findparent(t_data *node, t_list *chill);
 t_list			*short_path(t_list *queu, int level, char target);
 t_list			*add_outnode(t_data *node, t_list *chill);
-
+void			resetlevel(t_nodes *nodes);
+void 		 	path_print(t_path_head *heads);
+int				find_path(t_list **queu, char target);
+t_nodes			*add_paths(t_path_head *head_paths, t_nodes *new_path, t_data *start);
+int				path_back(t_list **q, t_path_head **paths, t_data *start);
 /*
 ** path back
 */
@@ -135,7 +154,6 @@ t_list			*ft_lstremove(t_list **list, t_list *to_del);
 
 int				bfs_level(t_list *q, int level);
 t_list			*bfs_path(t_list *q, int level, t_nodes **path);
-
 int				add_newq(t_list **q, t_list *list, int (*fn)(int, int), int level);
 int				is_levelnull(int this_level, int graph_level);
 int				is_levelinf(int this_level, int graph_level);
@@ -147,7 +165,7 @@ void			ft_nodeprint(t_nodes *nodes);
 */
 
 long			count_lines(t_path_head *paths, int ants);
-
+int		print_ants(t_path_head *paths);
 void			push_print(t_path_head *paths, int ant_man, int max);
 
 void	printqueu2(char *title, t_list *q);
