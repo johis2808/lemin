@@ -47,47 +47,6 @@ static int		simulate_outnode(t_list *node, t_list *node_previous)
 	return (1);
 }
 
-t_list			*ft_lstremove(t_list **list, t_list *to_del)
-{
-	t_list	*element;
-	t_list	*previous;
-
-	element = *list;
-	previous = NULL;
-	while (element)
-	{
-		if ((t_data *)(element->content) == (t_data *)(to_del->content))
-			break ;
-		previous = element;
-		element = element->next;
-	}
-	if (previous)
-		previous->next = element->next;
-	else
-		*list = element->next;
-	return (*list);
-}
-
-static t_list	*add_queusp(t_list *queu, t_list *candidates, int level)
-{
-	t_list *tmp;
-	t_list *new;
-
-	tmp = candidates;
-	while (tmp)
-	{
-		if (((t_data *)(tmp->content))->level > level)
-		{
-			if (!(new = ft_memalloc(sizeof(t_list))))
-				return (NULL);
-			new->content = ((t_data *)tmp->content);
-			ft_lstadd(&queu, new);
-		}
-		tmp = tmp->next;
-	}
-	return (queu);
-}
-
 static t_list	*find_parent(t_list *haystack, t_list *needle, int level)
 {
 	t_list	*tmp;
