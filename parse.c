@@ -80,14 +80,6 @@ t_nodes		*read_node_edge(char *line, t_cond *cond, t_nodes *nodes)
 	return (nodes);
 }
 
-int			check_cmds(char *line)
-{
-	if (ft_strcmp(line, "##start") == 0
-		|| ft_strcmp(line, "##end") == 0)
-		return (1);
-	return (1);
-}
-
 t_nodes		*ft_read(t_nodes *nodes, int fd)
 {
 	char	*line;
