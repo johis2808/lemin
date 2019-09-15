@@ -33,7 +33,7 @@ int	push_ants(t_data *path, int ant_man, int prev)
 	if (path->role == 't' && ant_man)
 	{
 	//		path->open = 0;
-			ft_printf("L%d-%s ", ant_man, path->name);
+				ft_printf("L%d-%s ", ant_man, path->name);
 		path->ant_name = 0;
 	}
 	return (0);
@@ -169,6 +169,8 @@ long		count_lines(t_path_head *paths, int ants)
 	i = 0;
 	mid = 0;
 	max = 0;
+	if (paths->nb_path)
+	{
 	tmp = paths->head;
 	antbypath = ants / paths->nb_path;
 	paths->max_ants = ants;
@@ -203,6 +205,7 @@ long		count_lines(t_path_head *paths, int ants)
 			max = tmp->ants + tmp->path_size;
 		i++;
 		tmp = tmp->next;
+	}
 	}
 	return (max);
 }

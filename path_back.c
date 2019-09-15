@@ -16,7 +16,7 @@ int		is_levelnull(int this_level, int graph_level)
 {
 	(void)graph_level;
 //	ft_printf("io %d\n", this_level);
-	if (this_level < 1)
+	if (!this_level)
 		return (1);
 	return (0);
 }
@@ -32,22 +32,42 @@ int		add_newq(t_list **q, t_list *candidates, int (*fn)(int, int), int level)
 {
 	t_data	*this;
 	t_list	*new_lst;
+	t_list	*tmp;
+	t_list	*twin;
+	int		donotadd;
 
-	while (candidates)
+	tmp = candidates;
+	while (tmp)
 	{
-		this = (t_data *)candidates->content;
-		if (fn(this->level, level))
+		this = (t_data *)tmp->content;
+		if (fn(this->level, level) == 1)
 		{
-//			ft_printf("addqueing %s (%d / %d) \n", this->name, this->level, level);
-			new_lst = ft_memalloc(sizeof(t_list));
-			new_lst->content = this;
-			ft_lstadd(q, new_lst);
+			donotadd = 0;
+			twin = *q;
+			while (twin)
+			{
+				if ((t_data *)twin->content == this)
+				{
+					donotadd = 1;
+					break;
+				}
+				twin = twin->next;
+			}
+		//	if (fn == is_levelnull)
+		//		ft_printf("addqueing %s (%d / %d) \n", this->name, this->level, level);
+			if (!donotadd)
+			{
+				new_lst = ft_memalloc(sizeof(t_list));
+				new_lst->content = this;
+
+				ft_lstadd(q, new_lst);
+			}
 		}
 //		else
 //		{
 //			ft_printf("refusing %s (%d / %d) \n", this->name, this->level, level);
 //		}
-		candidates = candidates->next;
+		tmp = tmp->next;
 	}
 //	ft_printf("\n");
 	return (1);
@@ -60,14 +80,30 @@ int		bfs_level(t_list *q, int level)
 	new_q = NULL;
 //	t_list *tmp = q;
 
+//	printqueu2("loooolll", q);
 	while (q)
 	{
-		if (!((t_data *)(q->content))->level)
+	//	ft_printf(">> %p\n", q->next);
+	//	printqueu2("loooolll", q);
+
+	//	ft_printf("Q\n");
+		if (((t_data *)(q->content))->level <= 0)
+		{
 			((t_data *)(q->content))->level = level;
-//		ft_printf("leveling %s (%d) \n", ((t_data *)(q->content))->name, ((t_data *)(q->content))->level);
+//			ft_printf("set lvl %d : %s\n", ((t_data *)(q->content))->level, ((t_data *)(q->content))->name);
+		}
+		else 
+		{
+	//		ft_printf("already lvled %d : %s\n", ((t_data *)(q->content))->level, ((t_data *)(q->content))->name);	
+		}
 		add_newq(&new_q, ((t_data *)(q->content))->chill, is_levelnull, level);
+	//	printqueu2("laaaal", q);
+//		ft_printf("leveling %s (%d) \n", ((t_data *)(q->content))->name, ((t_data *)(q->content))->level);
 		q = q->next;
+	//	ft_printf(">>>> %p\n", q);
+	//	ft_printf("R\n");
 	}
+//	printqueu2("laaaal", new_q);
 /*
 	while (tmp)
 	{
@@ -76,8 +112,11 @@ int		bfs_level(t_list *q, int level)
 	}
 	ft_printf("\n");
 */
-	if (new_q)
+	if (new_q && (t_data *)(new_q->content))
+	{
+		//ft_printf("??????\n");
 		bfs_level(new_q, level + 1);
+	}
 	return (0);
 }
 

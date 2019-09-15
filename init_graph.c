@@ -101,11 +101,29 @@ void	printqueu2(char *title, t_list *q)
 	while (q)
 	{
 		if ((t_data *)(q->content))
-			ft_printf("%d : %s (%s, %c)\n", i, title, ((t_data *)(q->content))->name, ((t_data *)(q->content))->role);
+			ft_printf("%d : %s (%s, %d, %c)\n", i, title, ((t_data *)(q->content))->name, ((t_data *)(q->content))->level, ((t_data *)(q->content))->role);
 		else
 			ft_printf("%d : empty list node...(%s)\n", i, title);
 		q = q->next;
 		i += 1;
+	}
+}
+
+void	add_queubfs(t_list *queu, t_list *candidates)
+{
+	t_list *tmp;
+	t_list *new;
+
+	tmp = candidates;
+	while (tmp)
+	{
+		if (!(((t_data *)tmp->content)->level))
+		{
+			new = ft_memalloc(sizeof(t_list));
+			new->content = ((t_data *)tmp->content);
+			ft_lstadd(&queu, new); 
+		}
+		tmp = tmp->next;
 	}
 }
 
@@ -135,6 +153,7 @@ void	add_queu(t_list *queu, t_list *new, int level)
 	}
 	while (new)
 	{
+	//	ft_printf("1\n");
 			if (((t_data *)(new->content))->chill
 			&& ((!((t_data *)(new->content))->level)
 			|| (level && ((t_data *)(new->content))->level > level)))
@@ -155,7 +174,9 @@ void	add_queu(t_list *queu, t_list *new, int level)
 				}
 			}
 		new = new->next;
+//    ft_printf("2\n");
 	}
+//    ft_printf("3\n");
 	queu = head;
 }
 
@@ -176,6 +197,7 @@ t_data	*get_startend(t_nodes *nodes, char symbol)
 	return (NULL);
 }
 
+
 int		graph_bfs(t_list *queu, int level, char target)
 {
 	t_list	*tmp;
@@ -193,6 +215,10 @@ int		graph_bfs(t_list *queu, int level, char target)
 //	tmp = ft_memalloc(sizeof(t_list)); 
 	while (queu)
 	{
+  //  ft_printf("A\n");
+//		ft_printf("CD %d\n", cycle_detector(queu));
+
+//		ft_printf("LL %d\n", ft_listlen(queu));
 		i = 0;
 //		out = ((t_data *)(queu->content))->out;
 //		if (out && (((t_data *)(out->content))->out))
@@ -203,14 +229,18 @@ int		graph_bfs(t_list *queu, int level, char target)
 		//while (i < ((t_data *)(queu->content))->size)
 		if (tmp)
 		{
-			add_queu(new_queue, tmp, 0);
+			add_queubfs(new_queue, tmp);
 		}
 		if (!((t_data *)(queu->content))->level)
 		{	
 			((t_data *)(queu->content))->level = level;
 		}
 		queu = queu->next;
+
+//    ft_printf("B\n");
 	}
+//	ft_printf("O");
+//ft_printf("A.c\n");
 	if (new_queue->content)
 		graph_bfs(new_queue, level + 1, target);
 	return (-1);

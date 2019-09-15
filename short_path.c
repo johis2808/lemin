@@ -125,6 +125,60 @@ t_list	*ft_lstremove(t_list **list, t_list *to_del)
 	return (*list);
 }
 
+
+int        cycle_detector(const t_list *list)
+{
+	const t_list	*slow;
+	const t_list	*fast;
+
+	slow = list;
+	fast = list;
+	if (!list)
+		return (0);
+	while (fast && fast->next)
+	{
+		slow = slow->next;
+		fast = fast->next->next;
+		if (fast == slow)
+			return (1);
+	}
+	return (0);
+}
+
+size_t		ft_listlen(t_list *lst)
+{
+	size_t		i;
+
+	i = 0;
+	if (!lst)
+		return (0);
+	while (lst)
+	{
+		lst = lst->next;
+		i++;
+	}
+	return (i);
+}
+
+
+void	add_queusp(t_list *queu, t_list *candidates, int level)
+{
+	t_list *tmp;
+	t_list *new;
+
+	tmp = candidates;
+	while (tmp)
+	{
+		if (((t_data *)(tmp->content))->level > level)
+		{
+			new = ft_memalloc(sizeof(t_list));
+			new->content = ((t_data *)tmp->content);
+			ft_lstadd(&queu, new); 
+		}
+		tmp = tmp->next;
+	}
+}
+
 t_list *short_path(t_list *queu, int level, char target)
 {
 	t_list 	*tmp;
@@ -138,8 +192,11 @@ t_list *short_path(t_list *queu, int level, char target)
 	head = queu;
 	if (!(new_queue = ft_memalloc(sizeof(t_list))))
 		return (NULL);
+//	printqueu("lol", queu);
 	while (queu)
 	{
+	//	ft_printf("CD %d\n", cycle_detector(queu));
+	//	ft_printf("LL %d\n", ft_listlen(queu));
 		if (((t_data *)(queu->content))->role == target)
 		{
 			return (queu);
@@ -149,9 +206,12 @@ t_list *short_path(t_list *queu, int level, char target)
 //			tmp = out;
 //		else
 			tmp = ((t_data *)(queu->content))->chill;
-		add_queu(new_queue, tmp, level);
+		add_queusp(new_queue, tmp, level);
 		queu = queu->next;
+//		ft_printf("A.XX\n");
 	}
+
+	//	ft_printf("A.YY\n");
 //	if (!(t_data *)(new_queue->content))
 //		ft_printf("rabit 3\n");
 	if ((t_data *)(new_queue->content))
@@ -239,7 +299,7 @@ t_list *findparent(t_data *node, t_list *chill)
 		chill = chill->next;
 	}
 	t_list *debug;
-	ft_printf("FP %s\n", ((t_data *)(tmp->content))->name);
+//	ft_printf("FP %s\n", ((t_data *)(tmp->content))->name);
 	debug = ((t_data *)(tmp->content))->chill;
 	while (debug)
 	{
@@ -273,7 +333,7 @@ t_list *add_outnode(t_data *node, t_list *chill)
 	((t_data *)new_out->content)->statut = 'o';
 	tmp = ((t_data *)new_out->content); 
 	tmp_chill = ((t_data *)new_out->content)->chill;
-	ft_printf("name %s\n",((t_data *)new_out->content)->name);
+//	ft_printf("name %s\n",((t_data *)new_out->content)->name);
 	tmp_data = (t_data *)tmp_chill->content;
 	while (tmp_chill)
 		tmp_chill = tmp_chill->next;

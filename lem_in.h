@@ -143,5 +143,6 @@ long			count_lines(t_path_head *paths, int ants);
 
 void			push_print(t_path_head *paths, int ant_man, int max);
 
+void	printqueu2(char *title, t_list *q);
 
 # endif

@@ -151,11 +151,13 @@ int		find_path(t_list **queu, char target)
 {
 	int		ret;
 
+		//	ft_printf("A.a\n");
 	ret = graph_bfs(*queu, 1, target);
 //	if (target == 's')
 //		ft_printf(" >> %d\n", ret);
 	//ft_printf("LEVEL RET %d\n", ret);
 	ret = ((short_path(*queu, 1, target) ? 1 : 0));
+	///		ft_printf("A.y\n");
 //	if (target == 's')
 //		ft_printf(" >> %d\n", ret);
 	//ft_printf("SHORT RET %d\n", ret);
@@ -211,19 +213,28 @@ int        path_back(t_list **q, t_path_head **paths, t_data *start)
     int        retrn;
     t_nodes        *new_path;
 
+////	ft_printf("1.3.1\n");
     new_path = NULL;
     if(!*paths)
     {
         if(!(*paths = ft_memalloc(sizeof(t_path_head))))
             return (-1);
     }
+//	ft_printf("1.3.1.0\n");
     retrn = bfs_level(*q, 1);
+//	ft_printf("1.3.1.1\n");
 //	ft_printf("pif\n");
     //retrn = ((bfs_path(*q, 1, &new_path) ? 1 : 0));
     retrn = ((bfs_path(*q, 1, &new_path) ? 1 : 0));
+//	ft_printf("1.3.1.2\n");
 //	ft_printf("\n");
     if (new_path && retrn)
-        add_paths(*paths, new_path, start);    
+	{
+//		ft_printf("1.3.2\n");
+        add_paths(*paths, new_path, start);
+//		ft_printf("1.3.3\n");
+	}    
+//	ft_printf("1.3.4\n");
     return (retrn);
 }
 
@@ -316,7 +327,7 @@ int		main(int ac, char **av)
 	//		return (-1);
 		
 		//nodes = init_graph(nodes);
-
+	//	ft_printf("A\n");
 		tmpnodes = init_graph(nodes);
 
 		aya = get_startend(tmpnodes, 's');
@@ -327,10 +338,12 @@ int		main(int ac, char **av)
 		{
 			nb_paths++;
 			i++;
+//			ft_printf("A.z\n");
 		//	ft_printf("\n");
 			resetlevel(tmpnodes);
 		}
 
+		//ft_printf("B\n");
 
 //		ft_printf("max path %d\n", max_paths);
 		i = 0;
@@ -341,15 +354,19 @@ int		main(int ac, char **av)
 		queu->content = aya;
 		aya = get_startend(tmpnodes, 's');
 		aya->level = 0;	// llooooooooooooooooool bidouilles bidouilles;
+//		ft_printf("1\n");
 		while ((i < max_paths) && path_back(&queu, &paths, aya))
 		{
 			//test = path_back(&queu, &paths, aya);
+	//		ft_printf("1.2\n");
 			nb_print++;
-			
 			
 			resetlevel(tmpnodes);
 			i++;
+	//	ft_printf("1.3\n");
 		}
+//		ft_printf("2\n");
+//		ft_printf("B\n");
 		new = count_lines(paths, tmpnodes->ants);
 //	ft_printf("\n");
 		max_paths++;
@@ -363,6 +380,7 @@ int		main(int ac, char **av)
 		old_paths = paths;
 		
 	}
+	
 //	path_print(paths);
 //	if (paths->nb_path > 1)
 //		paths->nb_path -= 1;
