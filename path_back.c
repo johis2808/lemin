@@ -12,182 +12,142 @@
 
 #include "lem_in.h"
 
-int		is_levelnull(int this_level, int graph_level)
+static int	is_levelnull(int this_level, int graph_level)
 {
 	(void)graph_level;
-//	ft_printf("io %d\n", this_level);
 	if (!this_level)
 		return (1);
 	return (0);
 }
 
-int		is_levelinf(int this_level, int graph_level)
+static int	is_levelinf(int this_level, int graph_level)
 {
 	if (this_level < graph_level)
 		return (0);
 	return (1);
 }
 
-int		add_newq(t_list **q, t_list *candidates, int (*fn)(int, int), int level)
+static int	no_twin(t_list *q, t_data *this)
+{
+	t_list	*twin;
+
+	twin = q;
+	while (twin)
+	{
+		if ((t_data *)twin->content == this)
+			return (0);
+		twin = twin->next;
+	}
+	return (1);
+}
+
+int			add_newq(t_list **q, t_list *list, int (*fn)(int, int), int level)
 {
 	t_data	*this;
 	t_list	*new_lst;
 	t_list	*tmp;
-	t_list	*twin;
-	int		donotadd;
 
-	tmp = candidates;
+	tmp = list;
 	while (tmp)
 	{
 		this = (t_data *)tmp->content;
-		if (fn(this->level, level) == 1)
+		if (fn(this->level, level) == 1 && no_twin(*q, this))
 		{
-			donotadd = 0;
-			twin = *q;
-			while (twin)
-			{
-				if ((t_data *)twin->content == this)
-				{
-					donotadd = 1;
-					break;
-				}
-				twin = twin->next;
-			}
-		//	if (fn == is_levelnull)
-		//		ft_printf("addqueing %s (%d / %d) \n", this->name, this->level, level);
-			if (!donotadd)
-			{
-				new_lst = ft_memalloc(sizeof(t_list));
-				new_lst->content = this;
-
-				ft_lstadd(q, new_lst);
-			}
+			if (!(new_lst = ft_memalloc(sizeof(t_list))))
+				return (0);
+			new_lst->content = this;
+			ft_lstadd(q, new_lst);
 		}
-//		else
-//		{
-//			ft_printf("refusing %s (%d / %d) \n", this->name, this->level, level);
-//		}
 		tmp = tmp->next;
 	}
-//	ft_printf("\n");
 	return (1);
 }
 
-int		bfs_level(t_list *q, int level)
+int			bfs_level(t_list *q, int level)
 {
 	t_list	*new_q;
 
 	new_q = NULL;
-//	t_list *tmp = q;
-
-//	printqueu2("loooolll", q);
 	while (q)
 	{
-	//	ft_printf(">> %p\n", q->next);
-	//	printqueu2("loooolll", q);
-
-	//	ft_printf("Q\n");
 		if (((t_data *)(q->content))->level <= 0)
-		{
 			((t_data *)(q->content))->level = level;
-//			ft_printf("set lvl %d : %s\n", ((t_data *)(q->content))->level, ((t_data *)(q->content))->name);
-		}
-		else 
-		{
-	//		ft_printf("already lvled %d : %s\n", ((t_data *)(q->content))->level, ((t_data *)(q->content))->name);	
-		}
 		add_newq(&new_q, ((t_data *)(q->content))->chill, is_levelnull, level);
-	//	printqueu2("laaaal", q);
-//		ft_printf("leveling %s (%d) \n", ((t_data *)(q->content))->name, ((t_data *)(q->content))->level);
 		q = q->next;
-	//	ft_printf(">>>> %p\n", q);
-	//	ft_printf("R\n");
 	}
-//	printqueu2("laaaal", new_q);
-/*
-	while (tmp)
-	{
-		ft_printf("%s (%d)\n", ((t_data *)(tmp->content))->name, ((t_data *)(tmp->content))->level);
-		tmp = tmp->next;
-	}
-	ft_printf("\n");
-*/
 	if (new_q && (t_data *)(new_q->content))
-	{
-		//ft_printf("??????\n");
 		bfs_level(new_q, level + 1);
-	}
 	return (0);
 }
 
-
-t_nodes        *make_path(t_nodes **head, t_data *new)
+t_nodes		*make_path(t_nodes **head, t_data *new)
 {
-    if(!*head)
-    {
-        if(!(*head = ft_memalloc(sizeof(t_nodes))))
-            return (NULL);
-    }
- //   if (!(add_tubes(new->name, ".", *head)))
-	if (!(add_node(*head, new->name, new->role)))
-        return (NULL);
-    return    (*head);
+	if (!*head)
+		if (!(*head = ft_memalloc(sizeof(t_nodes))))
+			return (NULL);
+	if ((add_node(*head, new->name, new->role) < 0))
+		return (NULL);
+	return (*head);
 }
 
-t_list	*bfs_path(t_list *q, int level, t_nodes **path)
+t_list		*find_children(t_list *q, t_data *target)
+{
+	t_list *children;
+
+	while (q)
+	{
+		children = ((t_data *)(q->content))->chill;
+		while (children)
+		{
+			if (target == (t_data *)(children->content)
+				&& (((t_data *)(q->content))->level + 1) == target->level)
+				break ;
+			children = children->next;
+		}
+		if (children
+			&& target == (t_data *)(children->content)
+			&& (((t_data *)(q->content))->level + 1) == target->level)
+			break ;
+		q = q->next;
+	}
+	return (q);
+}
+
+t_list		*add_room(t_list *q, t_list *new_room, t_nodes **path)
+{
+	t_data	*tmp;
+
+	if (!(q = find_children(q, (t_data *)new_room->content)))
+		return (NULL);
+	ft_lstremove(&(((t_data *)(q->content))->chill), new_room);
+	if (!(tmp = ft_memalloc(sizeof(t_data))))
+		return (NULL);
+	tmp = ft_memcpy(tmp, (t_data *)(q->content), sizeof(t_data));
+	if (!make_path(path, tmp))
+		return (NULL);
+	return (q);
+}
+
+t_list		*bfs_path(t_list *q, int level, t_nodes **path)
 {
 	t_list	*retrn;
 	t_list	*new_q;
 	t_list	*q_save;
-	t_list	*children;
-
-	 t_data    *tmp;
-	 tmp = ft_memalloc(sizeof(t_data));
-
 
 	new_q = NULL;
 	q_save = q;
 	while (q)
 	{
 		if (((t_data *)(q->content))->role == 's')
-		{
-		//	tmp = ft_memcpy(tmp,(t_data *)(q->content), sizeof(t_data));
-        //   make_path(path, tmp);
-//			ft_printf("> %s (%d / %d) : %p\n", ((t_data *)(q->content))->name, ((t_data *)(q->content))->level, level, q);
 			return (q);
-		}
 		add_newq(&new_q, ((t_data *)(q->content))->chill, is_levelinf, level);
 		q = q->next;
 	}
 	if (!new_q)
 		return (NULL);
-	retrn = bfs_path(new_q, level += 1, path);
-	if (!retrn)
+	if (!(retrn = bfs_path(new_q, level += 1, path)))
 		return (NULL);
-	q = q_save;
-	while (q)
-	{
-		children = ((t_data *)(q->content))->chill;
-		while (children)
-		{
-			if ((t_data *)(retrn->content) == (t_data *)(children->content)
-				&& (((t_data *)(q->content))->level + 1) == ((t_data *)(retrn->content))->level)
-				break ;
-			children = children->next;
-		}
-		if (children 
-			&& (t_data *)(retrn->content) == (t_data *)(children->content)
-			&& (((t_data *)(q->content))->level + 1) == ((t_data *)(retrn->content))->level)
-			break ;
-		q = q->next;
-	}
-	if (!q)
+	if (!(q = add_room(q_save, retrn, path)))
 		return (NULL);
-	ft_lstremove(&(((t_data *)(q->content))->chill), retrn);
-	
-	tmp = ft_memcpy(tmp,(t_data *)(q->content), sizeof(t_data));
-    make_path(path, tmp);
-
-//	ft_printf("> %s (%d / %d) : %p\n", ((t_data *)(q->content))->name, ((t_data *)(q->content))->level, level, q);
-	return (q);	
+	return (q);
 }
