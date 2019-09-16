@@ -1,6 +1,10 @@
 
 #include "lem_in.h"
 
+/*
+** pensez a lire sur stdin (./lem-in < test plutot que ./lem-in test)
+*/
+
 void	printqueu2(char *title, t_list *q)
 {
 	int		i;

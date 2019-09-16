@@ -41,29 +41,57 @@ int		ft_moove(t_param **params)
 	return (0);
 }
 
-int		ft_start(t_param **params, char **av)
+int		ft_start(t_param **params)
 {
+//	(void)av;
 	(*params)->old = FT_INTMAX;
 	(*params)->new = 0;
-	if (!((*params)->fd = open(av[1], O_RDWR)))
-		return (-2);
 	if (!((*params)->nodes = ft_memalloc(sizeof(t_nodes))))
 		return (-1);
-	(*params)->nodes = ft_read((*params)->nodes, (*params)->fd);
+	(*params)->nodes = ft_read((*params)->nodes, 0);
 	(*params)->paths = NULL;
 	(*params)->max_paths = 1;
 	return (0);
 }
 
-int		main(int ac, char **av)
+void	print_input(t_nodes *nodes)
+{
+	size_t	i;
+	t_data	*room;
+	t_chill	*tubes;
+
+	i = 0;
+	room = nodes->head;
+	ft_printf("%d\n", nodes->ants);
+	while (i < nodes->size)
+	{
+		if (room->role == 's')
+			ft_putstr("##start\n");
+		if (room->role == 't')
+			ft_putstr("##end\n");
+		ft_printf("%s %d %d\n", room->name, room->x, room->y);
+		room = room->next;
+		i++;
+	}
+	i = 0;
+	tubes = nodes->head_tubes;
+	while (i < nodes->size_tubes / 2)
+	{
+		ft_printf("%s-%s\n", tubes->name, tubes->dest);
+		tubes = tubes->next->next;
+		i++;
+	}
+	ft_putchar('\n');
+}
+
+int		main(void)
 {
 	t_param *params;
 
 	if (!(params = ft_memalloc(sizeof(t_param))))
 		return (-1);
-	if ((params->ret = ft_start(&params, av)) < 0)
+	if ((params->ret = ft_start(&params)) < 0)
 		return (params->ret);
-	(void)ac;
 	while (1)
 	{
 		params->nb_paths = 0;
@@ -81,5 +109,6 @@ int		main(int ac, char **av)
 		params->old = params->new;
 		params->old_paths = params->paths;
 	}
+	print_input(params->nodes);
 	push_print(params->paths, 1, params->paths->max_ants);
 }
