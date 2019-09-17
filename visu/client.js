@@ -11,7 +11,12 @@ var renderer = new THREE.WebGLRenderer({"antialias": true});
     camera.position.set( 2, 2, 15 );
     controls.update();
 
-
+window.addEventListener("resize", function(){
+    camera.aspect = window.innerWidth / window.innerHeight;
+    camera.updateProjectionMatrix()
+    renderer.setSize( window.innerWidth, window.innerHeight )
+    render()
+})
 
 function animate(){
     requestAnimationFrame(function(){animate()});
