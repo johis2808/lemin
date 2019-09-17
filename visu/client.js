@@ -75,25 +75,40 @@ function create_sphere(map){
         scene.add( line );
         i++;
     }
+    animate();    
+}
 
+function launchAnts(map, turnIndex, previousAnts){
+    var i = 0;
+    console.log(map.turns[turnIndex])
+    while (i < previousAnts.length){
+        scene.remove(scene.getObjectByName(previousAnts[i]));
+        i += 1;
+    }
+    previousAnts = [];
     i = 0;
-    while (i < map.turns[0].length){
+    var sphereSize = 15 / map.nodes.length;
+    if (sphereSize > 2)
+        sphereSize = 2
+    while (i < map.turns[turnIndex].length){
        
 
         let geometry = new THREE.SphereGeometry( sphereSize / 2, 16, 16 ); 
         let material = new THREE.MeshBasicMaterial( {color: getRandomColor() } );
         let ant = new THREE.Mesh( geometry, material );
-        ant.position.set(ant.position.x, ant.position.y, ant.position.z);
-    
+        let thisAnt = map.turns[turnIndex][i];
+        ant.position.set(thisAnt.position.x, thisAnt.position.y, thisAnt.position.z);
+        ant.name = thisAnt.name;
+        previousAnts.push(thisAnt.name);
         scene.add( ant );
         
         let j = 0;
-        while (j < map.turns[1].length){
-            if (map.turns[1][j].name == map.turns[0][i].name)
-                var nextPosition = map.turns[1][j].position; 
+        while (j < map.turns[turnIndex + 1].length){
+            if (map.turns[turnIndex + 1][j].name == map.turns[turnIndex][i].name)
+                var nextPosition = map.turns[turnIndex + 1][j].position; 
             j++;
         }      
-        let tween = new TWEEN.Tween(map.turns[0][i].position)
+        let tween = new TWEEN.Tween(map.turns[turnIndex][i].position)
                     .to(nextPosition, 10000)
                     .onUpdate(function(){
                         ant.position.x = this.x;
@@ -103,10 +118,14 @@ function create_sphere(map){
     
         i++;
     }
-
-   
- //   console.log(ants);
-    animate();    
+    if (turnIndex + 2 < map.turns.length){
+        setTimeout(
+            function(){ 
+                launchAnts(map, turnIndex + 1, previousAnts)
+            }, 
+            10000
+        );
+    }
 }
 
 function get_jsonfile(fileName, fn)
@@ -117,7 +136,9 @@ function get_jsonfile(fileName, fn)
 	request.addEventListener("load", function (){
         if (request.status >= 200 && request.status < 400){
             console.log(JSON.parse(request.responseText));
-            fn(JSON.parse(request.responseText));
+            var map = JSON.parse(request.responseText);
+            fn(map);
+            launchAnts(map, 0, []);
         } else
 			console.log(request.status + " " + request.statusText);
 	});
