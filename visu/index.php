@@ -4,6 +4,7 @@
 		<title>♪ j'ai cale cale l'affaire, laissez laissez moi faire ♪</title>
 		<meta charset="utf-8">
 		<?php // <link rel="stylesheet" href="styles.css" type="text/css" media="screen"> ?>
+		<style>#canvas{position: absolute; top: 0; left: 0}</style>
 	</head>
 	<body>
         <?php include("./server.php"); ?>
