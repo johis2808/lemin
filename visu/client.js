@@ -13,12 +13,11 @@ var renderer = new THREE.WebGLRenderer({"antialias": true});
 
 
 
-function animate(ants){
-    requestAnimationFrame(function(){animate(ants)});
+function animate(){
+    requestAnimationFrame(function(){animate()});
     controls.update();
-    var L1 = ants[0];
 
-    TWEEN.update(time);
+    TWEEN.update();
     renderer.render(scene, camera);
     
 }
@@ -77,24 +76,37 @@ function create_sphere(map){
         i++;
     }
 
-    var geometry = new THREE.SphereGeometry( sphereSize / 2, 3, 3 ); 
-    var material = new THREE.MeshBasicMaterial( {color: "#000000" } );
-    var ant = new THREE.Mesh( geometry, material );
-    ant.position.set(map.arcs[0][0].x, map.arcs[0][0].y, map.arcs[0][0].z);
-
-    scene.add( ant );
-
-    var tween = new TWEEN.Tween(map.arcs[0][0])
-                .to(map.arcs[0][1], 1000)
-                .onUpdate(function(){
-                    ant.position.x = Math.round(this.x);
-                    ant.position.y = Math.round(this.y);
-                    ant.position.z = Math.round(this.z);
-                }).start();
-
     i = 0;
-    console.log(ants);
-    animate(ants);    
+    while (i < map.turns[0].length){
+       
+
+        let geometry = new THREE.SphereGeometry( sphereSize / 2, 16, 16 ); 
+        let material = new THREE.MeshBasicMaterial( {color: getRandomColor() } );
+        let ant = new THREE.Mesh( geometry, material );
+        ant.position.set(ant.position.x, ant.position.y, ant.position.z);
+    
+        scene.add( ant );
+        
+        let j = 0;
+        while (j < map.turns[1].length){
+            if (map.turns[1][j].name == map.turns[0][i].name)
+                var nextPosition = map.turns[1][j].position; 
+            j++;
+        }      
+        let tween = new TWEEN.Tween(map.turns[0][i].position)
+                    .to(nextPosition, 10000)
+                    .onUpdate(function(){
+                        ant.position.x = this.x;
+                        ant.position.y = this.y;
+                        ant.position.z = this.z;
+                    }).start();
+    
+        i++;
+    }
+
+   
+ //   console.log(ants);
+    animate();    
 }
 
 function get_jsonfile(fileName, fn)

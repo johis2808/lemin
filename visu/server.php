@@ -20,11 +20,18 @@ function get_coord($line, $nodes){
                 "y" => $node["y"],
                 "z" => $node["z"]
 			);
-			array_push($coords, $coord);
+            array_push($coords, $coord);
+            if (count($targets) < 2)
+                break ;
 		endif;
 		$i += 1;
 	endwhile;
 	return ($coords);
+}
+
+function console ($str)
+{
+    echo '<script>console.log("' . $str . '")</script>';   
 }
 
 function map_tojson($file){
@@ -32,12 +39,13 @@ function map_tojson($file){
 	$lines = explode(PHP_EOL, $content);
 	$map = array(
 		"nodes"	=> array(),
-		"arcs"	=> array()
+        "arcs"	=> array(),
+        "turns" => array()
 	);
 	$i = 0;
 	$max = count($lines) - 1;
 	$previous_line = "";
-	while($i < $max && strlen($lines[$i]) > 1) :
+	while ($i < $max && strlen($lines[$i]) > 1) :
 		if ($i > 0) :
 			$line = $lines[$i];
 			if (strpos($line, "#") === FALSE) :
@@ -62,7 +70,28 @@ function map_tojson($file){
 		endif; 			// not first line
 		$i += 1;
 		$previous_line = $line;
-	endwhile;
+    endwhile;
+    $i++;
+    while ($i < $max) :
+        $line = $lines[$i];
+        $ants = explode(" ", $line);
+        $j = 0;
+        $max_ants = count($ants);
+        $new_turn = array();
+        while ($j < $max_ants - 1) :
+            $ant = $ants[$j];
+            $data = explode("-", $ant);
+            $tmp = get_coord($data[1], $map["nodes"]);
+            $new_ant = array(
+                "name" => $data[0],
+                "position" => $tmp[0]
+            );
+            array_push($new_turn, $new_ant);
+            $j++;
+        endwhile;
+        array_push($map["turns"], $new_turn);
+        $i++;
+    endwhile;
 	file_put_contents("map.json", json_encode($map));
 	return ($map);
 }
