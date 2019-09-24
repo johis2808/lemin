@@ -69,7 +69,7 @@ static t_list	*find_parent(t_list *haystack, t_list *needle, int level)
 	return (haystack);
 }
 
-static t_list	*add_queusp(t_list *queu, t_list *candidates, int level)
+static t_list	*add_queusp(t_list **queu, t_list *candidates, int level)
 {
 	t_list *tmp;
 	t_list *new;
@@ -83,12 +83,11 @@ static t_list	*add_queusp(t_list *queu, t_list *candidates, int level)
 			if (!(new = ft_memalloc(sizeof(t_list))))
 				return (NULL);
 			new->content = ((t_data *)tmp->content);
-			ft_lstadd(&queu, new);
-			ft_lstadd(&queu, new);
+			ft_lstadd(queu, new);
 		}
 		tmp = tmp->next;
 	}
-	return (queu);
+	return (*queu);
 }
 
 t_list			*short_path(t_list *queu, int level, char target)
@@ -104,7 +103,7 @@ t_list			*short_path(t_list *queu, int level, char target)
 	{
 		if (((t_data *)(queu->content))->role == target)
 			return (queu);
-		if (!add_queusp(new_queue, ((t_data *)(queu->content))->chill, level))
+		if (!add_queusp(&new_queue, ((t_data *)(queu->content))->chill, level))
 			return (NULL);
 		queu = queu->next;
 	}

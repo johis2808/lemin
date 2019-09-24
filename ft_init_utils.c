@@ -92,7 +92,7 @@ int			print_ants(t_path_head *paths)
 		countroom = 0;
 		while (countroom++ < tmp->path_size - 1)
 		{
-			if (room->ant_name && retrn++)
+			if (room->ant_name && ++retrn)
 				ft_printf("L%d-%s ", room->ant_name, room->name);
 			room = room->next;
 		}

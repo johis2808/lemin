@@ -109,6 +109,8 @@ int		main(void)
 		params->old = params->new;
 		params->old_paths = params->paths;
 	}
-	print_input(params->nodes);
+	ft_printf("ch %d\n", params->paths->nb_path);
+	//print_input(params->nodes);
 	push_print(params->paths, 1, params->paths->max_ants);
+	//ft_close_lemin(params);
 }

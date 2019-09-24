@@ -21,11 +21,13 @@ int				bfs_level(t_list *q, int level)
 	{
 		if (((t_data *)(q->content))->level <= 0)
 			((t_data *)(q->content))->level = level;
+	//	ft_printf("%s + %d\n", ((t_data *)(q->content))->name, ((t_data *)(q->content))->level);
 		add_newq(&new_q, ((t_data *)(q->content))->chill, is_levelnull, level);
 		q = q->next;
 	}
 	if (new_q && (t_data *)(new_q->content))
 		bfs_level(new_q, level + 1);
+//	ft_printf("\n");
 	return (0);
 }
 

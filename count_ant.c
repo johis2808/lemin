@@ -42,7 +42,7 @@ int		update_ants(t_path_head *paths, int ant_man)
 	while (i < paths->nb_path)
 	{
 		room = tmp->path->head;
-		push_ants(room, ((tmp->ants > 0) ? ant_man : 0), 0);
+		push_ants(room, ((tmp->ants >= 0 && ant_man > 0) ? ant_man : 0), 0);
 		tmp->ants--;
 		ant_man++;
 		i++;
@@ -55,7 +55,7 @@ void	push_print(t_path_head *paths, int ant_man, int max)
 {
 	ant_man = update_ants(paths, ant_man);
 	if (ant_man > max)
-		ant_man = 1;
+		ant_man = -1;
 	if (print_ants(paths))
 	{
 		ft_printf("\n");

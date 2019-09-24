@@ -113,6 +113,7 @@ typedef struct 			s_param
 int				add_node(t_nodes *nodes, char *name, char role);
 void			clear_nodes(t_nodes *nodes);
 void			ft_nodeprint(t_nodes *nodes);
+void			ft_close_lemin(t_param *params);
 
 /*
 ** tubes tools

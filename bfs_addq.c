@@ -51,7 +51,7 @@ int			add_newq(t_list **q, t_list *list, int (*fn)(int, int), int level)
 	while (tmp)
 	{
 		this = (t_data *)tmp->content;
-		if (fn(this->level, level) == 1 && no_twin(*q, this))
+		if (fn(this->level, level) == 1 && no_twin(*q, this) == 1)
 		{
 			if (!(new_lst = ft_memalloc(sizeof(t_list))))
 				return (0);

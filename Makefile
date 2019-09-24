@@ -27,6 +27,7 @@ NAME_C = ft_init.c \
 		  check_cmd.c \
 		  bfs_addq.c \
 		  utils.c	\
+		  free_utils.c \
 		  trash.c 
 # FILES_C = $(addprefix $(DIR_C)/, $(NAME_C))
 NAME_O = $(NAME_C:.c=.o)
@@ -38,7 +39,7 @@ FLAGS = -g -Wall -Wextra -Werror
 all : $(NAME)
 
 $(NAME) : $(FILES_O) $(FILES_H) $(LIBFT)
-	gcc -I. -L ./libft/ -lft -o $(NAME) $(FILES_O)
+	gcc -fsanitize=address -I. -L ./libft/ -lft -o $(NAME) $(FILES_O)
  
 $(DIR_O)/%.o : %.c $(FILES_H)
 	@ mkdir -p $(DIR_O)
