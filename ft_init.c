@@ -160,6 +160,7 @@ int		main(int ac, char **av)
 	if ((params->ret = ft_start(&params, av)) < 0)
 		return (params->ret);
 	params->nodes = init_graph(params->nodes);
+	params->max_paths = 2;
 	while (1)
 	{
 		params->nb_paths = 0;
@@ -185,7 +186,7 @@ int		main(int ac, char **av)
 		params->tmpnodes = NULL;
 	}
 	ft_printf("ch %d\n", params->paths->nb_path);
-	//print_input(params->nodes);
+//	print_input(params->nodes);
 	push_print(params->paths, 1, params->paths->max_ants);
 	//ft_close_lemin(params);
 }
