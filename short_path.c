@@ -12,6 +12,7 @@
 
 #include "lem_in.h"
 
+/*
 static int		is_s_or_t(t_list *node, t_list *node_previous)
 {
 	if (((t_data *)(node_previous->content))->role != 't'
@@ -21,29 +22,31 @@ static int		is_s_or_t(t_list *node, t_list *node_previous)
 		return (1);
 	return (0);
 }
-
+*/
 static int		simulate_outnode(t_list *node, t_list *node_previous)
 {
 	t_list	*children;
 	t_list	*new;
 
-	if (is_s_or_t(node, node_previous))
-	{
+//	if (is_s_or_t(node, node_previous))
+//	{
 		children = ((t_data *)(node_previous->content))->chill;
 		while (children)
 		{
 			if (((t_data *)(children->content))->role == 's')
-				break ;
+				return (1) ;
 			children = children->next;
 		}
+	//	if (!children)
+	//		return (0);
 		if (!(new = ft_memalloc(sizeof(t_list))))
 			return (0);
 		new->content = node->content;
-		if (((t_data *)(children->content))->role == 's')
-			ft_lstadd(&(((t_data *)(node_previous->content))->chill), new);
-		else
+//		if (((t_data *)(children->content))->role != 's')
+//			ft_lstadd(&(((t_data *)(node_previous->content))->chill), new);
+//		else
 			((t_data *)(node_previous->content))->chill = new;
-	}
+//	}
 	return (1);
 }
 
@@ -73,13 +76,14 @@ static t_list	*add_queusp(t_list **queu, t_list *candidates, int level)
 {
 	t_list *tmp;
 	t_list *new;
+	t_data *print;
 
 	tmp = candidates;
 	while (tmp)
 	{
+		print = tmp->content;
 		if (((t_data *)(tmp->content))->level > level)
 		{
-			new = ft_memalloc(sizeof(t_list));
 			if (!(new = ft_memalloc(sizeof(t_list))))
 				return (NULL);
 			new->content = ((t_data *)tmp->content);
@@ -95,10 +99,13 @@ t_list			*short_path(t_list *queu, int level, char target)
 	t_list	*new_queue;
 	t_list	*ret;
 	t_list	*head;
+	t_data	*print;
 
 	head = queu;
-	if (!(new_queue = ft_memalloc(sizeof(t_list))))
-		return (NULL);
+	print = head->content;
+	new_queue = NULL;
+//	if (!(new_queue = ft_memalloc(sizeof(t_list))))
+//		return (NULL);
 	while (queu)
 	{
 		if (((t_data *)(queu->content))->role == target)
@@ -107,7 +114,7 @@ t_list			*short_path(t_list *queu, int level, char target)
 			return (NULL);
 		queu = queu->next;
 	}
-	if (!(t_data *)(new_queue->content))
+	if (!new_queue)
 		return (NULL);
 	if (!(ret = short_path(new_queue, level + 1, target)))
 		return (NULL);

@@ -32,6 +32,7 @@ int		ft_moove(t_param **params)
 	(*params)->queu->content = (*params)->aya;
 	(*params)->aya = get_startend((*params)->tmpnodes, 's');
 	(*params)->aya->level = 0;
+	resetlevel((*params)->tmpnodes);
 	while (((*params)->i++ < (*params)->max_paths) &&
 	path_back(&(*params)->queu, &(*params)->paths, (*params)->aya))
 	{
@@ -41,14 +42,14 @@ int		ft_moove(t_param **params)
 	return (0);
 }
 
-int		ft_start(t_param **params)
+int		ft_start(t_param **params, char **av)
 {
 //	(void)av;
 	(*params)->old = FT_INTMAX;
 	(*params)->new = 0;
 	if (!((*params)->nodes = ft_memalloc(sizeof(t_nodes))))
 		return (-1);
-	(*params)->nodes = ft_read((*params)->nodes, 0);
+	(*params)->nodes = ft_read((*params)->nodes,  open(av[1], O_RDONLY));
 	(*params)->paths = NULL;
 	(*params)->max_paths = 1;
 	return (0);
@@ -84,18 +85,91 @@ void	print_input(t_nodes *nodes)
 	ft_putchar('\n');
 }
 
-int		main(void)
+t_data		*get_tdata(t_nodes *nodes, char *name)
+{
+	t_data	*tmp;
+	size_t	i;
+
+	i = 0;
+	tmp = nodes->head;
+	while (i < nodes->size)
+	{
+		if (!ft_strcmp(name, tmp->name))
+			return (tmp);
+		tmp = tmp->next;
+		i++;
+	}
+	return (NULL);
+}
+
+t_nodes		*ft_cpygraph(t_nodes *nodes)
+{
+	t_data	*tmp;
+	//t_data	*new;
+	//t_chill	*tmp_chill;
+	t_nodes	*tmpnodes;
+	t_data	*tmpdata;
+	size_t	size_nodes;
+	size_t	size_chills;
+	t_list	*tmplist;
+	t_list	*newlist;
+
+	size_nodes = 0;
+	tmp = nodes->head;
+	if (!(tmpnodes = ft_memalloc(sizeof(t_nodes))))
+		return (NULL);
+	tmpnodes->ants = nodes->ants;
+	while (size_nodes < nodes->size)
+	{
+		size_chills = 0;
+		add_node(tmpnodes, tmp->name, tmp->role);
+		/*while (size_chills < nodes->size_tubes)
+		{
+		}*/
+		tmp = tmp->next;
+		size_nodes++;
+	}
+	size_nodes = 0;
+	tmp = nodes->head;
+	tmpdata = tmpnodes->head;
+	while (size_nodes < nodes->size)
+	{
+		tmplist = tmp->chill;
+		while (tmplist)
+		{
+			if (!(newlist = ft_memalloc(sizeof(t_list))))
+				return (NULL);
+			newlist->content = get_tdata(tmpnodes, ((t_data *)tmplist->content)->name);
+			ft_lstadd(&tmpdata->chill, newlist);
+			tmplist = tmplist->next;
+		}
+		tmp = tmp->next;
+		tmpdata = tmpdata->next;
+		size_nodes++;
+	}
+	return (tmpnodes);
+}
+
+int		main(int ac, char **av)
 {
 	t_param *params;
-
+	
+	(void)ac;
 	if (!(params = ft_memalloc(sizeof(t_param))))
 		return (-1);
-	if ((params->ret = ft_start(&params)) < 0)
+	if ((params->ret = ft_start(&params, av)) < 0)
 		return (params->ret);
+	params->nodes = init_graph(params->nodes);
 	while (1)
 	{
 		params->nb_paths = 0;
-		params->tmpnodes = init_graph(params->nodes);
+		params->tmpnodes = NULL;
+	//	params->tmpnodes = init_graph(params->nodes);
+		if (!(params->tmpnodes = ft_cpygraph(params->nodes)))
+		{
+			ft_printf("malloc error\n");
+			return (0);
+		}
 		params->aya = get_startend(params->tmpnodes, 's');
 		if ((params->ret = ft_moove(&params)) == -1)
 			return (-1);
@@ -108,6 +182,7 @@ int		main(void)
 		}
 		params->old = params->new;
 		params->old_paths = params->paths;
+		params->tmpnodes = NULL;
 	}
 	ft_printf("ch %d\n", params->paths->nb_path);
 	//print_input(params->nodes);

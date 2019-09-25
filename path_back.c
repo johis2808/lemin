@@ -15,10 +15,12 @@
 int				bfs_level(t_list *q, int level)
 {
 	t_list	*new_q;
+	t_data	*print;
 
 	new_q = NULL;
 	while (q)
 	{
+		print = q->content;
 		if (((t_data *)(q->content))->level <= 0)
 			((t_data *)(q->content))->level = level;
 	//	ft_printf("%s + %d\n", ((t_data *)(q->content))->name, ((t_data *)(q->content))->level);

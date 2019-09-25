@@ -15,8 +15,10 @@
 int		find_path(t_list **queu, char target)
 {
 	int ret;
+	t_data	*print;
 
 	ret = graph_bfs(*queu, 1, target);
+	print = (t_data *)(*queu)->content;
 	ret = ((short_path(*queu, 1, target) ? 1 : 0));
 	return (ret);
 }

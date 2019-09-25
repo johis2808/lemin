@@ -65,7 +65,7 @@ t_nodes		*init_graph(t_nodes *nodes)
 	return (nodes);
 }
 
-void		add_queubfs(t_list *queu, t_list *candidates)
+void		add_queubfs(t_list **queu, t_list *candidates)
 {
 	t_list *tmp;
 	t_list *new;
@@ -77,7 +77,7 @@ void		add_queubfs(t_list *queu, t_list *candidates)
 		{
 			new = ft_memalloc(sizeof(t_list));
 			new->content = ((t_data *)tmp->content);
-			ft_lstadd(&queu, new);
+			ft_lstadd(queu, new);
 		}
 		tmp = tmp->next;
 	}
@@ -106,19 +106,21 @@ int			graph_bfs(t_list *queu, int level, char target)
 	t_list	*new_queue;
 	t_data	*aya;
 
-	aya = ((t_data *)queu->content);
-	if (!(new_queue = ft_memalloc(sizeof(t_list))))
-		return (-1);
+	//aya = ((t_data *)queu->content);
+	new_queue = NULL;
+//	if (!(new_queue = ft_memalloc(sizeof(t_list))))
+//		return (-1);
 	while (queu)
 	{
+		aya = ((t_data *)queu->content);
 		tmp = ((t_data *)(queu->content))->chill;
 		if (tmp)
-			add_queubfs(new_queue, tmp);
+			add_queubfs(&new_queue, tmp);
 		if (!((t_data *)(queu->content))->level)
 			((t_data *)(queu->content))->level = level;
 		queu = queu->next;
 	}
-	if (new_queue->content)
+	if (new_queue)
 		graph_bfs(new_queue, level + 1, target);
 	return (-1);
 }
