@@ -117,8 +117,16 @@ long	ft_lcounter(t_path_head *paths, long mid, t_path *tmp, long total)
 	}
 //	ft_printf("ANTS %d\n", total);
 //	ft_printf("SUM %d\n", sum);
-	if (sum < total)
-		tmp->ants += (total - sum);
+	tmp = paths->head;
+	int	res = 0;
+	while (res < (total - sum))
+	{
+		tmp->ants++;
+		res++;
+		tmp = tmp->prev;
+	} 
+	/*if (sum < total)
+		tmp->ants += (total - sum);*/
 //	tmp->ants = 8;
 //	tmp = tmp->next;
 //	tmp->ants = 2;

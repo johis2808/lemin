@@ -185,7 +185,7 @@ int		main(int ac, char **av)
 		params->old_paths = params->paths;
 		params->tmpnodes = NULL;
 	}
-	ft_printf("ch %d\n", params->paths->nb_path);
+//	ft_printf("ch %d\n", params->paths->nb_path);
 //	print_input(params->nodes);
 	push_print(params->paths, 1, params->paths->max_ants);
 	//ft_close_lemin(params);
