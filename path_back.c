@@ -30,6 +30,7 @@ int				bfs_level(t_list *q, int level)
 	if (new_q && (t_data *)(new_q->content))
 		bfs_level(new_q, level + 1);
 //	ft_printf("\n");
+	ft_lstfree(&new_q);
 	return (0);
 }
 
@@ -92,7 +93,10 @@ t_list			*bfs_path(t_list *q, int level, t_nodes **path)
 	while (q)
 	{
 		if (((t_data *)(q->content))->role == 's')
+		{
+			ft_lstfree(&new_q);
 			return (q);
+		}
 		add_newq(&new_q, ((t_data *)(q->content))->chill, is_levelinf, level);
 		q = q->next;
 	}
@@ -102,5 +106,6 @@ t_list			*bfs_path(t_list *q, int level, t_nodes **path)
 		return (NULL);
 	if (!(q = add_room(q_save, retrn, path)))
 		return (NULL);
+	ft_lstfree(&new_q);
 	return (q);
 }
