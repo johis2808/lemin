@@ -84,10 +84,11 @@ t_list	*simulate_outnode(t_list *node, t_list *node_previous)
 //		touchy = 1;	// lol seriously ?
 		if (!touchy)
 		{
-			new = ft_memalloc(sizeof(t_list));
-			new->content = node->content;
-			ft_lstfree(&save);
-			((t_data *)(node_previous->content))->chill = new;
+		//	new = ft_memalloc(sizeof(t_list));
+		//	new->content = node->content;
+			if (save->next)
+				ft_lstfree(&(save->next));
+			((t_data *)(node_previous->content))->chill->content = node->content;
 		//	ft_lstfree(&new);
 //		
 //i		else
@@ -335,8 +336,10 @@ t_list *short_path(t_list *queu, int level, char target)
 		if (!simulate_outnode(head, ret))
 		{
 			ft_lstfree(&new_queue);
+			ft_memdel((void **)&ret);
 			return (NULL);
 		}
+	//	ft_memdel((void **)&ret);
 		ft_lstfree(&new_queue);
 		return (head);
 	}
