@@ -58,7 +58,7 @@ t_list	*simulate_outnode(t_list *node, t_list *node_previous)
 	t_list	*children;
 	t_list	*new;
 	char	touchy;
-
+	t_list *save = ((t_data *)(node_previous->content))->chill;
 //	if (is_s_or_t(node, node_previous))
 	{
 	new = NULL;
@@ -86,8 +86,10 @@ t_list	*simulate_outnode(t_list *node, t_list *node_previous)
 		{
 			new = ft_memalloc(sizeof(t_list));
 			new->content = node->content;
+			ft_lstfree(&save);
 			((t_data *)(node_previous->content))->chill = new;
-//		}
+		//	ft_lstfree(&new);
+//		
 //i		else
 //		{
 //			ft_printf(":: :: %s\n", ((t_data *)(node_previous->content))->name);
@@ -267,6 +269,7 @@ t_list *short_path(t_list *queu, int level, char target)
 	{
 		if (((t_data *)(queu->content))->role == target)
 		{
+			ft_lstfree(&new_queue);
 			return (queu);
 		}
 		out = ((t_data *)(queu->content))->out;
@@ -286,6 +289,7 @@ t_list *short_path(t_list *queu, int level, char target)
 	if ((t_data *)(new_queue->content))
 	{
 		ret = short_path(new_queue, level + 1, target);
+	//	ft_lstfree(&new_queue);
 		if (!ret)
 			return (NULL);
 		/*
@@ -329,8 +333,13 @@ t_list *short_path(t_list *queu, int level, char target)
 		
 		/* simuler out node : supprimer tous les autres enfant, meh ? */
 		if (!simulate_outnode(head, ret))
+		{
+			ft_lstfree(&new_queue);
 			return (NULL);
+		}
+		ft_lstfree(&new_queue);
 		return (head);
 	}
+	ft_lstfree(&new_queue);
 	return (NULL);
 }

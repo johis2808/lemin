@@ -34,12 +34,12 @@ NAME_O = $(NAME_C:.c=.o)
 FILES_O = $(addprefix $(DIR_O)/, $(NAME_O))
 FILES_H = lem_in.h
 LIBFT = ./libft/libft.a
-FLAGS = -g -Wall -Wextra -Werror
+FLAGS = -Wall -Wextra -Werror
 
 all : $(NAME)
 
 $(NAME) : $(FILES_O) $(FILES_H) $(LIBFT)
-	gcc -fsanitize=address -I. -L ./libft/ -lft -o $(NAME) $(FILES_O)
+	gcc -I. -L ./libft/ -lft -o $(NAME) $(FILES_O)
  
 $(DIR_O)/%.o : %.c $(FILES_H)
 	@ mkdir -p $(DIR_O)

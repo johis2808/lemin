@@ -26,8 +26,9 @@ int		ft_moove(t_param **params)
 	}
 	(*params)->i = 0;
 	(*params)->paths = NULL;
-	if (!((*params)->queu = ft_memalloc(sizeof(t_list))))
-		return (-1);
+//	ft_lstfree(&((*params)->queu));
+//	if (!((*params)->queu = ft_memalloc(sizeof(t_list))))
+//		return (-1);
 	(*params)->aya = get_startend((*params)->tmpnodes, 't');
 	(*params)->queu->content = (*params)->aya;
 	(*params)->aya = get_startend((*params)->tmpnodes, 's');
@@ -39,6 +40,7 @@ int		ft_moove(t_param **params)
 		(*params)->nb_print++;
 		resetlevel((*params)->tmpnodes);
 	}
+	ft_lstfree(&((*params)->queu));
 	return (0);
 }
 

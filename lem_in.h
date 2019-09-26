@@ -171,4 +171,8 @@ void			push_print(t_path_head *paths, int ant_man, int max);
 
 void	printqueu2(char *title, t_list *q);
 
+void	clearcpy(t_nodes *tmpnodes);
+void	ft_lstfree(t_list **lst);
+void	ft_close_lemin(t_param *params);
+
 # endif

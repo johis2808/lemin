@@ -122,5 +122,6 @@ int			graph_bfs(t_list *queu, int level, char target)
 	}
 	if (new_queue)
 		graph_bfs(new_queue, level + 1, target);
+		ft_lstfree(&new_queue);
 	return (-1);
 }
