@@ -59,6 +59,7 @@ t_list	*simulate_outnode(t_list *node, t_list *node_previous)
 	t_list	*new;
 	char	touchy;
 	t_list *save = ((t_data *)(node_previous->content))->chill;
+	
 //	if (is_s_or_t(node, node_previous))
 	{
 	new = NULL;
@@ -84,11 +85,31 @@ t_list	*simulate_outnode(t_list *node, t_list *node_previous)
 //		touchy = 1;	// lol seriously ?
 		if (!touchy)
 		{
-		//	new = ft_memalloc(sizeof(t_list));
-		//	new->content = node->content;
-			if (save->next)
+
+//			new = ft_memalloc(sizeof(t_list));
+//			new->content = node->content;
+
+//(void)save;
+//			if (save)
+//				ft_lstfree(&save);	
+
+			if (save && save->next)
 				ft_lstfree(&(save->next));
-			((t_data *)(node_previous->content))->chill->content = node->content;
+			if (!save)
+			{
+				new = ft_memalloc(sizeof(t_list));
+				new->content = node->content;
+				ft_printf("LOL\n");
+				((t_data *)(node_previous->content))->chill = new;
+			} 
+			else
+			{
+				((t_data *)(node_previous->content))->chill->content = node->content;
+			}
+		//	if (save)
+				
+
+//			((t_data *)(node_previous->content))->chill->content = new->content;
 		//	ft_lstfree(&new);
 //		
 //i		else
@@ -107,13 +128,15 @@ t_list	*simulate_outnode(t_list *node, t_list *node_previous)
 		
 	}
 //	ft_printf(":: %s\n", ((t_data *)(node_previous->content))->name);
-	t_list *tmp;
-	tmp = ((t_data *)(node_previous->content))->chill;
-	while (tmp)
-	{
-//		ft_printf("|| %s\n", ((t_data *)(tmp->content))->name);
-		tmp = tmp->next;
-	}
+	/*
+			t_list *tmp;
+			tmp = ((t_data *)(node_previous->content))->chill;
+			while (tmp)
+			{
+		//		ft_printf("|| %s\n", ((t_data *)(tmp->content))->name);
+				tmp = tmp->next;
+			}
+	*/
 	}
 	return (node);
 }
