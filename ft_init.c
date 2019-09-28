@@ -163,7 +163,7 @@ int		main(int ac, char **av)
 	if ((params->ret = ft_start(&params, av)) < 0)
 		return (params->ret);
 	params->nodes = init_graph(params->nodes);
-	params->max_paths = 2;
+	params->max_paths = 1;
 	while (1)
 	{
 		params->nb_paths = 0;
