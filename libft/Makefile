@@ -6,12 +6,12 @@
 #    By: smoreno- <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2018/11/23 19:02:19 by smoreno-          #+#    #+#              #
-#    Updated: 2019/07/01 07:09:49 by smoreno-         ###   ########.fr        #
+#    Updated: 2019/09/28 06:37:59 by thberrid         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME = libft.a
-CFLAGS= -Wall -Werror -Wextra -Iincludes
+CFLAGS= -g -Wall -Werror -Wextra -Iincludes
 CC= gcc
 SRC =	ft_memset.c		\
 		ft_bzero.c		\

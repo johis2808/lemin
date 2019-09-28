@@ -24,34 +24,8 @@ static int		is_s_or_t(t_list *node, t_list *node_previous)
 }
 */
 
-/*
-static int		simulate_outnode(t_list *node, t_list *node_previous)
-{
-	t_list	*children;
-	t_list	*new;
 
-//	if (is_s_or_t(node, node_previous))
-//	{
-		children = ((t_data *)(node_previous->content))->chill;
-		while (children)
-		{
-			if (((t_data *)(children->content))->role == 's')
-				return (1) ;
-			children = children->next;
-		}
-	//	if (!children)
-	//		return (0);
-		if (!(new = ft_memalloc(sizeof(t_list))))
-			return (0);
-		new->content = node->content;
-//		if (((t_data *)(children->content))->role != 's')
-//			ft_lstadd(&(((t_data *)(node_previous->content))->chill), new);
-//		else
-			((t_data *)(node_previous->content))->chill = new;
-//	}
-	return (1);
-}
-*/
+
 
 t_list	*simulate_outnode(t_list *node, t_list *node_previous)
 {
@@ -134,18 +108,20 @@ t_list	*simulate_outnode(t_list *node, t_list *node_previous)
 		
 	}
 //	ft_printf(":: %s\n", ((t_data *)(node_previous->content))->name);
-	/*
-			t_list *tmp;
-			tmp = ((t_data *)(node_previous->content))->chill;
-			while (tmp)
-			{
+	
+	//		t_list *tmp;
+	//		tmp = ((t_data *)(node_previous->content))->chill;
+	//		while (tmp)
+	//		{
 		//		ft_printf("|| %s\n", ((t_data *)(tmp->content))->name);
-				tmp = tmp->next;
-			}
-	*/
+	//			tmp = tmp->next;
+	//		}
+	
 	}
 	return (node);
 }
+
+
 
 /*
 static t_list	*find_parent(t_list *haystack, t_list *needle, int level)
