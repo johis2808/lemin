@@ -174,5 +174,6 @@ void	printqueu2(char *title, t_list *q);
 void	clearcpy(t_nodes *tmpnodes);
 void	ft_lstfree(t_list **lst);
 void	ft_close_lemin(t_param *params);
+void	ft_freepath(t_path *paths, size_t path_size);
 
 # endif

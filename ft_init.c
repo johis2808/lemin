@@ -24,6 +24,7 @@ int		ft_moove(t_param **params)
 		(*params)->nb_paths++;
 		resetlevel((*params)->tmpnodes);
 	}
+//	ft_lstfree(&((*params)->queu));
 	(*params)->i = 0;
 	(*params)->paths = NULL;
 //	ft_lstfree(&((*params)->queu));
@@ -166,7 +167,7 @@ int		main(int ac, char **av)
 	while (1)
 	{
 		params->nb_paths = 0;
-		params->tmpnodes = NULL;
+	params->paths = NULL;
 	//	params->tmpnodes = init_graph(params->nodes);
 		if (!(params->tmpnodes = ft_cpygraph(params->nodes)))
 		{
@@ -178,17 +179,41 @@ int		main(int ac, char **av)
 			return (-1);
 		params->new = count_lines(params->paths, params->tmpnodes->ants);
 		params->max_paths++;
+		clearcpy(params->tmpnodes);
+	//ß	ft_memdel((void **)&params->tmpnodes);
 		if (params->old <= params->new)
 		{
+			ft_freepath(params->paths->head, params->paths->nb_path);
+			ft_memdel((void **)&params->paths);
 			params->paths = params->old_paths;
 			break ;
 		}
+		else
+		{
+	//		if (params->old_paths)
+	//			ft_freepath(params->old_paths->head, params->old_paths->nb_path);
+		}
 		params->old = params->new;
+		if (params->old_paths)
+		{
+			ft_freepath(params->old_paths->head, params->old_paths->nb_path);
+			ft_memdel((void **)&params->old_paths);
+		}
 		params->old_paths = params->paths;
-		params->tmpnodes = NULL;
+		
 	}
+	//	clearcpy(params->tmpnodes);
+//	free(params->tmpnodes);
 //	ft_printf("ch %d\n", params->paths->nb_path);
 //	print_input(params->nodes);
 	push_print(params->paths, 1, params->paths->max_ants);
-	//ft_close_lemin(params);
+	
+//	ft_freepath(params->paths->head, params->paths->nb_path);
+//	ft_memdel((void **)&params->paths);
+//	ft_memdel((void **)&(params->nodes));
+//	ft_memdel((void **)&params);
+	//	ft_memdel((void **)&(params->paths));
+//	ft_memdel((void **)&(params->old_paths));
+	ft_close_lemin(params);
+	return (0);
 }

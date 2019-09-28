@@ -16,15 +16,18 @@ void	ft_lstfree(t_list **lst)
 {
 	t_list	*tmp;
 
-	if (!lst || !*lst)
-		return ;
+//	if (!lst && !*lst)
+//		return ;
+//		ft_printf("  entring\n");
 	while (*lst)
 	{
+//		ft_printf("    loooool\n");
 		tmp = *lst;
 		*lst = (*lst)->next;
-		free(tmp);
+	//	free(tmp);
+		ft_memdel((void **)&tmp);
 	}
-	*lst = NULL;
+//	*lst = NULL;
 }
 
 void	ft_freelinks(t_chill *chill, size_t size_tubes)
@@ -39,11 +42,13 @@ void	ft_freelinks(t_chill *chill, size_t size_tubes)
 	{
 		curr = chill;
 		chill = chill->next;
+	//	ft_strdel(&curr->name);
+		ft_strdel(&curr->dest);
 		free(curr);
 		size++;
 	}
-	chill->next = NULL;
-	chill->prev = NULL;
+//	chill->next = NULL;
+//	chill->prev = NULL;
 }
 
 void	ft_freenodes(t_nodes *nodes)
@@ -60,11 +65,11 @@ void	ft_freenodes(t_nodes *nodes)
 	{
 		to_be_free = curr;
 		curr = curr->next;
-		free(to_be_free);
+		ft_memdel((void **)&to_be_free);
 		size++;
 	}
-	nodes->head->next = NULL;
-	nodes->head->prev = NULL;
+//	nodes->head->next = NULL;
+//	nodes->head->prev = NULL;
 }
 
 void	ft_freepath(t_path *paths, size_t path_size)
@@ -79,14 +84,14 @@ void	ft_freepath(t_path *paths, size_t path_size)
 	{
 		curr = paths;
 		paths = paths->next;
-		if (curr->path && curr->path->head)
+		if (curr->path)
 			ft_freenodes(curr->path);
 		ft_memdel((void **)&curr->path);
-		free(curr);
+		ft_memdel((void **)&curr);
 		size++;
 	}
-	paths->next = NULL;
-	paths->prev = NULL;
+//	paths->next = NULL;
+//	paths->prev = NULL;
 }
 
 void	clearcpy(t_nodes *tmpnodes)
@@ -95,12 +100,13 @@ void	clearcpy(t_nodes *tmpnodes)
 	size_t	i;
 
 	i = 0;
-	if (!tmpnodes)
-		return ;
+//	if (!tmpnodes)
+//		return ;
 	tmp = tmpnodes->head;
 	while (i < tmpnodes->size)
 	{	
-		ft_lstfree(&tmp->chill);
+//		ft_printf("loooool %s\n", tmp->name);
+		ft_lstfree(&(tmp->chill));
 		tmp = tmp->next;
 		i++;
 	}
@@ -122,12 +128,19 @@ void	ft_close_lemin(t_param *params)
 		tmp = tmp->next;
 		i++;
 	}
-	ft_freenodes(params->nodes);
 	ft_freelinks(params->nodes->head_tubes, params->nodes->size_tubes);
+	ft_freepath(params->paths->head, params->paths->nb_path);
+	ft_memdel((void **)&params->paths);
+	ft_freenodes(params->nodes);
 	ft_memdel((void **)&params->nodes);
-	clearcpy(params->tmpnodes);
-	ft_lstfree(&params->queu);
+	ft_memdel((void **)&params);
+//	ft_freelinks(params->nodes->head_tubes, params->nodes->size_tubes);
+//	ft_memdel((void **)&params->nodes);
+//	ft_memdel((void **)&params);
+//	clearcpy(params->tmpnodes);
+/*	ft_lstfree(&params->queu);
 	ft_freepath(params->paths->head, params->paths->nb_path);
 	ft_memdel((void **)&params->paths);
 	ft_memdel((void **)&params);
+	*/
 }

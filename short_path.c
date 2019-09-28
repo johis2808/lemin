@@ -93,17 +93,23 @@ t_list	*simulate_outnode(t_list *node, t_list *node_previous)
 //			if (save)
 //				ft_lstfree(&save);	
 
-			if (save && save->next)
-				ft_lstfree(&(save->next));
+		//	if (save)
+		//		ft_lstfree(&save->next);
+
+
+			
+
 			if (!save)
 			{
+			//	ft_lstfree(&save);
+			//	ft_printf(">>>> %d\n", ft_listlen(save));
 				new = ft_memalloc(sizeof(t_list));
 				new->content = node->content;
-				ft_printf("LOL\n");
 				((t_data *)(node_previous->content))->chill = new;
 			} 
 			else
 			{
+				ft_lstfree(&save->next);
 				((t_data *)(node_previous->content))->chill->content = node->content;
 			}
 		//	if (save)
@@ -286,6 +292,7 @@ t_list *short_path(t_list *queu, int level, char target)
 
 	
 	head = queu;
+	ret = NULL;
 	if (!(new_queue = ft_memalloc(sizeof(t_list))))
 		return (NULL);
 //	new_queue = NULL;
@@ -315,7 +322,10 @@ t_list *short_path(t_list *queu, int level, char target)
 		ret = short_path(new_queue, level + 1, target);
 	//	ft_lstfree(&new_queue);
 		if (!ret)
+		{
+			ft_lstfree(&new_queue);
 			return (NULL);
+		}
 		/*
 		 * below is to print the paths (with superposition)
 		 *
@@ -359,12 +369,13 @@ t_list *short_path(t_list *queu, int level, char target)
 		if (!simulate_outnode(head, ret))
 		{
 			ft_lstfree(&new_queue);
-			ft_memdel((void **)&ret);
+		//	ft_memdel((void **)&ret);
 			return (NULL);
 		}
-	//	ft_memdel((void **)&ret);
 		ft_lstfree(&new_queue);
 		return (head);
+	//	if (ret)
+	//		ft_memdel((void **)&ret);
 	}
 	ft_lstfree(&new_queue);
 	return (NULL);

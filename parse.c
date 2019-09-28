@@ -104,7 +104,7 @@ t_nodes		*ft_read(t_nodes *nodes, int fd)
 		}
 		ft_memdel((void **)&line);
 	}
-	if (line)
+//	if (line)
 		ft_memdel((void **)&line);
 	return (nodes);
 }

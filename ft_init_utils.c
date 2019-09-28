@@ -53,6 +53,7 @@ t_nodes		*ft_init_tube(char *line, t_nodes *nodes)
 		return (NULL);
 	if (!add_tubes(tubes[1], tubes[0], nodes))
 		return (NULL);
+	ft_memdel((void **)&tubes);
 	return (nodes);
 }
 

@@ -79,6 +79,7 @@ static t_list	*add_room(t_list *q, t_list *new_room, t_nodes **path)
 	tmp = ft_memcpy(tmp, (t_data *)(q->content), sizeof(t_data));
 	if (!make_path(path, tmp))
 		return (NULL);
+	free(tmp);
 	return (q);
 }
 
@@ -103,9 +104,13 @@ t_list			*bfs_path(t_list *q, int level, t_nodes **path)
 	if (!new_q)
 		return (NULL);
 	if (!(retrn = bfs_path(new_q, level += 1, path)))
+	{
+		ft_lstfree(&new_q);
 		return (NULL);
+	}
 	if (!(q = add_room(q_save, retrn, path)))
 		return (NULL);
 	ft_lstfree(&new_q);
+//	ft_memdel((void **)&retrn);
 	return (q);
 }

@@ -55,7 +55,6 @@ t_list		*ft_lstremove(t_list **list, t_list *to_del)
 		previous->next = element->next;
 	else
 		*list = element->next;
-//	ft_lstfree(&save);
 	return (*list);
 }
 
