@@ -114,6 +114,7 @@ int				add_node(t_nodes *nodes, char *name, char role);
 void			clear_nodes(t_nodes *nodes);
 void			ft_nodeprint(t_nodes *nodes);
 void			ft_close_lemin(t_param *params);
+t_nodes			*ft_cpygraph(t_nodes *nodes);
 
 /*
 ** tubes tools
@@ -128,7 +129,7 @@ long		ft_atol(const char *str);
 */
 int			parse_name(char *line, t_nodes *nodes, char role);
 int			parse_coord(char *line, t_data *node);
-t_nodes			*ft_read(t_nodes *nodes, int fd);
+t_nodes			*ft_read(t_nodes *nodes);
 int				ft_init(char *line, t_nodes	*nodes, char role);
 int				ft_read_error(char	*line, t_cond *cond);
 t_nodes			*init_graph(t_nodes *nodes);
@@ -147,6 +148,7 @@ void 		 	path_print(t_path_head *heads);
 int				find_path(t_list **queu, char target);
 t_nodes			*add_paths(t_path_head *head_paths, t_nodes *new_path, t_data *start);
 int				path_back(t_list **q, t_path_head **paths, t_data *start);
+
 /*
 ** path back
 */
@@ -175,5 +177,10 @@ void	clearcpy(t_nodes *tmpnodes);
 void	ft_lstfree(t_list **lst);
 void	ft_close_lemin(t_param *params);
 void	ft_freepath(t_path *paths, size_t path_size);
+
+/*
+** Print input
+*/
+void    print_input(t_nodes *nodes);
 
 # endif

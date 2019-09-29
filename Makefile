@@ -29,6 +29,7 @@ NAME_C = ft_init.c \
 		  utils.c	\
 		  free_utils.c \
 		  graph_cpy.c \
+		  print_input.c \
 		  trash.c 
 # FILES_C = $(addprefix $(DIR_C)/, $(NAME_C))
 NAME_O = $(NAME_C:.c=.o)
