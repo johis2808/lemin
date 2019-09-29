@@ -5,12 +5,13 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: smoreno- <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/09/15 07:10:10 by smoreno-          #+#    #+#             */
-/*   Updated: 2019/09/15 07:10:13 by smoreno-         ###   ########.fr       */
+/*   Created: 2019/07/09 21:54:29 by smoreno-          #+#    #+#             */
+/*   Updated: 2019/09/29 06:46:08 by thberrid         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "lem_in.h"
+
 /*
 ** parse_name, manque définir les erreurs dans le cas où les nom_salles
 ** debutent/fin par ' ' ou le nom de salle déjà existant.
@@ -39,7 +40,7 @@ int			parse_name(char *line, t_nodes *nodes, char role)
 }
 
 /*
-** parse_coord, revoir les codes err 
+** parse_coord, revoir les codes err
 ** manque définir l'erreur lorsqu'il y a qu'une coo'/plusieurs ' ',
 ** return -1 = pb atoi.
 ** corriger le READ +1
@@ -77,7 +78,7 @@ int			parse_coord(char *line, t_data *node)
 int			ft_init(char *line, t_nodes *nodes, char role)
 {
 	int		ret;
-	
+
 	ret = 0;
 	while (line && *line)
 	{
@@ -91,7 +92,7 @@ int			ft_init(char *line, t_nodes *nodes, char role)
 	return (0);
 }
 
-void	resetlevel(t_nodes *nodes)
+void		resetlevel(t_nodes *nodes)
 {
 	size_t	len;
 	t_data	*tmp;
@@ -111,30 +112,31 @@ void	resetlevel(t_nodes *nodes)
 			tmp2 = ((t_data *)chill->content);
 			((t_data *)chill->content)->level = 0;
 			chill = chill->next;
-		} 
+		}
 	}
 }
 
-void    path_print(t_path_head *heads)
+void		path_print(t_path_head *heads)
 {
-    t_path        *curr;
-    t_chill        *room;
-    size_t        i;
-    size_t        t;
-    curr = heads->head;
-    i = 0;
-    while (curr && i < heads->nb_path)
-    {
-        t = 0;
-        room = curr->path->head_tubes;
-        while (room && t < curr->path->size_tubes)
-        {
-            ft_printf("> %s\n", room->name);
-            t++;
-            room = room->next;
-        }
+	t_path		*curr;
+	t_chill		*room;
+	size_t		i;
+	size_t		t;
+
+	curr = heads->head;
+	i = 0;
+	while (curr && i < heads->nb_path)
+	{
+		t = 0;
+		room = curr->path->head_tubes;
+		while (room && t < curr->path->size_tubes)
+		{
+			ft_printf("> %s\n", room->name);
+			t++;
+			room = room->next;
+		}
 		ft_printf("\n");
-        curr = curr->next;
-        i++;
-    }
+		curr = curr->next;
+		i++;
+	}
 }

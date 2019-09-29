@@ -80,13 +80,13 @@ t_nodes		*read_node_edge(char *line, t_cond *cond, t_nodes *nodes)
 	return (nodes);
 }
 
-t_nodes		*ft_read(t_nodes *nodes, int fd)
+t_nodes		*ft_read(t_nodes *nodes)
 {
 	char	*line;
 	t_cond	cond;
 
 	ft_bzero(&cond, sizeof(t_cond));
-	while (get_next_line(fd, &line) != 0)
+	while (get_next_line(0, &line) != 0)
 	{
 		if ((ft_strlen(line) == 0))
 			return (NULL);
@@ -104,7 +104,6 @@ t_nodes		*ft_read(t_nodes *nodes, int fd)
 		}
 		ft_memdel((void **)&line);
 	}
-//	if (line)
-		ft_memdel((void **)&line);
+	ft_memdel((void **)&line);
 	return (nodes);
 }

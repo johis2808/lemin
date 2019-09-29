@@ -20,7 +20,7 @@ char		*ft_fill_line(char *s, char **line)
 	if ((tmp = ft_strchr(s, '\n')))
 	{
 		*tmp = 0;
-		if (!(tmp = ft_strdup(tmp + 1)))
+		if (!(tmp = ft_strdup(tmp)))
 			return (NULL);
 		if (!(*line = ft_strdup(s)))
 		{

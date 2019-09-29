@@ -6,7 +6,7 @@
 /*   By: smoreno- <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/15 08:18:47 by smoreno-          #+#    #+#             */
-/*   Updated: 2019/09/15 08:18:50 by smoreno-         ###   ########.fr       */
+/*   Updated: 2019/09/29 08:03:19 by thberrid         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 int		find_path(t_list **queu, char target)
 {
-	int ret;
+	int		ret;
 	t_data	*print;
 
 	ret = graph_bfs(*queu, 1, target);
@@ -44,8 +44,8 @@ t_nodes	*add_paths(t_path_head *head_paths, t_nodes *new_path, t_data *start)
 
 int		path_back(t_list **q, t_path_head **paths, t_data *start)
 {
-	int 	retrn;
-	t_nodes *new_path;
+	int		retrn;
+	t_nodes	*new_path;
 
 	new_path = NULL;
 	if (!*paths)

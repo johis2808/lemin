@@ -6,7 +6,7 @@
 /*   By: thberrid <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/29 03:28:25 by thberrid          #+#    #+#             */
-/*   Updated: 2019/09/29 04:01:30 by thberrid         ###   ########.fr       */
+/*   Updated: 2019/09/29 05:13:04 by thberrid         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,6 +76,23 @@ static t_nodes		*chill_cpy(t_nodes *dest, t_nodes *src)
 		size_nodes++;
 	}
 	return (dest);
+}
+
+void				clearcpy(t_nodes *tmpnodes)
+{
+	t_data	*tmp;
+	size_t	i;
+
+	i = 0;
+	tmp = tmpnodes->head;
+	while (i < tmpnodes->size)
+	{
+		ft_lstfree(&(tmp->chill));
+		tmp = tmp->next;
+		i++;
+	}
+	ft_freenodes(tmpnodes);
+	ft_memdel((void **)&tmpnodes);
 }
 
 t_nodes				*ft_cpygraph(t_nodes *nodes)

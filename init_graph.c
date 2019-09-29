@@ -6,7 +6,7 @@
 /*   By: thberrid <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/11 07:35:55 by thberrid          #+#    #+#             */
-/*   Updated: 2019/08/26 09:34:09 by thberrid         ###   ########.fr       */
+/*   Updated: 2019/09/29 07:55:49 by thberrid         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -106,10 +106,7 @@ int			graph_bfs(t_list *queu, int level, char target)
 	t_list	*new_queue;
 	t_data	*aya;
 
-	//aya = ((t_data *)queu->content);
 	new_queue = NULL;
-//	if (!(new_queue = ft_memalloc(sizeof(t_list))))
-//		return (-1);
 	while (queu)
 	{
 		aya = ((t_data *)queu->content);
@@ -122,6 +119,6 @@ int			graph_bfs(t_list *queu, int level, char target)
 	}
 	if (new_queue)
 		graph_bfs(new_queue, level + 1, target);
-		ft_lstfree(&new_queue);
+	ft_lstfree(&new_queue);
 	return (-1);
 }
