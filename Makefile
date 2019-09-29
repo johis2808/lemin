@@ -23,7 +23,6 @@ NAME_C = ft_init.c \
 		  path_back.c \
 		  count_ant.c \
 		  tools.c     \
-		  trash2.c \
 		  check_cmd.c \
 		  bfs_addq.c \
 		  utils.c	\
@@ -31,8 +30,8 @@ NAME_C = ft_init.c \
 		  graph_cpy.c \
 		  print_input.c \
 		  print_ants.c \
-		  short_path_utils.c \
-		  trash.c 
+		  short_path_utils.c
+
 # FILES_C = $(addprefix $(DIR_C)/, $(NAME_C))
 NAME_O = $(NAME_C:.c=.o)
 FILES_O = $(addprefix $(DIR_O)/, $(NAME_O))
