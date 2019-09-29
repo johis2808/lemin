@@ -8,7 +8,7 @@ var renderer = new THREE.WebGLRenderer({"antialias": true});
     renderer.domElement.id = "canvas";
 
     var controls = new THREE.OrbitControls( camera, renderer.domElement );
-    camera.position.set( 2, 2, 15 );
+    camera.position.set( 0, 0, 30 );
     controls.update();
 
 window.addEventListener("resize", function(){
@@ -40,10 +40,10 @@ function getRandomColor() {
 
 function create_sphere(map){
 
-    renderer.setSize(window.innerWidth, window.innerHeight);
-    renderer.setClearColor(0xe2e2e2, 1);
-    document.body.appendChild(renderer.domElement);
-    renderer.domElement.id = "canvas";
+//    renderer.setSize(window.innerWidth, window.innerHeight);
+//    renderer.setClearColor(0xe2e2e2, 1);
+//    document.body.appendChild(renderer.domElement);
+ //   renderer.domElement.id = "canvas";
     var i = 0;
     var sphereSize = 15 / map.nodes.length;
     if (sphereSize > 2)
@@ -71,7 +71,8 @@ function create_sphere(map){
         var arc = map.arcs[i];
         var a = arc[0];
         var b = arc[1];
-        var material = new THREE.LineBasicMaterial( { color: getRandomColor() } );
+       // var material = new THREE.LineBasicMaterial( { color: getRandomColor() } );
+        var material = new THREE.LineBasicMaterial( { color: "#b3b3b3" } );
         var geometry = new THREE.Geometry();
         geometry.vertices.push(new THREE.Vector3(a.x, a.y, a.z) );
         geometry.vertices.push(new THREE.Vector3( b.x, b.y, b.z) );
@@ -83,38 +84,48 @@ function create_sphere(map){
     animate();    
 }
 
-function launchAnts(map, turnIndex, previousAnts){
+function getPreviousPosition(antName, thisTurn, turnIndex, startRoom)
+{
+    var clonedStart = Object.assign({}, startRoom);
+    if (!turnIndex)
+        return clonedStart;
     var i = 0;
-    console.log(map.turns[turnIndex])
+    while (i < thisTurn[turnIndex - 1].length){
+        if (antName == thisTurn[turnIndex - 1][i].name)
+            return thisTurn[turnIndex - 1][i].position;
+        i += 1;
+    }
+    return clonedStart;
+}
+
+function launchAnts(map, turnIndex, previousAnts, startRoom){
+    var i = 0;
+//    console.log(map.turns[turnIndex])
     while (i < previousAnts.length){
         scene.remove(scene.getObjectByName(previousAnts[i]));
         i += 1;
     }
     previousAnts = [];
-    i = 0;
     var sphereSize = 15 / map.nodes.length;
     if (sphereSize > 2)
-        sphereSize = 2
+        sphereSize = 2;
+    var time = 2500;
+    i = 0;
     while (i < map.turns[turnIndex].length){
        
-
-        let geometry = new THREE.SphereGeometry( sphereSize / 2, 16, 16 ); 
-        let material = new THREE.MeshBasicMaterial( {color: getRandomColor() } );
-        let ant = new THREE.Mesh( geometry, material );
         let thisAnt = map.turns[turnIndex][i];
-        ant.position.set(thisAnt.position.x, thisAnt.position.y, thisAnt.position.z);
+        let geometry = new THREE.SphereGeometry( sphereSize / 2, 16, 16 ); 
+        let material = new THREE.MeshBasicMaterial( {color: thisAnt.color } );
+        let ant = new THREE.Mesh( geometry, material );
+
+        var previousPosition = getPreviousPosition(thisAnt.name, map.turns, turnIndex, startRoom);
+        ant.position.set(previousPosition.x, previousPosition.y, previousPosition.z);
         ant.name = thisAnt.name;
         previousAnts.push(thisAnt.name);
         scene.add( ant );
-        
-        let j = 0;
-        while (j < map.turns[turnIndex + 1].length){
-            if (map.turns[turnIndex + 1][j].name == map.turns[turnIndex][i].name)
-                var nextPosition = map.turns[turnIndex + 1][j].position; 
-            j++;
-        }      
-        let tween = new TWEEN.Tween(map.turns[turnIndex][i].position)
-                    .to(nextPosition, 10000)
+      
+        let tween = new TWEEN.Tween(previousPosition)
+                    .to(map.turns[turnIndex][i].position, time)
                     .onUpdate(function(){
                         ant.position.x = this.x;
                         ant.position.y = this.y;
@@ -123,29 +134,37 @@ function launchAnts(map, turnIndex, previousAnts){
     
         i++;
     }
-    if (turnIndex + 2 < map.turns.length){
+    if (turnIndex + 1 < map.turns.length){
         setTimeout(
             function(){ 
-                launchAnts(map, turnIndex + 1, previousAnts)
+                launchAnts(map, turnIndex + 1, previousAnts, startRoom)
             }, 
-            10000
+            time
         );
     }
 }
 
-function get_jsonfile(fileName, fn)
+function get_jsonfile(fileName)
 {
 	var request = new XMLHttpRequest();
 	request.overrideMimeType("application/json");
-	request.open("GET", "http://localhost:8080/" + fileName + ".json");
+	request.open("GET", "http://localhost:8080/map.json");
 	request.addEventListener("load", function (){
         if (request.status >= 200 && request.status < 400){
-            console.log(JSON.parse(request.responseText));
+       //     console.log(JSON.parse(request.responseText));
             var map = JSON.parse(request.responseText);
-            fn(map);
-            launchAnts(map, 0, []);
-        } else
-			console.log(request.status + " " + request.statusText);
+            if (map.error == "OK"){
+                const startRoom = map.start;
+                create_sphere(map);
+                launchAnts(map, 0, [], startRoom);
+            } else {
+                document.getElementById("canvas").style.display = 'none';
+                alert(map.error);
+            }
+        } else {
+            document.getElementById("canvas").style.display = 'none';
+            console.log(request.status + " " + request.statusText);
+        }
 	});
 	request.addEventListener("error", function(){
 		console.log("network js error");
@@ -154,5 +173,5 @@ function get_jsonfile(fileName, fn)
 }
 
 document.addEventListener("DOMContentLoaded", function(){
-    get_jsonfile("map", create_sphere); 
+    get_jsonfile(); 
 });

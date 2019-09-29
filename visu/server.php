@@ -34,10 +34,24 @@ function console ($str)
     echo '<script>console.log("' . $str . '")</script>';   
 }
 
+function get_randcolor($seed){
+	$hex_chars = 'ABCDEF0123456789';
+	$hex_color = '#';
+	$i = 0;
+	srand($seed);
+	while ($i < 6){
+	   $hex_color .= $hex_chars[rand(0, strlen($hex_chars) - 1)];
+	   $i += 1;
+	}
+	return ($hex_color);
+}
+
 function map_tojson($file){
 	$content = file_get_contents($file);
 	$lines = explode(PHP_EOL, $content);
 	$map = array(
+		"error"	=> "OK",
+		"start"	=> array(),
 		"nodes"	=> array(),
         "arcs"	=> array(),
         "turns" => array()
@@ -57,10 +71,12 @@ function map_tojson($file){
 						"name"	=> $node_data[0],
 					//	"x"	=> $node_data[1],
 					//	"y"	=> $node_data[2],
-						"x"		=> rand(-5, 5),
-                        "y"		=> rand(-5, 5),
-                        "z"		=> rand(-5, 5),
+						"x"		=> rand(-10, 10),
+                        "y"		=> rand(-10, 10),
+                        "z"		=> rand(-10, 10),
 					);
+					if ($new_node["role"] == "start")
+						$map["start"] = $new_node;
 					array_push($map["nodes"], $new_node);
 				else :
 					$new_arc = get_coord($line, $map["nodes"]);
@@ -83,7 +99,8 @@ function map_tojson($file){
             $data = explode("-", $ant);
             $tmp = get_coord($data[1], $map["nodes"]);
             $new_ant = array(
-                "name" => $data[0],
+				"name" 		=> $data[0],
+				"color"		=> get_randcolor(substr($data[0], 1)),
                 "position" => $tmp[0]
             );
             array_push($new_turn, $new_ant);
@@ -96,9 +113,13 @@ function map_tojson($file){
 	return ($map);
 }
 
-if (isset($_GET["map"])) :
+if (isset($_GET["map"]) && strlen($_GET["map"])) :
     if (file_exists("../" . $_GET["map"])) :
         exec('../lem-in < ../' . $_GET["map"] . ' > map');
-        map_tojson("map");
-    endif;
+		map_tojson("map");
+	else : 
+		file_put_contents("map.json", json_encode(array("error" => "map not found")));
+	endif;
+else :
+	file_put_contents("map.json", json_encode(array("error" => "indicate a map as GET parameter, like localhost/?map=MAPNAME")));
 endif;
