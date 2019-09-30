@@ -12,13 +12,6 @@
 
 #include "lem_in.h"
 
-t_nodes		*close_read(char *line)
-{
-	(void)line;
-	free(line);
-	return (NULL);
-}
-
 /*
 ** fn error : init tube aucun tube;
 */
@@ -80,28 +73,48 @@ t_nodes		*read_node_edge(char *line, t_cond *cond, t_nodes *nodes)
 	return (nodes);
 }
 
+int			analyse_line(char *line, t_cond *cond, t_nodes *nodes)
+{
+	if ((ft_strlen(line) == 0))
+	{
+		ft_memdel((void **)&line);
+		return (0);
+	}
+	if (!check_cmds(line))
+		return (1);
+	if (cond->ant)
+	{
+		if (!read_node_edge(line, cond, nodes))
+		{
+			close_read(line);
+			return (0);
+		}
+	}
+	else
+	{
+		if (!read_ant(line, cond, nodes))
+		{
+			close_read(line);
+			return (0);
+		}
+	}
+	return (1);
+}
+
 t_nodes		*ft_read(t_nodes *nodes)
 {
 	char	*line;
 	t_cond	cond;
+	int		retrn;
 
+	line = NULL;
 	ft_bzero(&cond, sizeof(t_cond));
-	while (get_next_line(0, &line) != 0)
+	while ((retrn = minignl(0, &line)))
 	{
-		if ((ft_strlen(line) == 0))
+		if (retrn < 0)
+			break ;
+		if (!analyse_line(line, &cond, nodes))
 			return (NULL);
-		if (!check_cmds(line))
-			continue ;
-		if (cond.ant)
-		{
-			if (!read_node_edge(line, &cond, nodes))
-				return (close_read(line));
-		}
-		else
-		{
-			if (!read_ant(line, &cond, nodes))
-				return (close_read(line));
-		}
 		ft_memdel((void **)&line);
 	}
 	ft_memdel((void **)&line);

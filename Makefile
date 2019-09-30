@@ -19,11 +19,12 @@ NAME_C = ft_init.c \
 		  init_graph.c \
 		  lst_util.c \
 		  parse.c \
+		  parse_utils.c \
+		  minignl.c \
 		  short_path.c \
 		  path_back.c \
 		  count_ant.c \
 		  tools.c     \
-		  check_cmd.c \
 		  bfs_addq.c \
 		  utils.c	\
 		  free_utils.c \

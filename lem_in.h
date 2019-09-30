@@ -16,6 +16,7 @@
 # include "libft/libft.h"
 # define FT_INTMAX 2147483647
 # define FT_LONGMAX 4294967295
+# define BUFF_SIZE 16
 
 typedef struct		s_chill
 {
@@ -134,7 +135,8 @@ t_nodes				*init_graph(t_nodes *nodes);
 t_data				*get_startend(t_nodes *nodes, char symbol);
 int					graph_bfs(t_list *node, int level, char target);
 long				ft_atol(const char *str);
-
+t_nodes				*close_read(char *line);
+int					minignl(const int fd, char **line);
 /*
 ** finding paths
 */
