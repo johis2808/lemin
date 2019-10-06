@@ -16,7 +16,7 @@ void	ft_lstfree(t_list **lst)
 {
 	t_list	*tmp;
 
-	while (*lst)
+	while (lst && *lst)
 	{
 		tmp = *lst;
 		*lst = (*lst)->next;
@@ -81,7 +81,7 @@ void	ft_freepath(t_path *paths, size_t path_size)
 	}
 }
 
-void	ft_close_lemin(t_param *params)
+int		ft_close_lemin(t_param *params)
 {
 	t_data	*tmp;
 	size_t	i;
@@ -100,4 +100,5 @@ void	ft_close_lemin(t_param *params)
 	ft_memdel((void **)&params->paths);
 	ft_freenodes(params->nodes);
 	ft_memdel((void **)&params->nodes);
+	return (0);
 }

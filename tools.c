@@ -12,12 +12,6 @@
 
 #include "lem_in.h"
 
-/*
-** parse_name, manque définir les erreurs dans le cas où les nom_salles
-** debutent/fin par ' ' ou le nom de salle déjà existant.
-** return -1 = erreur malloc. gerer le cas: caractère L ou le caractère #
-*/
-
 int			parse_name(char *line, t_nodes *nodes, char role)
 {
 	int		i;
@@ -28,27 +22,49 @@ int			parse_name(char *line, t_nodes *nodes, char role)
 	len = 0;
 	if (!line)
 		return (-1);
+	if (line[0] == 'L')
+		return (-1);
 	while (line[len] && line[len] != ' ')
 		len++;
 	if (!(name = ft_memalloc(len + 1)))
 		return (-1);
 	name[len] = '\0';
 	name = ft_memcpy(name, line, len);
+	if (checkdoubl(nodes, name) == 0)
+	{
+		ft_memdel((void **)&name);
+		return (-1);
+	}
 	if ((add_node(nodes, name, role)) == -1)
 		return (-1);
 	return (len);
 }
 
-/*
-** parse_coord, revoir les codes err
-** manque définir l'erreur lorsqu'il y a qu'une coo'/plusieurs ' ',
-** return -1 = pb atoi.
-** corriger le READ +1
-*/
+int			checkline(char *line)
+{
+	int		i;
+	int		sspace;
+
+	i = 0;
+	sspace = 0;
+	while (line[i])
+	{
+		if (line[i] == ' ')
+		{
+			sspace++;
+			i++;
+		}
+		if (!ft_isdigit(line[i]))
+			return (0);
+		i++;
+	}
+	return (sspace);
+}
 
 int			parse_coord(char *line, t_data *node)
 {
 	int		len;
+	int		ret;
 	size_t	i;
 
 	len = 0;
@@ -57,6 +73,8 @@ int			parse_coord(char *line, t_data *node)
 		return (-1);
 	if (line && *line == ' ' && *(line + 1) != ' ')
 		len++;
+	if (!(ret = checkline(line)) || ret > 2)
+		return (-1);
 	node->x = ft_atoi(line);
 	len += ft_intlen(node->x);
 	i += len;
@@ -69,11 +87,6 @@ int			parse_coord(char *line, t_data *node)
 	i += len;
 	return (len);
 }
-
-/*
-** ft_init, revoir les ret avec les codes err .
-** line vide?.
-*/
 
 int			ft_init(char *line, t_nodes *nodes, char role)
 {
@@ -113,30 +126,5 @@ void		resetlevel(t_nodes *nodes)
 			((t_data *)chill->content)->level = 0;
 			chill = chill->next;
 		}
-	}
-}
-
-void		path_print(t_path_head *heads)
-{
-	t_path		*curr;
-	t_chill		*room;
-	size_t		i;
-	size_t		t;
-
-	curr = heads->head;
-	i = 0;
-	while (curr && i < heads->nb_path)
-	{
-		t = 0;
-		room = curr->path->head_tubes;
-		while (room && t < curr->path->size_tubes)
-		{
-			ft_printf("> %s\n", room->name);
-			t++;
-			room = room->next;
-		}
-		ft_printf("\n");
-		curr = curr->next;
-		i++;
 	}
 }

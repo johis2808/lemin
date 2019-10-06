@@ -14,7 +14,7 @@
 
 void	split_rest(t_path *path, int rest)
 {
-	int		i;
+	int	i;
 
 	i = 0;
 	while (i < rest)
@@ -45,9 +45,9 @@ int		get_currentsum(t_path_head *paths)
 
 long	split_ants(t_path_head *paths, long mid, int sum)
 {
-	size_t		i;
-	t_path		*tmp;
-	long		max;
+	size_t				i;
+	t_path				*tmp;
+	unsigned long long	max;
 
 	i = 0;
 	max = 0;
@@ -65,9 +65,9 @@ long	split_ants(t_path_head *paths, long mid, int sum)
 
 long	ft_lcounter(t_path_head *paths, long mid, t_path *tmp, long total)
 {
-	size_t		i;
-	int			sum;
-	long		max;
+	size_t	i;
+	int		sum;
+	long	max;
 
 	i = 0;
 	sum = 0;

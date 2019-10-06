@@ -6,7 +6,7 @@
 /*   By: smoreno- <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/09 21:54:29 by smoreno-          #+#    #+#             */
-/*   Updated: 2019/09/29 06:46:10 by thberrid         ###   ########.fr       */
+/*   Updated: 2019/10/01 12:03:57 by thberrid         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,8 @@ int		ft_start(t_param *params)
 	params->new = 0;
 	if (!(params->nodes = ft_memalloc(sizeof(t_nodes))))
 		return (-1);
-	params->nodes = ft_read(params->nodes);
+	if (!(params->nodes = ft_read(params->nodes)))
+		return (-1);
 	params->paths = NULL;
 	params->max_paths = 1;
 	return (0);
@@ -102,6 +103,11 @@ int		main(void)
 	params.nodes = init_graph(params.nodes);
 	params.max_paths = 1;
 	launch_tests(&params);
+	if (!params.nb_paths)
+	{
+		ft_putendl_fd("ERROR", 2);
+		return (ft_close_lemin(&params));
+	}
 	print_input(params.nodes);
 	push_print(params.paths, 1, params.paths->max_ants);
 	ft_close_lemin(&params);

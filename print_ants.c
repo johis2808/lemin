@@ -84,12 +84,15 @@ int		update_ants(t_path_head *paths, int ant_man)
 
 void	push_print(t_path_head *paths, int ant_man, int max)
 {
-	ant_man = update_ants(paths, ant_man);
-	if (ant_man > max)
-		ant_man = -1;
-	if (print_ants(paths))
+	int	retrn;
+
+	retrn = 1;
+	while (retrn)
 	{
-		ft_printf("\n");
-		push_print(paths, ant_man, max);
+		ant_man = update_ants(paths, ant_man);
+		if (ant_man > max)
+			ant_man = -1;
+		if ((retrn = print_ants(paths)))
+			ft_printf("\n");
 	}
 }

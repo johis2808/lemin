@@ -68,7 +68,7 @@ int			get_next_line(const int fd, char **line)
 			break ;
 	}
 	if (ret <= 0 && !(*s))
-		return (ret);
+		return (ft_returnfree(s, 0));
 	if (!(s = ft_fill_line(s, line)))
 		return (ft_returnfree(s, -1));
 	return (1);

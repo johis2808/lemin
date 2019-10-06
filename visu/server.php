@@ -56,7 +56,7 @@ function map_tojson($file){
         "arcs"	=> array(),
         "turns" => array()
 	);
-	$i = 0;
+	$i = 1;
 	$max = count($lines) - 1;
 	$previous_line = "";
 	while ($i < $max && strlen($lines[$i]) > 1) :
@@ -69,8 +69,6 @@ function map_tojson($file){
 					$new_node = array(
 						"role"	=> get_commentdata($previous_line),
 						"name"	=> $node_data[0],
-					//	"x"	=> $node_data[1],
-					//	"y"	=> $node_data[2],
 						"x"		=> rand(-10, 10),
                         "y"		=> rand(-10, 10),
                         "z"		=> rand(-10, 10),
@@ -86,7 +84,7 @@ function map_tojson($file){
 		endif; 			// not first line
 		$i += 1;
 		$previous_line = $line;
-    endwhile;
+	endwhile;
     $i++;
     while ($i < $max) :
         $line = $lines[$i];

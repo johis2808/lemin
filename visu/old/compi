@@ -1,1 +1,0 @@
-gcc *.c -framework OpenGL -framework GLUT -I ../lem_in.h visu.h

@@ -40,10 +40,10 @@ function getRandomColor() {
 
 function create_sphere(map){
 
-//    renderer.setSize(window.innerWidth, window.innerHeight);
-//    renderer.setClearColor(0xe2e2e2, 1);
-//    document.body.appendChild(renderer.domElement);
- //   renderer.domElement.id = "canvas";
+    renderer.setSize(window.innerWidth, window.innerHeight);
+    renderer.setClearColor(0xe2e2e2, 1);
+    document.body.appendChild(renderer.domElement);
+    renderer.domElement.id = "canvas";
     var i = 0;
     var sphereSize = 15 / map.nodes.length;
     if (sphereSize > 2)
@@ -154,6 +154,7 @@ function get_jsonfile(fileName)
        //     console.log(JSON.parse(request.responseText));
             var map = JSON.parse(request.responseText);
             if (map.error == "OK"){
+				console.log(map);
                 const startRoom = map.start;
                 create_sphere(map);
                 launchAnts(map, 0, [], startRoom);

@@ -6,7 +6,7 @@
 #    By: thberrid <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/07/29 19:26:47 by thberrid          #+#    #+#              #
-#    Updated: 2019/09/12 12:00:57 by thberrid         ###   ########.fr        #
+#    Updated: 2019/10/01 12:03:37 by thberrid         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -20,7 +20,6 @@ NAME_C = ft_init.c \
 		  lst_util.c \
 		  parse.c \
 		  parse_utils.c \
-		  minignl.c \
 		  short_path.c \
 		  path_back.c \
 		  count_ant.c \
@@ -32,13 +31,12 @@ NAME_C = ft_init.c \
 		  print_input.c \
 		  print_ants.c \
 		  short_path_utils.c
-
-# FILES_C = $(addprefix $(DIR_C)/, $(NAME_C))
+		  
 NAME_O = $(NAME_C:.c=.o)
 FILES_O = $(addprefix $(DIR_O)/, $(NAME_O))
 FILES_H = lem_in.h
 LIBFT = ./libft/libft.a
-FLAGS = -g -Wall -Wextra -Werror
+FLAGS = -Wall -Wextra -Werror
 
 all : $(NAME)
 

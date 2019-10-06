@@ -12,11 +12,6 @@
 
 #include "lem_in.h"
 
-/*
-** manque l'add/free t_chill
-** manque le free de la struc t_cond dans le main.
-*/
-
 t_nodes		*add_tubes(char *tubes, char *dest, t_nodes *nodes)
 {
 	t_chill		*new;
@@ -75,30 +70,4 @@ int			add_node(t_nodes *nodes, char *name, char role)
 	new->next->prev = new;
 	nodes->size++;
 	return (0);
-}
-
-void		clear_nodes(t_nodes *nodes)
-{
-	t_data	*tmp;
-
-	while (nodes->size > 0)
-	{
-		tmp = nodes->head;
-		nodes->head = tmp->next;
-		nodes->size--;
-	}
-	nodes->head = NULL;
-}
-
-void		clear_tubes(t_nodes *nodes)
-{
-	t_chill	*tmp;
-
-	while (nodes->size_tubes > 0)
-	{
-		tmp = nodes->head_tubes;
-		nodes->head_tubes = tmp->next;
-		nodes->size_tubes--;
-	}
-	nodes->head_tubes = NULL;
 }

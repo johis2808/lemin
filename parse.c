@@ -12,23 +12,19 @@
 
 #include "lem_in.h"
 
-/*
-** fn error : init tube aucun tube;
-*/
-
 t_nodes		*read_node(char *line, t_cond *cond, t_nodes *nodes)
 {
 	if (ft_strcmp(line, "##start") == 0)
 	{
-		if (cond->start)
-			return (close_read(line));
+		if (cond->start || cond->role)
+			return (NULL);
 		cond->start = 1;
 		cond->role = 's';
 	}
 	else if (ft_strcmp(line, "##end") == 0)
 	{
-		if (cond->end)
-			return (close_read(line));
+		if (cond->end || cond->role)
+			return (NULL);
 		cond->end = 1;
 		cond->role = 't';
 	}
@@ -41,34 +37,26 @@ t_nodes		*read_node(char *line, t_cond *cond, t_nodes *nodes)
 	return (nodes);
 }
 
-t_nodes		*read_ant(char *line, t_cond *cond, t_nodes *nodes)
-{
-	long	ants;
-
-	ants = ft_atol(line);
-	if (ants <= FT_INTMAX && ants > 0)
-	{
-		cond->ant = ants;
-		nodes->ants = ants;
-	}
-	else
-		return (NULL);
-	return (nodes);
-}
-
 t_nodes		*read_node_edge(char *line, t_cond *cond, t_nodes *nodes)
 {
 	if (ft_strchr(line, '-'))
+	{
+		if (cond->role)
+		{
+			cond->start = 0;
+			cond->end = 0;
+		}
 		cond->edge = 1;
+	}
 	if (!cond->edge)
 	{
 		if (!read_node(line, cond, nodes))
-			return (close_read(line));
+			return (NULL);
 	}
 	else
 	{
 		if (!ft_init_tube(line, nodes))
-			return (close_read(line));
+			return (NULL);
 	}
 	return (nodes);
 }
@@ -85,20 +73,28 @@ int			analyse_line(char *line, t_cond *cond, t_nodes *nodes)
 	if (cond->ant)
 	{
 		if (!read_node_edge(line, cond, nodes))
-		{
-			close_read(line);
 			return (0);
-		}
-	}
-	else
-	{
-		if (!read_ant(line, cond, nodes))
-		{
-			close_read(line);
-			return (0);
-		}
 	}
 	return (1);
+}
+
+void		get_ants(t_cond *cond, t_nodes *nodes)
+{
+	int		o;
+	int		retrn;
+	char	buf[12];
+
+	o = 0;
+	ft_bzero(buf, 12);
+	retrn = 0;
+	while (o < 12)
+	{
+		retrn = read(0, &(buf[o]), 1);
+		if (!retrn || retrn == -1 || buf[o] == 0 || buf[o] == '\n')
+			break ;
+		o++;
+	}
+	read_ant(buf, cond, nodes);
 }
 
 t_nodes		*ft_read(t_nodes *nodes)
@@ -109,14 +105,17 @@ t_nodes		*ft_read(t_nodes *nodes)
 
 	line = NULL;
 	ft_bzero(&cond, sizeof(t_cond));
-	while ((retrn = minignl(0, &line)))
+	get_ants(&cond, nodes);
+	while (cond.ant && (retrn = get_next_line(0, &line)))
 	{
-		if (retrn < 0)
+		if (retrn < 0 || !line)
 			break ;
 		if (!analyse_line(line, &cond, nodes))
-			return (NULL);
+			break ;
 		ft_memdel((void **)&line);
 	}
 	ft_memdel((void **)&line);
+	if (!print_error(&cond, nodes))
+		return (NULL);
 	return (nodes);
 }
